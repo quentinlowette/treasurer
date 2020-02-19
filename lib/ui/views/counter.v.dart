@@ -6,6 +6,7 @@ class CounterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ViewModelProvider<CounterViewModel>.withConsumer(
     viewModel: CounterViewModel(),
+    onModelReady: (model) => model.loadData(),
     builder: (context, model, child) => Scaffold(
       appBar: AppBar(
         title: Text('Flutter Demo Home Page'),

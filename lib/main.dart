@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/ui/views/counter.v.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  setupServiceLocator();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
