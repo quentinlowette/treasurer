@@ -143,7 +143,7 @@ packages:
       name: provider_architecture
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.6"
   quiver:
     dependency: transitive
     description:

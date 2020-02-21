@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:treasurer/core/routes.dart';
 import 'package:treasurer/core/services/locator.dart';
-import 'package:treasurer/ui/views/counter.v.dart';
 
 void main() {
   setupServiceLocator();
@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CounterView(),
+      initialRoute: '/',
+      onGenerateRoute: Router.generateRoute,
     );
   }
 }
