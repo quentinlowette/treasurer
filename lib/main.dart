@@ -3,6 +3,7 @@ import 'package:treasurer/core/routes.dart';
 import 'package:treasurer/core/services/locator.dart';
 
 void main() {
+  // setting up the services provider
   setupServiceLocator();
   runApp(MyApp());
 }

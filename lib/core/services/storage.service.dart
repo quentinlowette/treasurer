@@ -7,9 +7,16 @@ import 'package:treasurer/core/models/operation.m.dart';
 
 /// Storage Service
 abstract class StorageService {
+  /// Adds an operation to the storage
   Future<void> addOperation(Operation operation);
+
+  /// Deletes the given operation from storage
   Future<void> deleteOperation(Operation operation);
+
+  /// Returns the stored list of operations
   Future<List<Operation>> getOperations();
+
+  /// Updates the given operation in storage
   Future<void> updateOperation(Operation operation);
 }
 
@@ -70,27 +77,34 @@ class FakeStorageService extends StorageService {
 class DatabaseStorageService extends StorageService {
   @override
   Future<void> addOperation(Operation operation) async {
+    // Fetches the database
     final Database db = await DatabaseHelper.instance.database;
 
+    // Inserts in the database the given operation, replace if conflict
     await db.insert(DatabaseHelper.operationsTable, operation.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
   Future<void> deleteOperation(Operation operation) async {
+    // Fetches the database
     final Database db = await DatabaseHelper.instance.database;
 
+    // Deletes from the operations table the given operation
     await db.delete(DatabaseHelper.operationsTable,
         where: "${DatabaseHelper.otColumnId} = ?", whereArgs: [operation.id]);
   }
 
   @override
   Future<List<Operation>> getOperations() async {
+    // Fetches the database
     final Database db = await DatabaseHelper.instance.database;
 
+    // Fetches the content of the operations table
     final List<Map<String, dynamic>> result =
         await db.query(DatabaseHelper.operationsTable);
 
+    // Generates a list of operations from a list of map
     return List.generate(
         result.length,
         (index) => Operation(
@@ -106,18 +120,30 @@ class DatabaseStorageService extends StorageService {
 
   @override
   Future<void> updateOperation(Operation operation) async {
+    // Fetches the database
     final Database db = await DatabaseHelper.instance.database;
 
+    // Updates in the database the given operation
     await db.update(DatabaseHelper.operationsTable, operation.toMap(),
         where: "${DatabaseHelper.otColumnId} = ?", whereArgs: [operation.id]);
   }
 }
 
+/// Helper class for the database management
+///
+/// It is a Singleton that holds a reference to the database.
+/// It also exposes the table and columns names.
 class DatabaseHelper {
+  /// Database name
   static final String _databaseName = "Treasurer.db";
+
+  /// Database version number
   static final int _databaseVersion = 1;
 
+  /// Table name
   static final String operationsTable = "operations";
+
+  /// Columns names
   static final String otColumnAmount = "amount";
   static final String otColumnDate = "date";
   static final String otColumnDescription = "description";
@@ -125,10 +151,16 @@ class DatabaseHelper {
   static final String otColumnIsCash = "isCash";
   static final String otColumnReceiptPhotoPath = "receiptPhotoPath";
 
-  DatabaseHelper._privateConstructor();
+  /// Instance of this class
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
+  /// Database instance
   static Database _database;
+
+  /// Private constructor
+  DatabaseHelper._privateConstructor();
+
+  /// Getter for the database instance
   Future<Database> get database async {
     if (_database != null) {
       return _database;
@@ -137,6 +169,7 @@ class DatabaseHelper {
     return _database;
   }
 
+  /// Opens the database
   Future<Database> _initInstance() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, _databaseName);
@@ -144,6 +177,7 @@ class DatabaseHelper {
         version: _databaseVersion, onCreate: _onCreate);
   }
 
+  /// Creates the table of the database
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $operationsTable (
