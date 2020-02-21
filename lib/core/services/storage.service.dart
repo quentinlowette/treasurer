@@ -17,39 +17,39 @@ abstract class StorageService {
 class FakeStorageService extends StorageService {
   @override
   Future<void> addOperation(Operation operation) {
-    // TODO: implement addOperation
-    throw UnimplementedError();
+    // do nothing
+    return null;
   }
 
   @override
   Future<void> deleteOperation(Operation operation) {
-    // TODO: implement deleteOperation
-    throw UnimplementedError();
+    // do nothing
+    return null;
   }
 
   @override
   Future<List<Operation>> getOperations() async {
     Operation op1 = Operation(
-      amount: 200.0,
-      date: DateTime.utc(2020, 2, 20, 10, 00),
-      description: "Fake operation 1",
-      isCash: false,
-      receiptPhotoPath: "/fake/path/to/receipt/1"
-    );
+        amount: 200.0,
+        date: DateTime.utc(2020, 2, 20, 10, 00),
+        description: "Fake operation 1",
+        id: 1,
+        isCash: false,
+        receiptPhotoPath: "/fake/path/to/receipt/1");
     Operation op2 = Operation(
-      amount: -100.0,
-      date: DateTime.utc(2020, 2, 20, 12, 00),
-      description: "Fake operation 2",
-      isCash: false,
-      receiptPhotoPath: "/fake/path/to/receipt/2"
-    );
+        amount: -100.0,
+        date: DateTime.utc(2020, 2, 20, 12, 00),
+        description: "Fake operation 2",
+        id: 2,
+        isCash: false,
+        receiptPhotoPath: "/fake/path/to/receipt/2");
     Operation op3 = Operation(
-      amount: 50.0,
-      date: DateTime.utc(2020, 2, 21, 10, 00),
-      description: "Fake operation 3",
-      isCash: true,
-      receiptPhotoPath: "/fake/path/to/receipt/3"
-    );
+        amount: 50.0,
+        date: DateTime.utc(2020, 2, 21, 10, 00),
+        description: "Fake operation 3",
+        id: 3,
+        isCash: true,
+        receiptPhotoPath: "/fake/path/to/receipt/3");
     List<Operation> operations = List<Operation>();
     operations.add(op1);
     operations.add(op2);
@@ -61,10 +61,9 @@ class FakeStorageService extends StorageService {
 
   @override
   Future<void> updateOperation(Operation operation) {
-    // TODO: implement updateOperation
-    throw UnimplementedError();
+    // do nothing
+    return null;
   }
-
 }
 
 /// Database implementation of the storage service
@@ -73,22 +72,16 @@ class DatabaseStorageService extends StorageService {
   Future<void> addOperation(Operation operation) async {
     final Database db = await DatabaseHelper.instance.database;
 
-    final Map<String, dynamic> values = {
-      DatabaseHelper.otColumnAmount: operation.amount,
-      DatabaseHelper.otColumnDate: operation.date,
-      DatabaseHelper.otColumnDescription: operation.description,
-      DatabaseHelper.otColumnIsCash: operation.isCash,
-      DatabaseHelper.otColumnReceiptPhotoPath: operation.receiptPhotoPath,
-    };
-
-    await db.insert(DatabaseHelper.operationsTable, values,
+    await db.insert(DatabaseHelper.operationsTable, operation.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
-  Future<void> deleteOperation(Operation operation) {
-    // TODO: implement deleteOperation
-    throw UnimplementedError();
+  Future<void> deleteOperation(Operation operation) async {
+    final Database db = await DatabaseHelper.instance.database;
+
+    await db.delete(DatabaseHelper.operationsTable,
+        where: "${DatabaseHelper.otColumnId} = ?", whereArgs: [operation.id]);
   }
 
   @override
@@ -104,6 +97,7 @@ class DatabaseStorageService extends StorageService {
               amount: result[index][DatabaseHelper.otColumnAmount],
               date: result[index][DatabaseHelper.otColumnDate],
               description: result[index][DatabaseHelper.otColumnDescription],
+              id: result[index][DatabaseHelper.otColumnId],
               isCash: result[index][DatabaseHelper.otColumnIsCash],
               receiptPhotoPath: result[index]
                   [DatabaseHelper.otColumnReceiptPhotoPath],
@@ -111,9 +105,11 @@ class DatabaseStorageService extends StorageService {
   }
 
   @override
-  Future<void> updateOperation(Operation operation) {
-    // TODO: implement updateOperation
-    throw UnimplementedError();
+  Future<void> updateOperation(Operation operation) async {
+    final Database db = await DatabaseHelper.instance.database;
+
+    await db.update(DatabaseHelper.operationsTable, operation.toMap(),
+        where: "${DatabaseHelper.otColumnId} = ?", whereArgs: [operation.id]);
   }
 }
 
