@@ -1,22 +1,17 @@
 import 'package:flutter/foundation.dart';
+import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 
-class CounterViewModel extends ChangeNotifier {
-  int _counter = 0;
+class AccountViewModel extends ChangeNotifier {
+  List<Operation> _operations;
 
-  int get counter => _counter;
+  List<Operation> get operations => _operations;
 
   StorageService _storageService = locator<StorageService>();
 
   Future loadData() async {
-    _counter = await _storageService.getValue();
-    notifyListeners();
-  }
-
-  void increment() {
-    _counter++;
-    _storageService.setValue(_counter);
+    _operations = await _storageService.getOperations();
     notifyListeners();
   }
 }
