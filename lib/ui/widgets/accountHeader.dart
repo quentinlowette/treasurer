@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AccountHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
-        height: 255,
+        height: MediaQuery.of(context).size.height * 0.3,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
