@@ -16,6 +16,9 @@ abstract class StorageService {
   /// Returns the stored list of operations
   Future<List<Operation>> getOperations();
 
+  /// Returns the total, cash and bank amounts based on the operations
+  Future<List<double>> getAmounts();
+
   /// Updates the given operation in storage
   Future<void> updateOperation(Operation operation);
 }
@@ -80,14 +83,14 @@ class FakeStorageService extends StorageService {
         receiptPhotoPath: "/fake/path/to/receipt/3");
     Operation op7 = Operation(
         amount: -100.0,
-        date: DateTime.utc(2020, 2, 21, 13, 00),
+        date: DateTime.utc(2020, 2, 21, 15, 00),
         description: "Fake operation 7",
         id: 7,
         isCash: false,
         receiptPhotoPath: "/fake/path/to/receipt/2");
     Operation op8 = Operation(
         amount: 50.0,
-        date: DateTime.utc(2020, 2, 21, 14, 00),
+        date: DateTime.utc(2020, 2, 21, 16, 00),
         description: "Fake operation 8",
         id: 8,
         isCash: true,
@@ -104,6 +107,18 @@ class FakeStorageService extends StorageService {
 
     await Future.delayed(Duration(seconds: 3), () => null);
     return operations;
+  }
+
+  @override
+  Future<List<double>> getAmounts() async {
+    List<double> amounts = List<double>();
+
+    amounts.add(250.0);
+    amounts.add(100.0);
+    amounts.add(150.0);
+
+    await Future.delayed(Duration(seconds: 3), () => null);
+    return amounts;
   }
 
   @override
@@ -156,6 +171,37 @@ class DatabaseStorageService extends StorageService {
               receiptPhotoPath: result[index]
                   [DatabaseHelper.otColumnReceiptPhotoPath],
             ));
+  }
+
+  @override
+  Future<List<double>> getAmounts() async {
+    // Fetches the database
+    final Database db =  await DatabaseHelper.instance.database;
+
+    // Fetches the bank amount
+    final List<Map<String, dynamic>> bankResult = await db.rawQuery('''
+      SELECT SUM(${DatabaseHelper.otColumnAmount}) as total
+      FROM ${DatabaseHelper.operationsTable}
+      WHERE ${DatabaseHelper.otColumnIsCash} = 0
+    ''');
+
+    final double bank = bankResult[0]['total'];
+
+    // Fetches the bank amount
+    final List<Map<String, dynamic>> cashResult = await db.rawQuery('''
+      SELECT SUM(${DatabaseHelper.otColumnAmount}) as total
+      FROM ${DatabaseHelper.operationsTable}
+      WHERE ${DatabaseHelper.otColumnIsCash} = 1
+    ''');
+
+    final double cash = cashResult[0]['total'];
+
+    List<double> amounts = [
+      bank + cash,
+      bank,
+      cash
+    ];
+    return amounts;
   }
 
   @override
