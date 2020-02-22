@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
+import 'package:treasurer/ui/widgets/operationTile.dart';
 
 /// View of an account
 class AccountView extends StatelessWidget {
@@ -17,9 +18,6 @@ class AccountView extends StatelessWidget {
                     )
                   : ListView.builder(
                       itemCount: model.operations.length,
-                      itemBuilder: (context, index) => ListTile(
-                            title: Text(model.operations[index].description),
-                            subtitle:
-                                Text(model.operations[index].amount.toString()),
-                          ))));
+                      itemBuilder: (context, index) =>
+                          OperationTile(operation: model.operations[index]))));
 }
