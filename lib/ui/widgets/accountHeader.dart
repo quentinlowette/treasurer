@@ -8,9 +8,9 @@ class AccountHeader extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.6],
+            stops: [0.3, 0.9],
             colors: [
-              Theme.of(context).primaryColor.withGreen(190),
+              Colors.greenAccent,
               Theme.of(context).primaryColor,
             ],
           ),

@@ -57,10 +57,50 @@ class FakeStorageService extends StorageService {
         id: 3,
         isCash: true,
         receiptPhotoPath: "/fake/path/to/receipt/3");
+    Operation op4 = Operation(
+        amount: 200.0,
+        date: DateTime.utc(2020, 2, 21, 12, 00),
+        description: "Fake operation 4",
+        id: 4,
+        isCash: false,
+        receiptPhotoPath: "/fake/path/to/receipt/1");
+    Operation op5 = Operation(
+        amount: -100.0,
+        date: DateTime.utc(2020, 2, 21, 13, 00),
+        description: "Fake operation 5",
+        id: 5,
+        isCash: false,
+        receiptPhotoPath: "/fake/path/to/receipt/2");
+    Operation op6 = Operation(
+        amount: 50.0,
+        date: DateTime.utc(2020, 2, 21, 14, 00),
+        description: "Fake operation 6",
+        id: 6,
+        isCash: true,
+        receiptPhotoPath: "/fake/path/to/receipt/3");
+    Operation op7 = Operation(
+        amount: -100.0,
+        date: DateTime.utc(2020, 2, 21, 13, 00),
+        description: "Fake operation 7",
+        id: 7,
+        isCash: false,
+        receiptPhotoPath: "/fake/path/to/receipt/2");
+    Operation op8 = Operation(
+        amount: 50.0,
+        date: DateTime.utc(2020, 2, 21, 14, 00),
+        description: "Fake operation 8",
+        id: 8,
+        isCash: true,
+        receiptPhotoPath: "/fake/path/to/receipt/3");
     List<Operation> operations = List<Operation>();
     operations.add(op1);
     operations.add(op2);
     operations.add(op3);
+    operations.add(op4);
+    operations.add(op5);
+    operations.add(op6);
+    operations.add(op7);
+    operations.add(op8);
 
     await Future.delayed(Duration(seconds: 3), () => null);
     return operations;
