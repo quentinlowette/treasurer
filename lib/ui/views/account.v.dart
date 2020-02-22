@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
+import 'package:treasurer/ui/widgets/accountHeader.dart';
 import 'package:treasurer/ui/widgets/operationTile.dart';
 
 /// View of an account
@@ -16,8 +17,36 @@ class AccountView extends StatelessWidget {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : ListView.builder(
-                      itemCount: model.operations.length,
-                      itemBuilder: (context, index) =>
-                          OperationTile(operation: model.operations[index]))));
+                  : Stack(
+                      children: <Widget>[
+                        AccountHeader(),
+                        SafeArea(
+                          child: ListView.builder(
+                              itemCount: model.operations.length,
+                              itemBuilder: (context, index) {
+                                return OperationTile(
+                                    operation: model.operations[index]);
+                              })),
+                        Positioned(
+                          top: 30,
+                          left: 5,
+                          child: IconButton(
+                            icon: Icon(Icons.exit_to_app),
+                            onPressed: () {
+                              print("logout");
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          top: 30,
+                          right: 5,
+                          child: IconButton(
+                            icon: Icon(Icons.settings),
+                            onPressed: () {
+                              print("settings");
+                            },
+                          ),
+                        ),
+                      ],
+                    )));
 }
