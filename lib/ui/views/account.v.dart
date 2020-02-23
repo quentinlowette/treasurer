@@ -20,6 +20,7 @@ class AccountView extends StatelessWidget {
           builder: (context, model, child) {
             return Scaffold(
               backgroundColor: Colors.deepOrange,
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   print("fab");
@@ -38,7 +39,7 @@ class AccountView extends StatelessWidget {
                             children: <Widget>[
                               AccountHeader(model: model,),
                               Container(
-                                padding: EdgeInsets.all(20.0),
+                                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.only(
@@ -57,8 +58,11 @@ class AccountView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10.0,),
-                                    Text("Operations", style: Theme.of(context).textTheme.headline6,),
+                                    SizedBox(height: 20.0,),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      child: Text("Operations", style: Theme.of(context).textTheme.headline6,),
+                                    ),
                                     SizedBox(height: 10.0,),
                                     ListView.builder(
                                         physics: ClampingScrollPhysics(),
