@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/ui/views/account.v.dart';
+import 'package:treasurer/ui/views/addOperation.v.dart';
 
 /// Navigation helper that generates the routes of the application
 class Router {
@@ -9,6 +10,8 @@ class Router {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => AccountView());
+      case '/addOperation':
+        return MaterialPageRoute(builder: (_) => AddOperationView());
       default:
         // Default page return if the route name is unknown
         return MaterialPageRoute(

@@ -19,16 +19,21 @@ class AccountView extends StatelessWidget {
           onModelReady: (model) => model.loadData(),
           builder: (context, model, child) {
             return Scaffold(
-              backgroundColor: Colors.deepOrange,
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  print("fab");
-                },
-                child: Icon(Icons.add),
-              ),
+              backgroundColor: Theme.of(context).accentColor,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: !model.isLoaded
+                  ? null
+                  : FloatingActionButton(
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('/addOperation'),
+                      child: Icon(Icons.add),
+                    ),
               body: !model.isLoaded
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(
+                      child: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ))
                   : SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: SafeArea(
@@ -37,9 +42,12 @@ class AccountView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              AccountHeader(model: model,),
+                              AccountHeader(
+                                model: model,
+                              ),
                               Container(
-                                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.only(
@@ -53,17 +61,27 @@ class AccountView extends StatelessWidget {
                                         height: 5.0,
                                         width: 60.0,
                                         decoration: BoxDecoration(
-                                          color: Colors.black26,
-                                          borderRadius: BorderRadius.circular(5.0)
-                                        ),
+                                            color: Colors.black26,
+                                            borderRadius:
+                                                BorderRadius.circular(5.0)),
                                       ),
                                     ),
-                                    SizedBox(height: 20.0,),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                      child: Text("Operations", style: Theme.of(context).textTheme.headline6,),
+                                    SizedBox(
+                                      height: 20.0,
                                     ),
-                                    SizedBox(height: 10.0,),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: Text(
+                                        "Operations",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
                                     ListView.builder(
                                         physics: ClampingScrollPhysics(),
                                         shrinkWrap: true,
