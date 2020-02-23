@@ -13,112 +13,69 @@ class AccountView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => ViewModelProvider<
-          AccountViewModel>.withConsumer(
-      viewModel: AccountViewModel(),
-      onModelReady: (model) => model.loadData(),
-      builder: (context, model, child) {
-        return Scaffold(
-          body: Stack(
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height * 0.55,
-                decoration: BoxDecoration(
-                    color: Colors.deepOrangeAccent,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.elliptical(
-                            MediaQuery.of(context).size.width * 0.5, 32),
-                        bottomRight: Radius.elliptical(
-                            MediaQuery.of(context).size.width * 0.5, 32))),
+  Widget build(BuildContext context) =>
+      ViewModelProvider<AccountViewModel>.withConsumer(
+          viewModel: AccountViewModel(),
+          onModelReady: (model) => model.loadData(),
+          builder: (context, model, child) {
+            return Scaffold(
+              backgroundColor: Colors.deepOrange,
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  print("fab");
+                },
+                child: Icon(Icons.add),
               ),
-              SafeArea(
-                child: !model.isLoaded
-                    ? Center(child: CircularProgressIndicator())
-                    : SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 50.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Total",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20.0),
-                                  ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Text(
-                                    "${model.total} €",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 40.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 50.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Column(
-                                        children: <Widget>[
-                                          Text(
-                                            "Cash",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15.0),
-                                          ),
-                                          Text(
-                                            "${model.cash} €",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 30.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
+              body: !model.isLoaded
+                  ? Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              AccountHeader(model: model,),
+                              Container(
+                                padding: EdgeInsets.all(20.0),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20))),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Container(
+                                        height: 5.0,
+                                        width: 60.0,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black26,
+                                          borderRadius: BorderRadius.circular(5.0)
+                                        ),
                                       ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text(
-                                            "Bank",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15.0),
-                                          ),
-                                          Text(
-                                            "${model.bank} €",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 30.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                    ),
+                                    SizedBox(height: 10.0,),
+                                    Text("Operations", style: Theme.of(context).textTheme.headline6,),
+                                    SizedBox(height: 10.0,),
+                                    ListView.builder(
+                                        physics: ClampingScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: model.operations.length,
+                                        itemBuilder: (context, index) =>
+                                            OperationTile(
+                                                operation:
+                                                    model.operations[index]))
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Column(children: _getBody(context, model)),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-              )
-            ],
-          ),
-        );
-      });
+                    ),
+            );
+          });
 }
