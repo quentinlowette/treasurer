@@ -24,11 +24,6 @@ class OperationDialog extends StatelessWidget {
             Text("${operation.amount}"),
             Text("${operation.isCash}"),
             Text("${operation.receiptPhotoPath}"),
-            // RaisedButton(
-            //   onPressed: () => Navigator.of(context).pop(),
-            //   child: Text("Close", style: Theme.of(context).accentTextTheme.button,),
-            //   color: Theme.of(context).accentColor,
-            // )
           ],
         ),
       ),
