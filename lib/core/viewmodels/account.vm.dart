@@ -20,6 +20,9 @@ class AccountViewModel extends ChangeNotifier {
   /// Amount of bank of the account
   double _bank;
 
+  /// Index of the next operation to insert
+  int _nextOperationIndex;
+
   /// Getter for the loading status
   bool get isLoaded => _isLoaded;
 
@@ -35,6 +38,9 @@ class AccountViewModel extends ChangeNotifier {
   /// Getter for the bank amount
   double get bank => _bank;
 
+  /// Getter for the next operation's index
+  int get nextOperationIndex => _nextOperationIndex;
+
   /// Instance of the storage service
   StorageService _storageService = locator<StorageService>();
 
@@ -49,9 +55,19 @@ class AccountViewModel extends ChangeNotifier {
     _bank = amounts[1];
     _cash = amounts[2];
 
+    _nextOperationIndex = _operations.last.id + 1;
+
     _isLoaded = true;
 
     // Notify the changes
+    notifyListeners();
+  }
+
+  /// Adds an operation to the list
+  Future addOperation(Operation operation) async {
+    _operations.add(operation);
+    await _storageService.addOperation(operation);
+    _nextOperationIndex++;
     notifyListeners();
   }
 }

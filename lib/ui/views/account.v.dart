@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/ui/widgets/accountHeader.dart';
 import 'package:treasurer/ui/widgets/operationTile.dart';
 
 /// View of an account
 class AccountView extends StatelessWidget {
-  List<Widget> _getBody(BuildContext context, AccountViewModel model) {
-    List<Widget> operationTiles =
-        model.operations.map((op) => OperationTile(operation: op)).toList();
-    return operationTiles;
-  }
-
   @override
   Widget build(BuildContext context) =>
       ViewModelProvider<AccountViewModel>.withConsumer(
-          viewModel: AccountViewModel(),
+          viewModel: locator<AccountViewModel>(),
+          reuseExisting: true,
           onModelReady: (model) => model.loadData(),
           builder: (context, model, child) {
             return Scaffold(

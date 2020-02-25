@@ -128,6 +128,7 @@ class FakeStorageService extends StorageService {
   }
 }
 
+// TODO: In the future, maybe have a better structure that would be able to store multiple tables in an easy and manageable way
 /// Database implementation of the storage service
 class DatabaseStorageService extends StorageService {
   @override
