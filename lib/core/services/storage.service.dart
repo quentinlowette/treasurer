@@ -117,7 +117,7 @@ class FakeStorageService extends StorageService {
     amounts.add(100.0);
     amounts.add(150.0);
 
-    await Future.delayed(Duration(seconds: 3), () => null);
+    await Future.delayed(Duration(milliseconds: 500), () => null);
     return amounts;
   }
 

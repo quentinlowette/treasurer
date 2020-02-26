@@ -10,12 +10,10 @@ class OperationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListTile(
-    title: Text(operation.description),
-    subtitle: Text(DateFormat("dd/MM/yyyy").format(operation.date)),
-    trailing: Text("${operation.amount} €"),
+    title: Text(operation.description, style: Theme.of(context).accentTextTheme.subtitle1,),
+    subtitle: Text(DateFormat("dd/MM/yyyy").format(operation.date), style: Theme.of(context).accentTextTheme.bodyText2),
+    trailing: Text("${operation.amount}", style: Theme.of(context).accentTextTheme.subtitle2),
     onTap: () => showDialog(
-      context: context,
-      child: OperationDialog(operation: operation)
-    ),
+        context: context, child: OperationDialog(operation: operation)),
   );
 }

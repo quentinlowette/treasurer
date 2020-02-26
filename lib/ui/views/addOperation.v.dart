@@ -59,6 +59,14 @@ class _AddOperationViewState extends State<AddOperationView> {
         reuseExisting: true,
         builder: (context, model, child) {
           return Scaffold(
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.filter_center_focus),
+                  onPressed: () => print("scan"),
+                )
+              ],
+            ),
             body: SingleChildScrollView(
               child: SafeArea(
                 child: Form(
@@ -66,31 +74,27 @@ class _AddOperationViewState extends State<AddOperationView> {
                   autovalidate: _autoValidate,
                   child: Column(
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.arrow_back_ios),
-                            onPressed: () => Navigator.of(context).pop(),
-                            // color: Colors.white,
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.filter_center_focus),
-                            onPressed: () => print("scan"),
-                            // color: Colors.white,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10.0),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: <Widget>[
+                      //     IconButton(
+                      //       icon: Icon(Icons.arrow_back_ios),
+                      //       onPressed: () => Navigator.of(context).pop(),
+                      //     ),
+                      //     IconButton(
+                      //       icon: Icon(Icons.filter_center_focus),
+                      //       onPressed: () => print("scan"),
+                      //     ),
+                      //   ],
+                      // ),
+                      SizedBox(height: 30.0),
                       Text(
                         "New operation",
-                        style: Theme.of(context).textTheme.headline3,
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             SizedBox(height: 60.0),
@@ -111,8 +115,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                               decoration: InputDecoration(
                                 labelText: 'Montant',
                                 suffixIcon: Icon(
-                                  Icons.euro_symbol,
-                                  color: Colors.black,
+                                  Icons.euro_symbol
                                 ),
                               ),
                               keyboardType: TextInputType.number,
@@ -148,6 +151,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                                 });
                               },
                               title: Text("Cash ?"),
+                              activeColor: Theme.of(context).accentColor,
                             ),
                             SizedBox(height: 20.0),
                             RaisedButton(

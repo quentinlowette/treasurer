@@ -9,26 +9,25 @@ class AccountHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 60.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Total", style: Theme.of(context).accentTextTheme.headline4,),
-          Text("${model.total} €", style: Theme.of(context).accentTextTheme.headline3,),
+          Text("Total", style: Theme.of(context).textTheme.headline4,),
+          Text("${model.total} €", style: Theme.of(context).textTheme.headline3,),
           SizedBox(height: 60.0,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Text("Cash", style: Theme.of(context).accentTextTheme.headline6,),
-                  Text("${model.cash} €", style: Theme.of(context).accentTextTheme.headline5,),
+                  Text("Cash", style: Theme.of(context).textTheme.headline6,),
+                  Text("${model.cash} €", style: Theme.of(context).textTheme.headline5,),
                 ],
               ),
               Column(
                 children: <Widget>[
-                  Text("Bank", style: Theme.of(context).accentTextTheme.headline6,),
-                  Text("${model.bank} €", style: Theme.of(context).accentTextTheme.headline5,),
+                  Text("Bank", style: Theme.of(context).textTheme.headline6,),
+                  Text("${model.bank} €", style: Theme.of(context).textTheme.headline5,),
                 ],
               ),
             ],

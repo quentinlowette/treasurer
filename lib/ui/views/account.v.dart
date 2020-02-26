@@ -15,15 +15,27 @@ class AccountView extends StatelessWidget {
           onModelReady: (model) => model.loadData(),
           builder: (context, model, child) {
             return Scaffold(
-              backgroundColor: Theme.of(context).accentColor,
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: !model.isLoaded
+              // backgroundColor: Theme.of(context).accentColor,
+              // floatingActionButtonLocation:
+              //     FloatingActionButtonLocation.centerFloat,
+              // floatingActionButton: !model.isLoaded
+              //     ? null
+              //     : FloatingActionButton(
+              //         onPressed: () =>
+              //             Navigator.of(context).pushNamed('/addOperation'),
+              //         child: Icon(Icons.add),
+              //         backgroundColor: Theme.of(context).accentColor,
+              //       ),
+              appBar: !model.isLoaded
                   ? null
-                  : FloatingActionButton(
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed('/addOperation'),
-                      child: Icon(Icons.add),
+                  : AppBar(
+                      actions: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed('/addOperation'),
+                        )
+                      ],
                     ),
               body: !model.isLoaded
                   ? Center(
@@ -38,6 +50,15 @@ class AccountView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.end,
+                              //   children: <Widget>[
+                              //     IconButton(
+                              //       icon: Icon(Icons.add),
+                              //       onPressed: () => Navigator.of(context).pushNamed('/addOperation'),
+                              //     ),
+                              //   ],
+                              // ),
                               AccountHeader(
                                 model: model,
                               ),
@@ -45,19 +66,19 @@ class AccountView extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 10.0),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: Theme.of(context).accentColor,
                                     borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20))),
+                                        topLeft: Radius.circular(40),
+                                        topRight: Radius.circular(40))),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Center(
                                       child: Container(
                                         height: 5.0,
-                                        width: 60.0,
+                                        width: 70.0,
                                         decoration: BoxDecoration(
-                                            color: Colors.black26,
+                                            color: Colors.black12,
                                             borderRadius:
                                                 BorderRadius.circular(5.0)),
                                       ),
@@ -67,11 +88,11 @@ class AccountView extends StatelessWidget {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
+                                          horizontal: 16.0),
                                       child: Text(
                                         "Operations",
                                         style: Theme.of(context)
-                                            .textTheme
+                                            .accentTextTheme
                                             .headline6,
                                       ),
                                     ),
