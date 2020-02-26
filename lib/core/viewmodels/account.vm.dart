@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:treasurer/core/models/operation.m.dart';
+import 'package:treasurer/core/services/chart.service.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 
@@ -44,6 +45,9 @@ class AccountViewModel extends ChangeNotifier {
   /// Instance of the storage service
   StorageService _storageService = locator<StorageService>();
 
+  /// Instance of the chart service
+  ChartService _chartService = locator<ChartService>();
+
   /// Loads the stored operations
   Future loadData() async {
     // Fetches the operations from the storage service
@@ -59,15 +63,27 @@ class AccountViewModel extends ChangeNotifier {
 
     _isLoaded = true;
 
-    // Notify the changes
+    // Notifies the changes
     notifyListeners();
   }
 
   /// Adds an operation to the list
   Future addOperation(Operation operation) async {
+    // Adds the operation to the loaded list
     _operations.add(operation);
+
+    // Adds the operation to the storage
     await _storageService.addOperation(operation);
+
+    // Increases the next operation index
     _nextOperationIndex++;
+
+    // Notifies the changes
     notifyListeners();
+  }
+
+  Widget getAmountsChart() {
+    List<double> fractions = [_cash/_total, _bank/_total];
+    return _chartService.getPieChart(fractions);
   }
 }

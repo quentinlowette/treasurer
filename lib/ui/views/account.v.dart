@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
+import 'package:treasurer/ui/colors.dart';
 import 'package:treasurer/ui/widgets/accountHeader.dart';
 import 'package:treasurer/ui/widgets/operationTile.dart';
 
@@ -78,7 +79,7 @@ class AccountView extends StatelessWidget {
                                         height: 5.0,
                                         width: 70.0,
                                         decoration: BoxDecoration(
-                                            color: Colors.black12,
+                                            color: DefaultThemeColors.blueDD,
                                             borderRadius:
                                                 BorderRadius.circular(5.0)),
                                       ),

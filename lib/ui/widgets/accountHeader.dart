@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
+import 'package:treasurer/ui/colors.dart';
 
 class AccountHeader extends StatelessWidget {
   final AccountViewModel model;
@@ -16,22 +17,24 @@ class AccountHeader extends StatelessWidget {
           Text("${model.total} €", style: Theme.of(context).textTheme.headline3,),
           SizedBox(height: 60.0,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Text("Cash", style: Theme.of(context).textTheme.headline6,),
-                  Text("${model.cash} €", style: Theme.of(context).textTheme.headline5,),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Text("Bank", style: Theme.of(context).textTheme.headline6,),
+                  Text("Bank", style: Theme.of(context).textTheme.headline6.copyWith(color: DefaultThemeColors.orangeLL), ),
                   Text("${model.bank} €", style: Theme.of(context).textTheme.headline5,),
                 ],
               ),
+              model.getAmountsChart(),
+              Column(
+                children: <Widget>[
+                  Text("Cash", style: Theme.of(context).textTheme.headline6.copyWith(color: DefaultThemeColors.blueLL),),
+                  Text("${model.cash} €", style: Theme.of(context).textTheme.headline5,),
+                ],
+              ),
             ],
-          )
+          ),
+          SizedBox(height: 30.0)
         ],
       ),
     );
