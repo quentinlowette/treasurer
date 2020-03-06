@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/ui/colors.dart';
+import 'package:treasurer/ui/widgets/charts/charts.dart';
 
 class AccountHeader extends StatelessWidget {
   final AccountViewModel model;
@@ -25,7 +26,7 @@ class AccountHeader extends StatelessWidget {
                   Text("${model.bank} €", style: Theme.of(context).textTheme.headline5,),
                 ],
               ),
-              model.getAmountsChart(),
+              PieChart(fractions: [model.cash/model.total, model.bank/model.total]),
               Column(
                 children: <Widget>[
                   Text("Cash", style: Theme.of(context).textTheme.headline6.copyWith(color: DefaultThemeColors.blueLL),),

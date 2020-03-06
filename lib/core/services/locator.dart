@@ -3,7 +3,6 @@
 /// Easyly accessible services provider
 
 import 'package:get_it/get_it.dart';
-import 'package:treasurer/core/services/chart.service.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 
@@ -15,7 +14,6 @@ GetIt locator = GetIt.instance;
 setupServiceLocator() {
   // Services
   locator.registerLazySingleton<StorageService>(() => FakeStorageService());
-  locator.registerLazySingleton<ChartService>(() => ChartService());
 
   // ViewModels
   locator.registerLazySingleton<AccountViewModel>(() => AccountViewModel());

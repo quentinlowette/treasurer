@@ -3,21 +3,26 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:treasurer/ui/colors.dart';
 
-/// Chart Service
-class ChartService {
-  Widget getPieChart(List<double> fractions) {
+class PieChart extends StatelessWidget {
+  final List<double> fractions;
+
+  PieChart({@required this.fractions});
+
+  @override
+  Widget build(BuildContext context) {
     return CustomPaint(
-      painter: PieChart(fractions: fractions),
+      painter: PieChartPainter(fractions: fractions),
     );
   }
+
 }
 
-class PieChart extends CustomPainter {
+class PieChartPainter extends CustomPainter {
   final List<double> fractions;
 
   List<Color> colors = [DefaultThemeColors.blue, DefaultThemeColors.orange];
 
-  PieChart({@required this.fractions});
+  PieChartPainter({@required this.fractions});
 
   @override
   void paint(Canvas canvas, Size size) {
