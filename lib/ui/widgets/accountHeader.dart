@@ -14,23 +14,54 @@ class AccountHeader extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 60.0),
       child: Column(
         children: <Widget>[
-          Text("Total", style: Theme.of(context).textTheme.headline4,),
-          Text("${model.total} €", style: Theme.of(context).textTheme.headline3,),
-          SizedBox(height: 60.0,),
+          Text(
+            "Total",
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          Text(
+            "${model.total} €",
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          SizedBox(
+            height: 60.0,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Text("Bank", style: Theme.of(context).textTheme.headline6.copyWith(color: DefaultThemeColors.orangeLL), ),
-                  Text("${model.bank} €", style: Theme.of(context).textTheme.headline5,),
+                  Text(
+                    "Bank",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(color: DefaultThemeColors.orangeLL),
+                  ),
+                  Text(
+                    "${model.bank} €",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                 ],
               ),
-              PieChart(fractions: [model.cash/model.total, model.bank/model.total]),
+              Chart(
+                painter: PieChartPainter(fractions: [
+                  model.cash / model.total,
+                  model.bank / model.total
+                ]),
+              ),
               Column(
                 children: <Widget>[
-                  Text("Cash", style: Theme.of(context).textTheme.headline6.copyWith(color: DefaultThemeColors.blueLL),),
-                  Text("${model.cash} €", style: Theme.of(context).textTheme.headline5,),
+                  Text(
+                    "Cash",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(color: DefaultThemeColors.blueLL),
+                  ),
+                  Text(
+                    "${model.cash} €",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                 ],
               ),
             ],
