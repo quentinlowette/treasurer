@@ -15,14 +15,14 @@ class ImageMiniature extends StatelessWidget {
           showDialog(
               context: context,
               child: Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                // shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(10.0)),
                 child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                      image: DecorationImage(
-                          fit: BoxFit.cover, image: FileImage(imageFile))),
-                  child: Text(imageFile.path, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),),
+                  // decoration: BoxDecoration(
+                  //   borderRadius: BorderRadius.circular(10.0),
+                  //     image: DecorationImage(
+                  //         fit: BoxFit.contain, image: FileImage(imageFile))),
+                  child: Image.file(imageFile),
                 ),
               ));
         }

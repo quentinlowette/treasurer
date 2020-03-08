@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
+import 'package:treasurer/core/services/textRecognition.service.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
@@ -18,17 +19,43 @@ class _AddOperationViewState extends State<AddOperationView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   bool _isCash = false;
+  bool _isPositive = false;
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
   DateTime _date;
   File _imageFile;
+  bool _isLoading = false;
+
+  /// Instance of the text recognition service
+  TextRecognitionService _textRecognitionService =
+      locator<TextRecognitionService>();
 
   /// Displays the image picker with the camera
   Future<void> _getImage() async {
     File pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
 
+    // If picked image is null
+    if (pickedImage == null) {
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    // If there was a previous image
+    if (_imageFile != null) {
+      _imageFile.delete();
+    }
+
+    await _textRecognitionService.detect(pickedImage);
+
     setState(() {
       _imageFile = pickedImage;
+      _amountController.text =
+          _textRecognitionService.total.toString().replaceAll('.', ',');
+      _date = _textRecognitionService.date;
+      _isLoading = false;
     });
   }
 
@@ -52,7 +79,9 @@ class _AddOperationViewState extends State<AddOperationView> {
   Operation _validateInputs(int nextOperationIndex) {
     if (_formKey.currentState.validate() && _date != null) {
       Operation newOperation = Operation(
-          amount: double.parse(_amountController.text.replaceAll(',', '.')),
+          amount: _isPositive
+              ? double.parse(_amountController.text.replaceAll(',', '.'))
+              : -1 * double.parse(_amountController.text.replaceAll(',', '.')),
           date: _date,
           description: _descriptionController.text,
           id: nextOperationIndex,
@@ -107,13 +136,16 @@ class _AddOperationViewState extends State<AddOperationView> {
                           ),
                         ],
                       ),
+                      _isLoading ? LinearProgressIndicator() : Container(),
                       SizedBox(height: 30.0),
                       // Text(
                       //   "New operation",
                       //   style: Theme.of(context).textTheme.headline2,
                       // ),
                       // SizedBox(height: 30.0),
-                      ImageMiniature(imageFile: _imageFile,),
+                      ImageMiniature(
+                        imageFile: _imageFile,
+                      ),
                       SizedBox(height: 30.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -133,24 +165,39 @@ class _AddOperationViewState extends State<AddOperationView> {
                               },
                             ),
                             SizedBox(height: 20.0),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Montant',
-                                suffixIcon: Icon(
-                                  Icons.euro_symbol
+                            Row(
+                              children: <Widget>[
+                                IconButton(
+                                  icon: _isPositive
+                                      ? Icon(Icons.add)
+                                      : Icon(Icons.remove),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isPositive ^= true;
+                                    });
+                                  },
                                 ),
-                              ),
-                              keyboardType: TextInputType.number,
-                              controller: _amountController,
-                              validator: (value) {
-                                Pattern amountPattern =
-                                    r'^[1-9][0-9]*([\.,][0-9]+)?$';
-                                RegExp amountRegex = RegExp(amountPattern);
-                                if (!amountRegex.hasMatch(value)) {
-                                  return 'Please enter a valid amount';
-                                }
-                                return null;
-                              },
+                                Expanded(
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Montant',
+                                      suffixIcon: Icon(Icons.euro_symbol),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    controller: _amountController,
+                                    validator: (value) {
+                                      Pattern amountPattern =
+                                          r'^[1-9][0-9]*([\.,][0-9]+)?$';
+                                      RegExp amountRegex =
+                                          RegExp(amountPattern);
+                                      if (!amountRegex.hasMatch(value)) {
+                                        return 'Please enter a valid amount';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 20.0),
                             RaisedButton(
@@ -178,7 +225,8 @@ class _AddOperationViewState extends State<AddOperationView> {
                             SizedBox(height: 20.0),
                             RaisedButton(
                               onPressed: () {
-                                Operation newOp = _validateInputs(model.nextOperationIndex);
+                                Operation newOp =
+                                    _validateInputs(model.nextOperationIndex);
                                 if (newOp != null) {
                                   model.addOperation(newOp);
                                   Navigator.of(context).pop();
