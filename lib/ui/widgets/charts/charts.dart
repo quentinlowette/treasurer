@@ -15,13 +15,15 @@ abstract class ChartPainter extends CustomPainter {
 
 class Chart extends StatelessWidget {
   final CustomPainter painter;
+  final Widget child;
 
-  Chart({@required this.painter});
+  Chart({@required this.painter, this.child});
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: this.painter,
+      child: this.child,
     );
   }
 }

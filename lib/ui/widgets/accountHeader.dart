@@ -14,13 +14,22 @@ class AccountHeader extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 60.0),
       child: Column(
         children: <Widget>[
-          Text(
-            "Total",
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          Text(
-            "${model.total} €",
-            style: Theme.of(context).textTheme.headline3,
+          Chart(
+            painter: PieChartPainter(
+                fractions: [model.cash / model.total, model.bank / model.total],
+                radius: 120.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Total",
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                Text(
+                  "${model.total} €",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 60.0,
@@ -42,12 +51,6 @@ class AccountHeader extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ],
-              ),
-              Chart(
-                painter: PieChartPainter(fractions: [
-                  model.cash / model.total,
-                  model.bank / model.total
-                ]),
               ),
               Column(
                 children: <Widget>[

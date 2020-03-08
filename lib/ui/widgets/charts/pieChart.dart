@@ -5,8 +5,9 @@ import 'package:treasurer/ui/widgets/charts/charts.dart';
 
 class PieChartPainter extends ChartPainter {
   final List<double> fractions;
+  final double radius;
 
-  PieChartPainter({@required this.fractions});
+  PieChartPainter({@required this.fractions, @required this.radius});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -26,7 +27,7 @@ class PieChartPainter extends ChartPainter {
 
     Offset center = Offset(size.width / 2, size.height / 2);
 
-    double radius = 50.0;
+    double radius = this.radius;
 
     double angle = -pi / 2;
 

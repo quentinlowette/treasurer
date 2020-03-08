@@ -61,6 +61,9 @@ class AccountViewModel extends ChangeNotifier {
       }
       _total += operation.amount;
     }
+    _cash = double.parse(_cash.toStringAsFixed(2));
+    _bank = double.parse(_bank.toStringAsFixed(2));
+    _total = double.parse(_total.toStringAsFixed(2));
   }
 
   /// Loads the stored operations
