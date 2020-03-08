@@ -57,7 +57,8 @@ class AccountView extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.add),
                                     color: Theme.of(context).accentColor,
-                                    onPressed: () => Navigator.of(context).pushNamed('/addOperation'),
+                                    onPressed: () => Navigator.of(context)
+                                        .pushNamed('/addOperation'),
                                   ),
                                 ],
                               ),
@@ -66,7 +67,7 @@ class AccountView extends StatelessWidget {
                               ),
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 10.0),
+                                    vertical: 10.0, horizontal: 0.0),
                                 decoration: BoxDecoration(
                                     color: Theme.of(context).accentColor,
                                     borderRadius: BorderRadius.only(
@@ -86,7 +87,7 @@ class AccountView extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 20.0,
+                                      height: 30.0,
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -108,7 +109,8 @@ class AccountView extends StatelessWidget {
                                         itemBuilder: (context, index) =>
                                             OperationTile(
                                                 operation:
-                                                    model.operations[index]))
+                                                    model.operations[index],
+                                                model: model))
                                   ],
                                 ),
                               ),

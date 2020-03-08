@@ -44,6 +44,25 @@ class AccountViewModel extends ChangeNotifier {
   /// Instance of the storage service
   StorageService _storageService = locator<StorageService>();
 
+  /// Updates the amounts
+  void _updateAmounts(Operation operation, {removed = false}) {
+    if (removed) {
+      if (operation.isCash) {
+        _cash -= operation.amount;
+      } else {
+        _bank -= operation.amount;
+      }
+      _total -= operation.amount;
+    } else {
+      if (operation.isCash) {
+        _cash += operation.amount;
+      } else {
+        _bank += operation.amount;
+      }
+      _total += operation.amount;
+    }
+  }
+
   /// Loads the stored operations
   Future loadData() async {
     // Fetches the operations from the storage service
@@ -68,11 +87,28 @@ class AccountViewModel extends ChangeNotifier {
     // Adds the operation to the loaded list
     _operations.add(operation);
 
+    // Changes the amounts
+    _updateAmounts(operation);
+
     // Adds the operation to the storage
     await _storageService.addOperation(operation);
 
     // Increases the next operation index
     _nextOperationIndex++;
+
+    // Notifies the changes
+    notifyListeners();
+  }
+
+  Future removeOperation(Operation operation) async {
+    // Removes the operation from the loaded list
+    _operations.remove(operation);
+
+    // Changes the amounts
+    _updateAmounts(operation, removed: true);
+
+    // Removes the operation from the storage
+    await _storageService.deleteOperation(operation);
 
     // Notifies the changes
     notifyListeners();
