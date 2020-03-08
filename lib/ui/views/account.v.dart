@@ -27,17 +27,17 @@ class AccountView extends StatelessWidget {
               //         child: Icon(Icons.add),
               //         backgroundColor: Theme.of(context).accentColor,
               //       ),
-              appBar: !model.isLoaded
-                  ? null
-                  : AppBar(
-                      actions: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed('/addOperation'),
-                        )
-                      ],
-                    ),
+              // appBar: !model.isLoaded
+              //     ? null
+              //     : AppBar(
+              //         actions: <Widget>[
+              //           IconButton(
+              //             icon: Icon(Icons.add),
+              //             onPressed: () =>
+              //                 Navigator.of(context).pushNamed('/addOperation'),
+              //           )
+              //         ],
+              //       ),
               body: !model.isLoaded
                   ? Center(
                       child: CircularProgressIndicator(
@@ -51,15 +51,16 @@ class AccountView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.end,
-                              //   children: <Widget>[
-                              //     IconButton(
-                              //       icon: Icon(Icons.add),
-                              //       onPressed: () => Navigator.of(context).pushNamed('/addOperation'),
-                              //     ),
-                              //   ],
-                              // ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    color: Theme.of(context).accentColor,
+                                    onPressed: () => Navigator.of(context).pushNamed('/addOperation'),
+                                  ),
+                                ],
+                              ),
                               AccountHeader(
                                 model: model,
                               ),

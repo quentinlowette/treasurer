@@ -45,56 +45,56 @@ class FakeStorageService extends StorageService {
         description: "Fake operation 1",
         id: 1,
         isCash: false,
-        receiptPhotoPath: "/fake/path/to/receipt/1");
+        receiptPhotoPath: null);
     Operation op2 = Operation(
         amount: -100.0,
         date: DateTime.utc(2020, 2, 20, 12, 00),
         description: "Fake operation 2",
         id: 2,
         isCash: false,
-        receiptPhotoPath: "/fake/path/to/receipt/2");
+        receiptPhotoPath: null);
     Operation op3 = Operation(
         amount: 50.0,
         date: DateTime.utc(2020, 2, 21, 10, 00),
         description: "Fake operation 3",
         id: 3,
         isCash: true,
-        receiptPhotoPath: "/fake/path/to/receipt/3");
+        receiptPhotoPath: null);
     Operation op4 = Operation(
         amount: 200.0,
         date: DateTime.utc(2020, 2, 21, 12, 00),
         description: "Fake operation 4",
         id: 4,
         isCash: false,
-        receiptPhotoPath: "/fake/path/to/receipt/1");
+        receiptPhotoPath: null);
     Operation op5 = Operation(
         amount: -100.0,
         date: DateTime.utc(2020, 2, 21, 13, 00),
         description: "Fake operation 5",
         id: 5,
         isCash: false,
-        receiptPhotoPath: "/fake/path/to/receipt/2");
+        receiptPhotoPath: null);
     Operation op6 = Operation(
         amount: 50.0,
         date: DateTime.utc(2020, 2, 21, 14, 00),
         description: "Fake operation 6",
         id: 6,
         isCash: true,
-        receiptPhotoPath: "/fake/path/to/receipt/3");
+        receiptPhotoPath: null);
     Operation op7 = Operation(
         amount: -100.0,
         date: DateTime.utc(2020, 2, 21, 15, 00),
         description: "Fake operation 7",
         id: 7,
         isCash: false,
-        receiptPhotoPath: "/fake/path/to/receipt/2");
+        receiptPhotoPath: null);
     Operation op8 = Operation(
         amount: 50.0,
         date: DateTime.utc(2020, 2, 21, 16, 00),
         description: "Fake operation 8",
         id: 8,
         isCash: true,
-        receiptPhotoPath: "/fake/path/to/receipt/3");
+        receiptPhotoPath: null);
     List<Operation> operations = List<Operation>();
     operations.add(op1);
     operations.add(op2);

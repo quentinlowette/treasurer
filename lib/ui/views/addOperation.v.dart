@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
+import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
 class AddOperationView extends StatefulWidget {
   @override
@@ -17,7 +21,18 @@ class _AddOperationViewState extends State<AddOperationView> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
   DateTime _date;
+  File _imageFile;
 
+  /// Displays the image picker with the camera
+  Future<void> _getImage() async {
+    File pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _imageFile = pickedImage;
+    });
+  }
+
+  /// Displays the date picker and sets the date variable
   Future<void> _selectDate() async {
     final DateTime pickedDate = await showDatePicker(
       context: context,
@@ -37,12 +52,12 @@ class _AddOperationViewState extends State<AddOperationView> {
   Operation _validateInputs(int nextOperationIndex) {
     if (_formKey.currentState.validate() && _date != null) {
       Operation newOperation = Operation(
-          amount: double.parse(_amountController.text),
+          amount: double.parse(_amountController.text.replaceAll(',', '.')),
           date: _date,
           description: _descriptionController.text,
           id: nextOperationIndex,
           isCash: _isCash,
-          receiptPhotoPath: null);
+          receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
       return newOperation;
     } else {
       setState(() {
@@ -59,14 +74,14 @@ class _AddOperationViewState extends State<AddOperationView> {
         reuseExisting: true,
         builder: (context, model, child) {
           return Scaffold(
-            appBar: AppBar(
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.filter_center_focus),
-                  onPressed: () => print("scan"),
-                )
-              ],
-            ),
+            // appBar: AppBar(
+            //   actions: <Widget>[
+            //     IconButton(
+            //       icon: Icon(Icons.filter_center_focus),
+            //       onPressed: _getImage,
+            //     )
+            //   ],
+            // ),
             body: SingleChildScrollView(
               child: SafeArea(
                 child: Form(
@@ -74,30 +89,37 @@ class _AddOperationViewState extends State<AddOperationView> {
                   autovalidate: _autoValidate,
                   child: Column(
                     children: <Widget>[
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: <Widget>[
-                      //     IconButton(
-                      //       icon: Icon(Icons.arrow_back_ios),
-                      //       onPressed: () => Navigator.of(context).pop(),
-                      //     ),
-                      //     IconButton(
-                      //       icon: Icon(Icons.filter_center_focus),
-                      //       onPressed: () => print("scan"),
-                      //     ),
-                      //   ],
-                      // ),
-                      SizedBox(height: 30.0),
-                      Text(
-                        "New operation",
-                        style: Theme.of(context).textTheme.headline2,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.arrow_back_ios),
+                            onPressed: () {
+                              if (_imageFile != null) {
+                                _imageFile.delete();
+                              }
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.filter_center_focus),
+                            onPressed: _getImage,
+                          ),
+                        ],
                       ),
+                      SizedBox(height: 30.0),
+                      // Text(
+                      //   "New operation",
+                      //   style: Theme.of(context).textTheme.headline2,
+                      // ),
+                      // SizedBox(height: 30.0),
+                      ImageMiniature(imageFile: _imageFile,),
+                      SizedBox(height: 30.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            SizedBox(height: 60.0),
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'Description',

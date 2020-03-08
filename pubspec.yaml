@@ -29,6 +29,7 @@ dependencies:
   path: ^1.6.4
   path_provider: ^1.6.1
   sqflite: ^1.2.1
+  image_picker: ^0.6.3+4
   intl: ^0.16.1
   flutter_localizations:
     sdk: flutter
