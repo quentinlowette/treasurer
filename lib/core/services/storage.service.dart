@@ -1,5 +1,8 @@
 import 'package:treasurer/core/models/operation.m.dart';
 
+export 'storage.database.service.dart';
+export 'storage.fake.service.dart';
+
 /// Storage Service
 abstract class StorageService {
   /// Adds an operation to the storage.
