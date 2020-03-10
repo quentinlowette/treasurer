@@ -76,7 +76,7 @@ class _AddOperationViewState extends State<AddOperationView> {
   }
 
   /// Validates the form fields and creates a new operation
-  Operation _validateInputs(int nextOperationIndex) {
+  Operation _validateInputs() {
     if (_formKey.currentState.validate() && _date != null) {
       Operation newOperation = Operation(
           amount: _isPositive
@@ -84,7 +84,6 @@ class _AddOperationViewState extends State<AddOperationView> {
               : -1 * double.parse(_amountController.text.replaceAll(',', '.')),
           date: _date,
           description: _descriptionController.text,
-          id: nextOperationIndex,
           isCash: _isCash,
           receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
       return newOperation;
@@ -226,7 +225,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                             RaisedButton(
                               onPressed: () {
                                 Operation newOp =
-                                    _validateInputs(model.nextOperationIndex);
+                                    _validateInputs();
                                 if (newOp != null) {
                                   model.addOperation(newOp);
                                   Navigator.of(context).pop();

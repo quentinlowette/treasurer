@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:treasurer/core/services/storage.service.dart';
 
 /// Model of an Operation
 class Operation {
@@ -13,7 +12,7 @@ class Operation {
   final String description;
 
   /// Id of the operation in the database
-  final int id;
+  int id;
 
   /// Boolean that is true if the operation is made on the cash and false if not
   final bool isCash;
@@ -25,19 +24,7 @@ class Operation {
       {@required this.amount,
       @required this.date,
       @required this.description,
-      @required this.id,
       @required this.isCash,
-      @required this.receiptPhotoPath});
-
-  /// Convert this to a map corresponding to the database model
-  Map<String, dynamic> toMap() {
-    return {
-      DatabaseHelper.otColumnAmount: this.amount,
-      DatabaseHelper.otColumnDate: this.date,
-      DatabaseHelper.otColumnDescription: this.description,
-      DatabaseHelper.otColumnId: this.id,
-      DatabaseHelper.otColumnIsCash: this.isCash,
-      DatabaseHelper.otColumnReceiptPhotoPath: this.receiptPhotoPath
-    };
-  }
+      @required this.receiptPhotoPath,
+      this.id});
 }
