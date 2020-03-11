@@ -8,6 +8,7 @@ import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/textRecognition.service.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
+import 'package:treasurer/core/viewmodels/addOperation.vm.dart';
 import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
 class AddOperationView extends StatefulWidget {
@@ -23,41 +24,14 @@ class _AddOperationViewState extends State<AddOperationView> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
   DateTime _date;
-  File _imageFile;
-  bool _isLoading = false;
+  // File _imageFile;
+  // bool _isLoading = false;
 
   /// Instance of the text recognition service
-  TextRecognitionService _textRecognitionService =
-      locator<TextRecognitionService>();
+  // TextRecognitionService _textRecognitionService =
+  //     locator<TextRecognitionService>();
 
   /// Displays the image picker with the camera
-  Future<void> _getImage() async {
-    File pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
-
-    // If picked image is null
-    if (pickedImage == null) {
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    // If there was a previous image
-    if (_imageFile != null) {
-      _imageFile.delete();
-    }
-
-    await _textRecognitionService.detect(pickedImage);
-
-    setState(() {
-      _imageFile = pickedImage;
-      _amountController.text =
-          _textRecognitionService.total.toString().replaceAll('.', ',');
-      _date = _textRecognitionService.date;
-      _isLoading = false;
-    });
-  }
 
   /// Displays the date picker and sets the date variable
   Future<void> _selectDate() async {
@@ -76,40 +50,13 @@ class _AddOperationViewState extends State<AddOperationView> {
   }
 
   /// Validates the form fields and creates a new operation
-  Operation _validateInputs() {
-    if (_formKey.currentState.validate() && _date != null) {
-      Operation newOperation = Operation(
-          amount: _isPositive
-              ? double.parse(_amountController.text.replaceAll(',', '.'))
-              : -1 * double.parse(_amountController.text.replaceAll(',', '.')),
-          date: _date,
-          description: _descriptionController.text,
-          isCash: _isCash,
-          receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
-      return newOperation;
-    } else {
-      setState(() {
-        _autoValidate = true;
-      });
-      return null;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<AccountViewModel>.withConsumer(
-        viewModel: locator<AccountViewModel>(),
-        reuseExisting: true,
+    return ViewModelProvider<AddOperationViewModel>.withConsumer(
+        viewModel: AddOperationViewModel(),
         builder: (context, model, child) {
           return Scaffold(
-            // appBar: AppBar(
-            //   actions: <Widget>[
-            //     IconButton(
-            //       icon: Icon(Icons.filter_center_focus),
-            //       onPressed: _getImage,
-            //     )
-            //   ],
-            // ),
             body: SingleChildScrollView(
               child: SafeArea(
                 child: Form(
@@ -122,20 +69,22 @@ class _AddOperationViewState extends State<AddOperationView> {
                         children: <Widget>[
                           IconButton(
                             icon: Icon(Icons.arrow_back_ios),
-                            onPressed: () {
-                              if (_imageFile != null) {
-                                _imageFile.delete();
-                              }
-                              Navigator.of(context).pop();
-                            },
+                            onPressed: () => model.exit(context),
                           ),
                           IconButton(
-                            icon: Icon(Icons.filter_center_focus),
-                            onPressed: _getImage,
-                          ),
+                              icon: Icon(Icons.filter_center_focus),
+                              onPressed: () {
+                                model.getImage();
+                                model.scanImage();
+                                setState(() {
+                                  _amountController.text =
+                                      model.detectedAmountString;
+                                  _date = model.detectedDate;
+                                });
+                              }),
                         ],
                       ),
-                      _isLoading ? LinearProgressIndicator() : Container(),
+                      model.isLoading ? LinearProgressIndicator() : Container(),
                       SizedBox(height: 30.0),
                       // Text(
                       //   "New operation",
@@ -143,7 +92,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                       // ),
                       // SizedBox(height: 30.0),
                       ImageMiniature(
-                        imageFile: _imageFile,
+                        imageFile: model.imageFile,
                       ),
                       SizedBox(height: 30.0),
                       Padding(
@@ -224,11 +173,19 @@ class _AddOperationViewState extends State<AddOperationView> {
                             SizedBox(height: 20.0),
                             RaisedButton(
                               onPressed: () {
-                                Operation newOp =
-                                    _validateInputs();
-                                if (newOp != null) {
-                                  model.addOperation(newOp);
-                                  Navigator.of(context).pop();
+                                if (_formKey.currentState.validate() &&
+                                    _date != null) {
+                                  model.commitOperation(
+                                      _amountController.text,
+                                      _date,
+                                      _descriptionController.text,
+                                      _isCash,
+                                      _isPositive);
+                                  model.exit(context);
+                                } else {
+                                  setState(() {
+                                    _autoValidate = true;
+                                  });
                                 }
                               },
                               color: Theme.of(context).accentColor,
