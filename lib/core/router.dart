@@ -5,15 +5,19 @@ import 'package:treasurer/ui/views/addOperation.v.dart';
 /// Navigation helper that generates the routes of the application
 class Router {
   /// Initial route
-  static String initialRoute = '/';
-  
+  static const String InitialRoute = '/';
+
+  // Route's definitions
+  static const String AccountViewRoute = '/';
+  static const String AddOperationViewRoute = '/addOperation';
+
   /// Generates the routes from given route settings
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Switch on the route name
     switch (settings.name) {
-      case '/':
+      case AccountViewRoute:
         return MaterialPageRoute(builder: (_) => AccountView());
-      case '/addOperation':
+      case AddOperationViewRoute:
         return MaterialPageRoute(builder: (_) => AddOperationView());
       default:
         // Default page return if the route name is unknown

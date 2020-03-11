@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/models/operation.m.dart';
+import 'package:treasurer/core/router.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/storage.service.dart';
@@ -69,7 +70,7 @@ class AccountViewModel extends ChangeNotifier {
 
   /// Navigates to the AddOperation view
   void navigateToAddOperation() {
-    _navigationService.navigateTo('/addOperation');
+    _navigationService.navigateTo(Router.AddOperationViewRoute);
   }
 
   /// Navigates back to the previous view

@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: CustomTheme.defaultTheme,
-      initialRoute: Router.initialRoute,
+      initialRoute: Router.InitialRoute,
       onGenerateRoute: Router.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
       localizationsDelegates: [
