@@ -13,8 +13,10 @@ class OperationsDao extends Dao<Operation> {
   final String description = "description";
   final String receiptPhotoPath = "receiptPhotoPath";
 
-  @override
-  List<List<String>> get columnsDefinition => [
+  // Constructor
+  OperationsDao(){
+    // Columns definition
+    columnsDefinition = [
         [id, "INTEGER PRIMARY KEY AUTOINCREMENT"],
         [amount, "REAL NOT NULL"],
         [isCash, "INTEGER NOT NULL"],
@@ -22,6 +24,10 @@ class OperationsDao extends Dao<Operation> {
         [description, "TEXT NOT NULL"],
         [receiptPhotoPath, "TEXT"]
       ];
+
+    // Table name
+    tableName = "operations";
+  }
 
   @override
   Operation fromMap(Map<String, dynamic> map) {
@@ -33,9 +39,6 @@ class OperationsDao extends Dao<Operation> {
         isCash: map[isCash] == 1,
         receiptPhotoPath: map[receiptPhotoPath]);
   }
-
-  @override
-  String get tableName => "operations";
 
   @override
   Map<String, dynamic> toMap(Operation operation) {

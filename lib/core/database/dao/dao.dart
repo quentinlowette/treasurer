@@ -9,13 +9,13 @@ abstract class Dao<T> {
 
   /// Description of the columns in the database that store the object
   @protected
-  List<List<String>> get columnsDefinition;
+  List<List<String>> columnsDefinition;
 
   /// Getter for the create table query
   String get createTableQuery => """CREATE TABLE $tableName ($columns)""";
 
   /// Getter for the table name
-  String get tableName;
+  String tableName;
 
   /// Converts a [Map<String, dynamic>] to a generic object
   T fromMap(Map<String, dynamic> map);
