@@ -1,13 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:treasurer/core/models/operation.m.dart';
-import 'package:treasurer/core/services/locator.dart';
-import 'package:treasurer/core/services/textRecognition.service.dart';
-import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/core/viewmodels/addOperation.vm.dart';
 import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
@@ -69,7 +62,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                         children: <Widget>[
                           IconButton(
                             icon: Icon(Icons.arrow_back_ios),
-                            onPressed: () => model.exit(context),
+                            onPressed: () => model.exit(),
                           ),
                           IconButton(
                               icon: Icon(Icons.filter_center_focus),
@@ -181,7 +174,6 @@ class _AddOperationViewState extends State<AddOperationView> {
                                       _descriptionController.text,
                                       _isCash,
                                       _isPositive);
-                                  model.exit(context);
                                 } else {
                                   setState(() {
                                     _autoValidate = true;

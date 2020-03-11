@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:treasurer/core/routes.dart';
+import 'package:treasurer/core/router.dart';
 import 'package:treasurer/core/services/locator.dart';
+import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/ui/theme.dart';
 
 void main() {
@@ -16,8 +17,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: CustomTheme.defaultTheme,
-      initialRoute: '/',
+      initialRoute: Router.initialRoute,
       onGenerateRoute: Router.generateRoute,
+      navigatorKey: locator<NavigationService>().navigatorKey,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
+import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 
 /// View Model of the Account View
@@ -22,6 +23,9 @@ class AccountViewModel extends ChangeNotifier {
 
   /// Index of the next operation to insert
   // int _nextOperationIndex;
+
+  /// Instance of the navigation service
+  NavigationService _navigationService = locator<NavigationService>();
 
   /// Instance of the storage service
   StorageService _storageService = locator<StorageService>();
@@ -61,6 +65,16 @@ class AccountViewModel extends ChangeNotifier {
     _cash = double.parse(_cash.toStringAsFixed(2));
     _bank = double.parse(_bank.toStringAsFixed(2));
     _total = double.parse(_total.toStringAsFixed(2));
+  }
+
+  /// Navigates to the AddOperation view
+  void navigateToAddOperation() {
+    _navigationService.navigateTo('/addOperation');
+  }
+
+  /// Navigates back to the previous view
+  void navigateBack() {
+    _navigationService.goBack();
   }
 
   /// Loads the stored operations
@@ -108,5 +122,6 @@ class AccountViewModel extends ChangeNotifier {
 
     // Notifies the changes
     notifyListeners();
+    navigateBack();
   }
 }

@@ -16,28 +16,6 @@ class AccountView extends StatelessWidget {
           onModelReady: (model) => model.loadData(),
           builder: (context, model, child) {
             return Scaffold(
-              // backgroundColor: Theme.of(context).accentColor,
-              // floatingActionButtonLocation:
-              //     FloatingActionButtonLocation.centerFloat,
-              // floatingActionButton: !model.isLoaded
-              //     ? null
-              //     : FloatingActionButton(
-              //         onPressed: () =>
-              //             Navigator.of(context).pushNamed('/addOperation'),
-              //         child: Icon(Icons.add),
-              //         backgroundColor: Theme.of(context).accentColor,
-              //       ),
-              // appBar: !model.isLoaded
-              //     ? null
-              //     : AppBar(
-              //         actions: <Widget>[
-              //           IconButton(
-              //             icon: Icon(Icons.add),
-              //             onPressed: () =>
-              //                 Navigator.of(context).pushNamed('/addOperation'),
-              //           )
-              //         ],
-              //       ),
               body: !model.isLoaded
                   ? Center(
                       child: CircularProgressIndicator(
@@ -57,8 +35,7 @@ class AccountView extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.add),
                                     color: Theme.of(context).accentColor,
-                                    onPressed: () => Navigator.of(context)
-                                        .pushNamed('/addOperation'),
+                                    onPressed: () => model.navigateToAddOperation(),
                                   ),
                                 ],
                               ),

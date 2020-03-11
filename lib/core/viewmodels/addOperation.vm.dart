@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
+import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/textRecognition.service.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 
@@ -30,15 +31,18 @@ class AddOperationViewModel extends ChangeNotifier {
   /// Instance of the text recognition service
   TextRecognitionService _textRecognitionService = locator<TextRecognitionService>();
 
+  /// Instance of the navigation service
+  NavigationService _navigationService = locator<NavigationService>();
+
   /// Instance of the account view model
   AccountViewModel _accountViewModel = locator<AccountViewModel>();
 
-  void exit(BuildContext context) {
+  void exit() {
     if (_imageFile != null) {
       _imageFile.delete();
     }
 
-    Navigator.of(context).pop();
+    _navigationService.goBack();
   }
 
   /// Displays the image picker with the camera
@@ -82,5 +86,6 @@ class AddOperationViewModel extends ChangeNotifier {
         isCash: isCash,
         receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
     _accountViewModel.addOperation(operation);
+    exit();
   }
 }

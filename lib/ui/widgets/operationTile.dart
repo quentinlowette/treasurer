@@ -16,16 +16,14 @@ class OperationTile extends StatelessWidget {
         confirmDismiss: (direction) => showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            content: Text('Êtes-vous sûr de vouloir supprimer cette opération ?'),
+            content: Text("Êtes-vous sûr de vouloir supprimer cette opération ?"),
             actions: <Widget>[
               FlatButton(
                 child: Text(
                   "Annuler",
                   style: Theme.of(context).textTheme.button,
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => model.navigateBack(),
               ),
               FlatButton(
                 child: Text(
@@ -34,7 +32,6 @@ class OperationTile extends StatelessWidget {
                 ),
                 onPressed: () {
                   model.removeOperation(operation);
-                  Navigator.of(context).pop();
                 },
               ),
             ],

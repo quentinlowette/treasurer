@@ -4,6 +4,9 @@ import 'package:treasurer/ui/views/addOperation.v.dart';
 
 /// Navigation helper that generates the routes of the application
 class Router {
+  /// Initial route
+  static String initialRoute = '/';
+  
   /// Generates the routes from given route settings
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Switch on the route name
