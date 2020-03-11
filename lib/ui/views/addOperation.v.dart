@@ -17,14 +17,6 @@ class _AddOperationViewState extends State<AddOperationView> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
   DateTime _date;
-  // File _imageFile;
-  // bool _isLoading = false;
-
-  /// Instance of the text recognition service
-  // TextRecognitionService _textRecognitionService =
-  //     locator<TextRecognitionService>();
-
-  /// Displays the image picker with the camera
 
   /// Displays the date picker and sets the date variable
   Future<void> _selectDate() async {
@@ -41,8 +33,6 @@ class _AddOperationViewState extends State<AddOperationView> {
       });
     }
   }
-
-  /// Validates the form fields and creates a new operation
 
   @override
   Widget build(BuildContext context) {
