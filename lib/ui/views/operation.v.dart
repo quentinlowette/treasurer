@@ -15,7 +15,7 @@ class OperationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<OperationViewModel>.withConsumer(
-      viewModel: OperationViewModel(),
+      viewModel: OperationViewModel(operation: operation),
       builder: (context, model, _) => Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(

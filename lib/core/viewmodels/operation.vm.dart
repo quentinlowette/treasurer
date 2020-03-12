@@ -7,13 +7,13 @@ import 'package:treasurer/core/services/navigation.service.dart';
 /// View Model of the operation view
 class OperationViewModel extends ChangeNotifier {
   /// Operation
-  Operation _operation;
-
-  /// Getter for the operation
-  Operation get operation => _operation;
+  Operation operation;
 
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
+
+  /// Constructor
+  OperationViewModel({@required this.operation});
 
   /// Exits the operation view
   void exit() {
@@ -23,7 +23,7 @@ class OperationViewModel extends ChangeNotifier {
   /// Opens the edit view and updates the operation
   Future<void> editOperation() async{
     /// Opens edit view and wait for the new Operation
-    _operation = await _navigationService.navigateTo(Router.OperationViewRoute, arguments: _operation);
+    operation = await _navigationService.navigateTo(Router.AddOperationViewRoute, arguments: operation);
 
     /// Notifies changes
     notifyListeners();

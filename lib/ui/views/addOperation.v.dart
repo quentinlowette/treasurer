@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/viewmodels/addOperation.vm.dart';
 import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
 class AddOperationView extends StatefulWidget {
+  final Operation initialOperation;
+
+  AddOperationView({@required this.initialOperation});
+
   @override
   _AddOperationViewState createState() => _AddOperationViewState();
 }
@@ -17,6 +22,19 @@ class _AddOperationViewState extends State<AddOperationView> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
   DateTime _date;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.initialOperation != null) {
+      _descriptionController.text = widget.initialOperation.description;
+      _amountController.text = widget.initialOperation.amount.abs().toString();
+      _date = widget.initialOperation.date;
+      _isCash = widget.initialOperation.isCash;
+      _isPositive = widget.initialOperation.amount >= 0;
+    }
+  }
 
   /// Displays the date picker and sets the date variable
   Future<void> _selectDate() async {
@@ -37,7 +55,8 @@ class _AddOperationViewState extends State<AddOperationView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<AddOperationViewModel>.withConsumer(
-        viewModel: AddOperationViewModel(),
+        viewModel:
+            AddOperationViewModel(initialOperation: widget.initialOperation),
         builder: (context, model, child) {
           return Scaffold(
             body: SingleChildScrollView(

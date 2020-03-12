@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/ui/colors.dart';
 import 'package:treasurer/ui/widgets/accountHeader.dart';
@@ -11,8 +10,7 @@ class AccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       ViewModelProvider<AccountViewModel>.withConsumer(
-          viewModel: locator<AccountViewModel>(),
-          reuseExisting: true,
+          viewModel: AccountViewModel(),
           onModelReady: (model) => model.loadData(),
           builder: (context, model, child) {
             return Scaffold(

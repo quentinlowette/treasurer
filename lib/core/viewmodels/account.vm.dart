@@ -68,12 +68,6 @@ class AccountViewModel extends ChangeNotifier {
     _total = double.parse(_total.toStringAsFixed(2));
   }
 
-  // TODO cleanc
-  //// Navigates to the AddOperation view
-  // void navigateToAddOperation() {
-  //   _navigationService.navigateTo(Router.AddOperationViewRoute);
-  // }
-
   Future<void> newOpeartion() async {
     Operation newOperation = await _navigationService.navigateTo(Router.AddOperationViewRoute);
 
@@ -132,9 +126,5 @@ class AccountViewModel extends ChangeNotifier {
 
     // Notifies the changes
     notifyListeners();
-
-    // TODO clean
-    //// Navigates back to the previous view
-    //// _navigationService.goBack();
   }
 }

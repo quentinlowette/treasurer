@@ -6,7 +6,6 @@ import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/textRecognition.service.dart';
-import 'package:treasurer/core/viewmodels/account.vm.dart';
 
 /// ViewModel of the AddOperation View
 class AddOperationViewModel extends ChangeNotifier {
@@ -19,6 +18,12 @@ class AddOperationViewModel extends ChangeNotifier {
   String _detectedAmountString;
 
   DateTime _detectedDate;
+
+  AddOperationViewModel({@required Operation initialOperation}) {
+    if (initialOperation != null && initialOperation.receiptPhotoPath != null) {
+      _imageFile = File(initialOperation.receiptPhotoPath);
+    }
+  }
 
   String get detectedAmountString => _detectedAmountString;
 
@@ -33,10 +38,6 @@ class AddOperationViewModel extends ChangeNotifier {
 
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
-
-  // TODO clean
-  ///// Instance of the account view model
-  ////AccountViewModel _accountViewModel = locator<AccountViewModel>();
 
   Operation _operation;
 

@@ -21,7 +21,8 @@ class Router {
       case AccountViewRoute:
         return MaterialPageRoute(builder: (_) => AccountView());
       case AddOperationViewRoute:
-        return MaterialPageRoute(builder: (_) => AddOperationView());
+        Operation operation = settings.arguments as Operation;
+        return MaterialPageRoute(builder: (_) => AddOperationView(initialOperation: operation,));
       case OperationViewRoute:
         Operation operation = settings.arguments as Operation;
         return MaterialPageRoute(builder: (_) => OperationView(operation: operation,));
