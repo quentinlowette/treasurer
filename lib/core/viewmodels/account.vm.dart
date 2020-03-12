@@ -68,18 +68,27 @@ class AccountViewModel extends ChangeNotifier {
     _total = double.parse(_total.toStringAsFixed(2));
   }
 
-  /// Navigates to the AddOperation view
-  void navigateToAddOperation() {
-    _navigationService.navigateTo(Router.AddOperationViewRoute);
+  // TODO cleanc
+  //// Navigates to the AddOperation view
+  // void navigateToAddOperation() {
+  //   _navigationService.navigateTo(Router.AddOperationViewRoute);
+  // }
+
+  Future<void> newOpeartion() async {
+    Operation newOperation = await _navigationService.navigateTo(Router.AddOperationViewRoute);
+
+    if (newOperation != null) {
+      addOperation(newOperation);
+    }
   }
 
-  /// Navigates back to the previous view
-  void navigateBack() {
-    _navigationService.goBack();
+  /// Navigates to the AddOperation view
+  void navigateToOperation(Operation operation) {
+    _navigationService.navigateTo(Router.OperationViewRoute, arguments: operation);
   }
 
   /// Loads the stored operations
-  Future loadData() async {
+  Future<void> loadData() async {
     // Fetches the operations from the storage service
     _operations = await _storageService.getOperations();
 
@@ -96,7 +105,7 @@ class AccountViewModel extends ChangeNotifier {
   }
 
   /// Adds an operation to the list
-  Future addOperation(Operation operation) async {
+  Future<void> addOperation(Operation operation) async {
     // Adds the operation to the storage
     operation.id = await _storageService.addOperation(operation);
 
@@ -111,18 +120,21 @@ class AccountViewModel extends ChangeNotifier {
   }
 
   /// Removes an operation from the list
-  Future removeOperation(Operation operation) async {
+  Future<void> removeOperation(Operation operation) async {
+    // Removes the operation from the storage
+    await _storageService.deleteOperation(operation);
+
     // Removes the operation from the loaded list
     _operations.remove(operation);
 
     // Changes the amounts
     _updateAmounts(operation, removed: true);
 
-    // Removes the operation from the storage
-    await _storageService.deleteOperation(operation);
-
     // Notifies the changes
     notifyListeners();
-    navigateBack();
+
+    // TODO clean
+    //// Navigates back to the previous view
+    //// _navigationService.goBack();
   }
 }

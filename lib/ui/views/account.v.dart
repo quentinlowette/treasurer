@@ -35,7 +35,7 @@ class AccountView extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.add),
                                     color: Theme.of(context).accentColor,
-                                    onPressed: () => model.navigateToAddOperation(),
+                                    onPressed: () => model.newOpeartion(),
                                   ),
                                 ],
                               ),

@@ -34,15 +34,18 @@ class AddOperationViewModel extends ChangeNotifier {
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
 
-  /// Instance of the account view model
-  AccountViewModel _accountViewModel = locator<AccountViewModel>();
+  // TODO clean
+  ///// Instance of the account view model
+  ////AccountViewModel _accountViewModel = locator<AccountViewModel>();
+
+  Operation _operation;
 
   void exit() {
     if (_imageFile != null) {
       _imageFile.delete();
     }
 
-    _navigationService.goBack();
+    _navigationService.goBack<Operation>(_operation);
   }
 
   /// Displays the image picker with the camera
@@ -77,7 +80,7 @@ class AddOperationViewModel extends ChangeNotifier {
 
   /// Creates a new operation
   void commitOperation(String amountText, DateTime date, String descriptionText, bool isCash, bool isPositive) {
-    Operation operation = Operation(
+    _operation = Operation(
         amount: isPositive
             ? double.parse(amountText.replaceAll(',', '.'))
             : -1 * double.parse(amountText.replaceAll(',', '.')),
@@ -85,7 +88,7 @@ class AddOperationViewModel extends ChangeNotifier {
         description: descriptionText,
         isCash: isCash,
         receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
-    _accountViewModel.addOperation(operation);
+    // _accountViewModel.addOperation(operation);
     exit();
   }
 }
