@@ -10,7 +10,7 @@ class FakeStorageService extends StorageService {
   }
 
   @override
-  Future<void> deleteOperation(Operation operation) {
+  Future<bool> deleteOperation(Operation operation) {
     // do nothing
     return null;
   }
@@ -100,7 +100,7 @@ class FakeStorageService extends StorageService {
   }
 
   @override
-  Future<void> updateOperation(Operation operation) {
+  Future<bool> updateOperation(Operation operation) {
     // do nothing
     return null;
   }

@@ -11,7 +11,7 @@ abstract class StorageService {
   Future<int> addOperation(Operation operation);
 
   /// Deletes the given operation from storage
-  Future<void> deleteOperation(Operation operation);
+  Future<bool> deleteOperation(Operation operation);
 
   /// Returns the stored list of operations
   Future<List<Operation>> getOperations();
@@ -20,5 +20,5 @@ abstract class StorageService {
   Future<List<double>> getAmounts();
 
   /// Updates the given operation in storage
-  Future<void> updateOperation(Operation operation);
+  Future<bool> updateOperation(Operation operation);
 }

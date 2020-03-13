@@ -21,13 +21,16 @@ class DatabaseStorageService extends StorageService {
   }
 
   @override
-  Future<void> deleteOperation(Operation operation) async {
+  Future<bool> deleteOperation(Operation operation) async {
     // Fetches the database
     final Database db = await DatabaseProvider.instance.database;
 
     // Deletes from the operations table the given operation
-    await db.delete(operationsDao.tableName,
+    int rowsAffected = await db.delete(operationsDao.tableName,
         where: "${operationsDao.id} = ?", whereArgs: [operation.id]);
+
+    // Returns success status
+    return rowsAffected != 0;
   }
 
   @override
@@ -72,12 +75,14 @@ class DatabaseStorageService extends StorageService {
   }
 
   @override
-  Future<void> updateOperation(Operation operation) async {
+  Future<bool> updateOperation(Operation operation) async {
     // Fetches the database
     final Database db = await DatabaseProvider.instance.database;
 
     // Updates in the database the given operation
-    await db.update(operationsDao.tableName, operationsDao.toMap(operation),
-        where: "${operationsDao.id} = ?", whereArgs: [operation.id]);
+    int rowsAffected = await db.update(operationsDao.tableName, operationsDao.toMap(operation), where: "${operationsDao.id} = ?", whereArgs: [operation.id]);
+
+    // Returns success status
+    return rowsAffected != 0;
   }
 }
