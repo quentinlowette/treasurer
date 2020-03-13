@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/ui/views/account.v.dart';
-import 'package:treasurer/ui/views/addOperation.v.dart';
+import 'package:treasurer/ui/views/operationEditor.v.dart';
 import 'package:treasurer/ui/views/operation.v.dart';
 
 /// Navigation helper that generates the routes of the application
@@ -10,8 +10,19 @@ class Router {
   static const String InitialRoute = '/';
 
   // Route's definitions
+  /// Route of the Account View
   static const String AccountViewRoute = '/';
-  static const String AddOperationViewRoute = '/addOperation';
+
+  /// Route of the Operation Editor View
+  ///
+  /// Navigation has one optional parameter of type `Operation`
+  ///
+  /// Navigation returns an `Operation` or `null`
+  static const String OperationEditorViewRoute = '/operationEditor';
+
+  /// Route of the Operation View
+  ///
+  /// Navigation has one optional parameter of type `Operation`
   static const String OperationViewRoute = '/operation';
 
   /// Generates the routes from given route settings
@@ -20,12 +31,20 @@ class Router {
     switch (settings.name) {
       case AccountViewRoute:
         return MaterialPageRoute(builder: (_) => AccountView());
-      case AddOperationViewRoute:
+      case OperationEditorViewRoute:
+        // Cast arguments
         Operation operation = settings.arguments as Operation;
-        return MaterialPageRoute(builder: (_) => AddOperationView(initialOperation: operation,));
+        return MaterialPageRoute(
+            builder: (_) => OperationEditorView(
+                  initialOperation: operation,
+                ));
       case OperationViewRoute:
+        // Cast arguments
         Operation operation = settings.arguments as Operation;
-        return MaterialPageRoute(builder: (_) => OperationView(operation: operation,));
+        return MaterialPageRoute(
+            builder: (_) => OperationView(
+                  operation: operation,
+                ));
       default:
         // Default page return if the route name is unknown
         return MaterialPageRoute(
