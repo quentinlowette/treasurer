@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:treasurer/core/models/operation.m.dart';
-import 'package:treasurer/core/viewmodels/addOperation.vm.dart';
+import 'package:treasurer/core/viewmodels/operationEditor.vm.dart';
 import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
-class AddOperationView extends StatefulWidget {
+/// View of the Operation's Editor
+class OperationEditorView extends StatefulWidget {
   final Operation initialOperation;
 
-  AddOperationView({@required this.initialOperation});
+  OperationEditorView({@required this.initialOperation});
 
   @override
-  _AddOperationViewState createState() => _AddOperationViewState();
+  _OperationEditorViewState createState() => _OperationEditorViewState();
 }
 
-class _AddOperationViewState extends State<AddOperationView> {
+class _OperationEditorViewState extends State<OperationEditorView> {
   /// Global key of the form
   ///
   /// Needed for the Form widget
@@ -80,9 +81,9 @@ class _AddOperationViewState extends State<AddOperationView> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<AddOperationViewModel>.withConsumer(
+    return ViewModelProvider<OperationEditorViewModel>.withConsumer(
         viewModel:
-            AddOperationViewModel(initialOperation: widget.initialOperation),
+            OperationEditorViewModel(initialOperation: widget.initialOperation),
         builder: (context, model, child) {
           return Scaffold(
             body: SingleChildScrollView(

@@ -22,9 +22,6 @@ class AccountViewModel extends ChangeNotifier {
   /// Amount of bank of the account
   double _bank;
 
-  /// Index of the next operation to insert
-  // int _nextOperationIndex;
-
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
 
@@ -68,17 +65,21 @@ class AccountViewModel extends ChangeNotifier {
     _total = double.parse(_total.toStringAsFixed(2));
   }
 
-  Future<void> newOpeartion() async {
-    Operation newOperation = await _navigationService.navigateTo(Router.AddOperationViewRoute);
+  /// Navigates to the operation's editor and then adds the new operation
+  Future<void> newOperation() async {
+    Operation newOperation =
+        await _navigationService.navigateTo(Router.OperationEditorViewRoute);
 
+    // If an operation was returned by the operation's editor
     if (newOperation != null) {
       addOperation(newOperation);
     }
   }
 
-  /// Navigates to the AddOperation view
+  /// Navigates to the Operation view
   void navigateToOperation(Operation operation) {
-    _navigationService.navigateTo(Router.OperationViewRoute, arguments: operation);
+    _navigationService.navigateTo(Router.OperationViewRoute,
+        arguments: operation);
   }
 
   /// Loads the stored operations
@@ -98,33 +99,59 @@ class AccountViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Adds an operation to the list
+  /// Adds an operation
   Future<void> addOperation(Operation operation) async {
     // Adds the operation to the storage
     operation.id = await _storageService.addOperation(operation);
 
-    // Adds the operation to the loaded list
-    _operations.add(operation);
+    // If the database's operation succeeds
+    if (operation.id != null) {
+      // Adds the operation to the loaded list
+      _operations.add(operation);
 
-    // Changes the amounts
-    _updateAmounts(operation);
+      // Changes the amounts
+      _updateAmounts(operation);
 
-    // Notifies the changes
-    notifyListeners();
+      // Notifies the changes
+      notifyListeners();
+    }
   }
 
-  /// Removes an operation from the list
+  /// Removes an operation
   Future<void> removeOperation(Operation operation) async {
     // Removes the operation from the storage
-    await _storageService.deleteOperation(operation);
+    bool success = await _storageService.deleteOperation(operation);
 
-    // Removes the operation from the loaded list
-    _operations.remove(operation);
+    // If the database's operation succeeds
+    if (success) {
+      // Removes the operation from the loaded list
+      _operations.remove(operation);
 
-    // Changes the amounts
-    _updateAmounts(operation, removed: true);
+      // Changes the amounts
+      _updateAmounts(operation, removed: true);
 
-    // Notifies the changes
-    notifyListeners();
+      // Notifies the changes
+      notifyListeners();
+    }
+  }
+
+  /// Updates an operation
+  Future<void> updateOperation(Operation oldOperation, Operation newOperation) async {
+    // Removes the operation from the storage
+    bool success = await _storageService.updateOperation(newOperation);
+
+    // If the database's operation succeeds
+    if (success) {
+      // Updates the operation from the loaded list
+      _operations.remove(oldOperation);
+      _operations.add(newOperation);
+
+      // Changes the amounts
+      _updateAmounts(oldOperation, removed: true);
+      _updateAmounts(newOperation, removed: false);
+
+      // Notifies the changes
+      notifyListeners();
+    }
   }
 }

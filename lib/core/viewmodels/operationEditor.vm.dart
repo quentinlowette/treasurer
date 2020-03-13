@@ -7,8 +7,8 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/textRecognition.service.dart';
 
-/// ViewModel of the AddOperation View
-class AddOperationViewModel extends ChangeNotifier {
+/// ViewModel of the OperationEditor View
+class OperationEditorViewModel extends ChangeNotifier {
   /// Loading status
   bool _isLoading = false;
 
@@ -19,7 +19,8 @@ class AddOperationViewModel extends ChangeNotifier {
 
   DateTime _detectedDate;
 
-  AddOperationViewModel({@required Operation initialOperation}) {
+  OperationEditorViewModel({@required Operation initialOperation}) {
+    _initialOperation = initialOperation;
     if (initialOperation != null && initialOperation.receiptPhotoPath != null) {
       _imageFile = File(initialOperation.receiptPhotoPath);
     }
@@ -34,26 +35,28 @@ class AddOperationViewModel extends ChangeNotifier {
   File get imageFile => _imageFile;
 
   /// Instance of the text recognition service
-  TextRecognitionService _textRecognitionService = locator<TextRecognitionService>();
+  TextRecognitionService _textRecognitionService =
+      locator<TextRecognitionService>();
 
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
 
-  Operation _operation;
+  Operation _initialOperation;
 
-  void exit() {
-    if (_imageFile != null) {
+  /// Exits the view and deletes, if needed, the taken picture
+  void exit([Operation operation]) {
+    // If there isn't an initial operation and if a picture has been taken
+    if (_initialOperation == null && _imageFile != null) {
       _imageFile.delete();
     }
-
-    _navigationService.goBack<Operation>(_operation);
+    _navigationService.goBack<Operation>(operation);
   }
 
   /// Displays the image picker with the camera
   Future<void> getImage() async {
     File pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
 
-    // If picked image is null
+    // If picker was closed
     if (pickedImage == null) {
       return;
     }
@@ -63,7 +66,10 @@ class AddOperationViewModel extends ChangeNotifier {
       _imageFile.delete();
     }
 
+    // Saves the picture
     _imageFile = pickedImage;
+
+    // Notifies changes
     notifyListeners();
   }
 
@@ -73,23 +79,28 @@ class AddOperationViewModel extends ChangeNotifier {
 
     await _textRecognitionService.detect(_imageFile);
 
-    _detectedAmountString = _textRecognitionService.total.toString().replaceAll('.', ',');
+    _detectedAmountString =
+        _textRecognitionService.total.toString().replaceAll('.', ',');
     _detectedDate = _textRecognitionService.date;
     _isLoading = false;
     notifyListeners();
   }
 
-  /// Creates a new operation
-  void commitOperation(String amountText, DateTime date, String descriptionText, bool isCash, bool isPositive) {
-    _operation = Operation(
+  /// Creates a new operation and exit the view
+  void commitOperation(String amountText, DateTime date, String descriptionText,
+      bool isCash, bool isPositive) {
+    // Create a new Operation
+    Operation newOperation = Operation(
         amount: isPositive
             ? double.parse(amountText.replaceAll(',', '.'))
             : -1 * double.parse(amountText.replaceAll(',', '.')),
         date: date,
         description: descriptionText,
+        id: _initialOperation == null ? null : _initialOperation.id,
         isCash: isCash,
         receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
-    // _accountViewModel.addOperation(operation);
-    exit();
+
+    // Exits the view
+    exit(newOperation);
   }
 }
