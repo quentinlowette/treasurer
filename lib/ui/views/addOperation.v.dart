@@ -15,18 +15,37 @@ class AddOperationView extends StatefulWidget {
 }
 
 class _AddOperationViewState extends State<AddOperationView> {
+  /// Global key of the form
+  ///
+  /// Needed for the Form widget
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  /// Auto validate status
   bool _autoValidate = false;
+
+  /// Auto filled status
+  bool _autoFilled = false;
+
+  /// Cash status
   bool _isCash = false;
+
+  /// Positive status
   bool _isPositive = false;
+
+  /// Controller of the description input
   TextEditingController _descriptionController = TextEditingController();
+
+  /// Controller of the amount input
   TextEditingController _amountController = TextEditingController();
+
+  /// Selected DateTime
   DateTime _date;
 
   @override
   void initState() {
     super.initState();
 
+    // Initializes the fields if there is an initial operation
     if (widget.initialOperation != null) {
       _descriptionController.text = widget.initialOperation.description;
       _amountController.text = widget.initialOperation.amount.abs().toString();
@@ -36,7 +55,14 @@ class _AddOperationViewState extends State<AddOperationView> {
     }
   }
 
-  /// Displays the date picker and sets the date variable
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  /// Displays the date picker and sets the [_date] variable
   Future<void> _selectDate() async {
     final DateTime pickedDate = await showDatePicker(
       context: context,
@@ -82,6 +108,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                                   _amountController.text =
                                       model.detectedAmountString;
                                   _date = model.detectedDate;
+                                  _autoFilled = true;
                                 });
                               }),
                         ],
@@ -132,6 +159,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                                     decoration: InputDecoration(
                                       labelText: 'Montant',
                                       suffixIcon: Icon(Icons.euro_symbol),
+                                      icon: _autoFilled ? Icon(Icons.warning) : null,
                                     ),
                                     keyboardType: TextInputType.number,
                                     controller: _amountController,
