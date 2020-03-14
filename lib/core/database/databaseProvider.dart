@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:treasurer/core/database/dao/dao.dart';
-import 'package:treasurer/core/database/dao/operations.dao.dart';
+import 'package:treasurer/core/database/dao/operation.dao.dart';
 
 /// Helper class for the database management
 ///
@@ -17,7 +17,7 @@ class DatabaseProvider {
   static final int _databaseVersion = 1;
 
   /// Tables definition
-  static final List<Dao> tables = [OperationsDao()];
+  static final List<Dao> tables = [OperationDao()];
 
   /// Instance of this class
   static final DatabaseProvider instance =

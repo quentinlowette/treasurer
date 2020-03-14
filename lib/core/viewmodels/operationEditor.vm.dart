@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
@@ -15,8 +16,10 @@ class OperationEditorViewModel extends ChangeNotifier {
   /// Image File associated to the operation
   File _imageFile;
 
+  /// Detected amount's string
   String _detectedAmountString;
 
+  /// Detected date
   DateTime _detectedDate;
 
   OperationEditorViewModel({@required Operation initialOperation}) {
@@ -26,12 +29,16 @@ class OperationEditorViewModel extends ChangeNotifier {
     }
   }
 
+  /// Getter for the detected amount's string
   String get detectedAmountString => _detectedAmountString;
 
+  /// Getter for the detected date
   DateTime get detectedDate => _detectedDate;
 
+  /// Getter for the loading status
   bool get isLoading => _isLoading;
 
+  /// Getter for the image's fiel
   File get imageFile => _imageFile;
 
   /// Instance of the text recognition service
@@ -41,6 +48,7 @@ class OperationEditorViewModel extends ChangeNotifier {
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
 
+  /// Initial operation
   Operation _initialOperation;
 
   /// Exits the view and deletes, if needed, the taken picture
@@ -87,17 +95,15 @@ class OperationEditorViewModel extends ChangeNotifier {
   }
 
   /// Creates a new operation and exit the view
-  void commitOperation(String amountText, DateTime date, String descriptionText,
-      bool isCash, bool isPositive) {
+  void commitOperation(String amountText, DateTime date, String descriptionText) {
     // Create a new Operation
     Operation newOperation = Operation(
-        amount: isPositive
-            ? double.parse(amountText.replaceAll(',', '.'))
-            : -1 * double.parse(amountText.replaceAll(',', '.')),
+        amount: double.parse(amountText.replaceAll(',', '.')),
         date: date,
         description: descriptionText,
         id: _initialOperation == null ? null : _initialOperation.id,
-        isCash: isCash,
+        src: Actors.extern,
+        dst: Actors.bank,
         receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
 
     // Exits the view

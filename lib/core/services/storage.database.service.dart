@@ -1,13 +1,14 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:treasurer/core/database/dao/operations.dao.dart';
+import 'package:treasurer/core/database/dao/operation.dao.dart';
 import 'package:treasurer/core/database/databaseProvider.dart';
+import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 
 /// Implementation of the storage service using an sqllite database
 class DatabaseStorageService extends StorageService {
   ///
-  OperationsDao operationsDao = OperationsDao();
+  OperationDao operationDao = OperationDao();
 
   @override
   Future<int> addOperation(Operation operation) async {
@@ -16,7 +17,7 @@ class DatabaseStorageService extends StorageService {
 
     // Inserts in the database the given operation, replace if conflict
     return await db.insert(
-        operationsDao.tableName, operationsDao.toMap(operation),
+        operationDao.tableName, operationDao.toMap(operation),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
@@ -26,8 +27,8 @@ class DatabaseStorageService extends StorageService {
     final Database db = await DatabaseProvider.instance.database;
 
     // Deletes from the operations table the given operation
-    int rowsAffected = await db.delete(operationsDao.tableName,
-        where: "${operationsDao.id} = ?", whereArgs: [operation.id]);
+    int rowsAffected = await db.delete(operationDao.tableName,
+        where: "${operationDao.id} = ?", whereArgs: [operation.id]);
 
     // Returns success status
     return rowsAffected != 0;
@@ -40,11 +41,11 @@ class DatabaseStorageService extends StorageService {
 
     // Fetches the content of the operations table
     final List<Map<String, dynamic>> result =
-        await db.query(operationsDao.tableName);
+        await db.query(operationDao.tableName);
 
     // Generates a list of operations from a list of map
     return List.generate(
-        result.length, (index) => operationsDao.fromMap(result[index]));
+        result.length, (index) => operationDao.fromMap(result[index]));
   }
 
   @override
@@ -54,21 +55,29 @@ class DatabaseStorageService extends StorageService {
 
     // Fetches the bank amount
     final List<Map<String, dynamic>> bankResult = await db.rawQuery("""
-      SELECT SUM(${operationsDao.amount}) as sum
-      FROM ${operationsDao.tableName}
-      WHERE ${operationsDao.isCash} = 0
+      SELECT ${operationDao.src}, SUM(${operationDao.amount}) AS sum
+      FROM ${operationDao.tableName}
+      WHERE (${operationDao.src} = ${Actors.bank.index}) OR
+            (${operationDao.dst} = ${Actors.bank.index})
+      GROUP BY ${operationDao.src}
     """);
 
-    final double bank = bankResult[0]['sum'] ?? 0;
+    double bankExpense = bankResult.length >= 1 ? bankResult[0]['sum'] : 0.0;
+    double bankIncome = bankResult.length == 2 ? bankResult[1]['sum'] : 0.0;
+    double bank = bankIncome - bankExpense;
 
     // Fetches the bank amount
     final List<Map<String, dynamic>> cashResult = await db.rawQuery("""
-      SELECT SUM(${operationsDao.amount}) as sum
-      FROM ${operationsDao.tableName}
-      WHERE ${operationsDao.isCash} = 1
+      SELECT ${operationDao.src}, SUM(${operationDao.amount}) AS sum
+      FROM ${operationDao.tableName}
+      WHERE (${operationDao.src} = ${Actors.cash.index}) OR
+            (${operationDao.dst} = ${Actors.cash.index})
+      GROUP BY ${operationDao.src}
     """);
 
-    final double cash = cashResult[0]['sum'] ?? 0;
+    double cashExpense = cashResult.length >= 1 ? cashResult[0]['sum'] : 0.0;
+    double cashIncome = cashResult.length == 2 ? cashResult[1]['sum'] : 0.0;
+    double cash = cashIncome - cashExpense;
 
     List<double> amounts = [bank + cash, bank, cash];
     return amounts;
@@ -80,7 +89,9 @@ class DatabaseStorageService extends StorageService {
     final Database db = await DatabaseProvider.instance.database;
 
     // Updates in the database the given operation
-    int rowsAffected = await db.update(operationsDao.tableName, operationsDao.toMap(operation), where: "${operationsDao.id} = ?", whereArgs: [operation.id]);
+    int rowsAffected = await db.update(
+        operationDao.tableName, operationDao.toMap(operation),
+        where: "${operationDao.id} = ?", whereArgs: [operation.id]);
 
     // Returns success status
     return rowsAffected != 0;

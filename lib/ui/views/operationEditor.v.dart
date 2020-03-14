@@ -27,12 +27,6 @@ class _OperationEditorViewState extends State<OperationEditorView> {
   /// Auto filled status
   bool _autoFilled = false;
 
-  /// Cash status
-  bool _isCash = false;
-
-  /// Positive status
-  bool _isPositive = false;
-
   /// Controller of the description input
   TextEditingController _descriptionController = TextEditingController();
 
@@ -51,8 +45,6 @@ class _OperationEditorViewState extends State<OperationEditorView> {
       _descriptionController.text = widget.initialOperation.description;
       _amountController.text = widget.initialOperation.amount.abs().toString();
       _date = widget.initialOperation.date;
-      _isCash = widget.initialOperation.isCash;
-      _isPositive = widget.initialOperation.amount >= 0;
     }
   }
 
@@ -143,40 +135,24 @@ class _OperationEditorViewState extends State<OperationEditorView> {
                               },
                             ),
                             SizedBox(height: 20.0),
-                            Row(
-                              children: <Widget>[
-                                IconButton(
-                                  icon: _isPositive
-                                      ? Icon(Icons.add)
-                                      : Icon(Icons.remove),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isPositive ^= true;
-                                    });
-                                  },
-                                ),
-                                Expanded(
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Montant',
-                                      suffixIcon: Icon(Icons.euro_symbol),
-                                      icon: _autoFilled ? Icon(Icons.warning) : null,
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    controller: _amountController,
-                                    validator: (value) {
-                                      Pattern amountPattern =
-                                          r'^[1-9][0-9]*([\.,][0-9]+)?$';
-                                      RegExp amountRegex =
-                                          RegExp(amountPattern);
-                                      if (!amountRegex.hasMatch(value)) {
-                                        return 'Please enter a valid amount';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ],
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Montant',
+                                suffixIcon: Icon(Icons.euro_symbol),
+                                icon: _autoFilled ? Icon(Icons.warning) : null,
+                              ),
+                              keyboardType: TextInputType.number,
+                              controller: _amountController,
+                              validator: (value) {
+                                Pattern amountPattern =
+                                    r'^[1-9][0-9]*([\.,][0-9]+)?$';
+                                RegExp amountRegex =
+                                    RegExp(amountPattern);
+                                if (!amountRegex.hasMatch(value)) {
+                                  return 'Please enter a valid amount';
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(height: 20.0),
                             RaisedButton(
@@ -191,17 +167,6 @@ class _OperationEditorViewState extends State<OperationEditorView> {
                                       DateFormat('dd/MM/yyyy').format(_date)),
                             ),
                             SizedBox(height: 20.0),
-                            CheckboxListTile(
-                              value: this._isCash,
-                              onChanged: (checked) {
-                                setState(() {
-                                  this._isCash = checked;
-                                });
-                              },
-                              title: Text("Cash ?"),
-                              activeColor: Theme.of(context).accentColor,
-                            ),
-                            SizedBox(height: 20.0),
                             RaisedButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate() &&
@@ -209,9 +174,7 @@ class _OperationEditorViewState extends State<OperationEditorView> {
                                   model.commitOperation(
                                       _amountController.text,
                                       _date,
-                                      _descriptionController.text,
-                                      _isCash,
-                                      _isPositive);
+                                      _descriptionController.text);
                                 } else {
                                   setState(() {
                                     _autoValidate = true;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/router.dart';
 import 'package:treasurer/core/services/locator.dart';
@@ -45,21 +46,24 @@ class AccountViewModel extends ChangeNotifier {
 
   /// Updates the amounts
   void _updateAmounts(Operation operation, {removed = false}) {
-    if (removed) {
-      if (operation.isCash) {
-        _cash -= operation.amount;
-      } else {
-        _bank -= operation.amount;
-      }
-      _total -= operation.amount;
-    } else {
-      if (operation.isCash) {
-        _cash += operation.amount;
-      } else {
-        _bank += operation.amount;
-      }
-      _total += operation.amount;
+
+    double amount = removed ? -1 * operation.amount : operation.amount;
+
+    if (operation.dst == Actors.cash) {
+      _cash += amount;
     }
+    if (operation.src == Actors.cash) {
+      _cash -= amount;
+    }
+    if (operation.dst == Actors.bank) {
+      _bank += amount;
+    }
+    if (operation.src == Actors.bank) {
+      _bank -= amount;
+    }
+
+    _total = _bank + _cash;
+
     _cash = double.parse(_cash.toStringAsFixed(2));
     _bank = double.parse(_bank.toStringAsFixed(2));
     _total = double.parse(_total.toStringAsFixed(2));
@@ -136,7 +140,8 @@ class AccountViewModel extends ChangeNotifier {
   }
 
   /// Updates an operation
-  Future<void> updateOperation(Operation oldOperation, Operation newOperation) async {
+  Future<void> updateOperation(
+      Operation oldOperation, Operation newOperation) async {
     // Removes the operation from the storage
     bool success = await _storageService.updateOperation(newOperation);
 
