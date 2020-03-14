@@ -16,10 +16,10 @@ class Operation {
   int id;
 
   /// Source Actors of the operation
-  final Actors src;
+  final Actor src;
 
   /// Destination Actors of the operation
-  final Actors dst;
+  final Actor dst;
 
   /// Path of the receipt photo associated to the operation
   final String receiptPhotoPath;

@@ -1,5 +1,5 @@
 /// Actors involved in an Operation
-enum Actors {
+enum Actor {
   /// Represents the cash register
   cash,
   /// Represents the bank account

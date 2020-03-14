@@ -57,8 +57,8 @@ class DatabaseStorageService extends StorageService {
     final List<Map<String, dynamic>> bankResult = await db.rawQuery("""
       SELECT ${operationDao.src}, SUM(${operationDao.amount}) AS sum
       FROM ${operationDao.tableName}
-      WHERE (${operationDao.src} = ${Actors.bank.index}) OR
-            (${operationDao.dst} = ${Actors.bank.index})
+      WHERE (${operationDao.src} = ${Actor.bank.index}) OR
+            (${operationDao.dst} = ${Actor.bank.index})
       GROUP BY ${operationDao.src}
     """);
 
@@ -70,8 +70,8 @@ class DatabaseStorageService extends StorageService {
     final List<Map<String, dynamic>> cashResult = await db.rawQuery("""
       SELECT ${operationDao.src}, SUM(${operationDao.amount}) AS sum
       FROM ${operationDao.tableName}
-      WHERE (${operationDao.src} = ${Actors.cash.index}) OR
-            (${operationDao.dst} = ${Actors.cash.index})
+      WHERE (${operationDao.src} = ${Actor.cash.index}) OR
+            (${operationDao.dst} = ${Actor.cash.index})
       GROUP BY ${operationDao.src}
     """);
 

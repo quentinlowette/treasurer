@@ -102,8 +102,8 @@ class OperationEditorViewModel extends ChangeNotifier {
         date: date,
         description: descriptionText,
         id: _initialOperation == null ? null : _initialOperation.id,
-        src: Actors.extern,
-        dst: Actors.bank,
+        src: Actor.extern,
+        dst: Actor.bank,
         receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
 
     // Exits the view

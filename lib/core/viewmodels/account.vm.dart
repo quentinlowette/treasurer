@@ -49,16 +49,16 @@ class AccountViewModel extends ChangeNotifier {
 
     double amount = removed ? -1 * operation.amount : operation.amount;
 
-    if (operation.dst == Actors.cash) {
+    if (operation.dst == Actor.cash) {
       _cash += amount;
     }
-    if (operation.src == Actors.cash) {
+    if (operation.src == Actor.cash) {
       _cash -= amount;
     }
-    if (operation.dst == Actors.bank) {
+    if (operation.dst == Actor.bank) {
       _bank += amount;
     }
-    if (operation.src == Actors.bank) {
+    if (operation.src == Actor.bank) {
       _bank -= amount;
     }
 

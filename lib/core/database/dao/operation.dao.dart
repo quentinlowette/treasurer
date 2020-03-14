@@ -39,8 +39,8 @@ class OperationDao extends Dao<Operation> {
         date: DateTime.fromMillisecondsSinceEpoch(map[date]),
         description: map[description],
         id: map[id],
-        src: Actors.values[map[src]],
-        dst: Actors.values[map[dst]],
+        src: Actor.values[map[src]],
+        dst: Actor.values[map[dst]],
         receiptPhotoPath: map[receiptPhotoPath]);
   }
 
