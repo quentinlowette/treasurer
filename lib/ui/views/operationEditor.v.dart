@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/viewmodels/operationEditor.vm.dart';
+import 'package:treasurer/ui/widgets/actorPicker.dart';
 import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
 /// View of the Operation's Editor
 class OperationEditorView extends StatefulWidget {
   final Operation initialOperation;
 
-  const OperationEditorView({Key key, @required this.initialOperation}) : super(key: key);
+  const OperationEditorView({Key key, @required this.initialOperation})
+      : super(key: key);
 
   @override
   _OperationEditorViewState createState() => _OperationEditorViewState();
@@ -35,6 +38,12 @@ class _OperationEditorViewState extends State<OperationEditorView> {
 
   /// Selected DateTime
   DateTime _date;
+
+  /// Selected source Actor
+  Actor _srcActor;
+
+  /// Selected destination Actor
+  Actor _dstActor;
 
   @override
   void initState() {
@@ -146,8 +155,7 @@ class _OperationEditorViewState extends State<OperationEditorView> {
                               validator: (value) {
                                 Pattern amountPattern =
                                     r'^[1-9][0-9]*([\.,][0-9]+)?$';
-                                RegExp amountRegex =
-                                    RegExp(amountPattern);
+                                RegExp amountRegex = RegExp(amountPattern);
                                 if (!amountRegex.hasMatch(value)) {
                                   return 'Please enter a valid amount';
                                 }
@@ -167,14 +175,40 @@ class _OperationEditorViewState extends State<OperationEditorView> {
                                       DateFormat('dd/MM/yyyy').format(_date)),
                             ),
                             SizedBox(height: 20.0),
+                            ActorPicker(
+                              title: Text("Source"),
+                              currentActor: _srcActor,
+                              differentFrom: _dstActor,
+                              onTap: (actor) {
+                                setState(() {
+                                  _srcActor = actor;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 20.0),
+                            ActorPicker(
+                              title: Text("Destination"),
+                              currentActor: _dstActor,
+                              differentFrom: _srcActor,
+                              onTap: (actor) {
+                                setState(() {
+                                  _dstActor = actor;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 20.0),
                             RaisedButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate() &&
-                                    _date != null) {
+                                    _date != null &&
+                                    _srcActor != null &&
+                                    _dstActor != null) {
                                   model.commitOperation(
                                       _amountController.text,
                                       _date,
-                                      _descriptionController.text);
+                                      _descriptionController.text,
+                                      _srcActor,
+                                      _dstActor);
                                 } else {
                                   setState(() {
                                     _autoValidate = true;

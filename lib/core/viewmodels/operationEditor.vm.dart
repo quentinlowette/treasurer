@@ -95,15 +95,15 @@ class OperationEditorViewModel extends ChangeNotifier {
   }
 
   /// Creates a new operation and exit the view
-  void commitOperation(String amountText, DateTime date, String descriptionText) {
+  void commitOperation(String amountText, DateTime date, String descriptionText, Actor srcActor, Actor dstActor) {
     // Create a new Operation
     Operation newOperation = Operation(
         amount: double.parse(amountText.replaceAll(',', '.')),
         date: date,
         description: descriptionText,
         id: _initialOperation == null ? null : _initialOperation.id,
-        src: Actor.extern,
-        dst: Actor.bank,
+        src: srcActor,
+        dst: dstActor,
         receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
 
     // Exits the view
