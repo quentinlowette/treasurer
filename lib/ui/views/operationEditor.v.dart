@@ -9,7 +9,7 @@ import 'package:treasurer/ui/widgets/imageMiniature.dart';
 class OperationEditorView extends StatefulWidget {
   final Operation initialOperation;
 
-  OperationEditorView({@required this.initialOperation});
+  const OperationEditorView({Key key, @required this.initialOperation}) : super(key: key);
 
   @override
   _OperationEditorViewState createState() => _OperationEditorViewState();

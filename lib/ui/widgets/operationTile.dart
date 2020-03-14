@@ -9,7 +9,7 @@ class OperationTile extends StatelessWidget {
   // OnTap function
   final void Function() onTap;
 
-  OperationTile({@required this.operation, @required this.onTap});
+  const OperationTile({Key key, @required this.operation, @required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => ListTile(

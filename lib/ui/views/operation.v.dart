@@ -10,7 +10,7 @@ import 'package:treasurer/core/viewmodels/operation.vm.dart';
 class OperationView extends StatelessWidget {
   final Operation operation;
 
-  OperationView({@required this.operation});
+  const OperationView({Key key, @required this.operation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
