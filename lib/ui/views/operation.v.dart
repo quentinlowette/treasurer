@@ -41,6 +41,7 @@ class OperationView extends StatelessWidget {
                 Text(model.operation.description),
                 Text("${model.operation.amount} €"),
                 Text(DateFormat('dd/MM/yyyy').format(model.operation.date)),
+                Text("From ${operation.src} To ${operation.dst}"),
                 Text("${model.operation.receiptPhotoPath}"),
               ],
             ),

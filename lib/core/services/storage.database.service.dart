@@ -55,28 +55,72 @@ class DatabaseStorageService extends StorageService {
 
     // Fetches the bank amount
     final List<Map<String, dynamic>> bankResult = await db.rawQuery("""
-      SELECT ${operationDao.src}, SUM(${operationDao.amount}) AS sum
-      FROM ${operationDao.tableName}
-      WHERE (${operationDao.src} = ${Actor.bank.index}) OR
-            (${operationDao.dst} = ${Actor.bank.index})
-      GROUP BY ${operationDao.src}
+      SELECT ${operationDao.src}, ${operationDao.dst}, SUM(tmp) as sum
+      FROM (
+        SELECT ${operationDao.src}, ${operationDao.dst}, SUM(${operationDao.amount}) as tmp
+        FROM ${operationDao.tableName}
+        WHERE ${operationDao.src} = ${Actor.bank.index}
+           OR ${operationDao.dst} = ${Actor.bank.index}
+        GROUP BY ${operationDao.src}
+      )
+      GROUP BY ${operationDao.dst}
     """);
 
-    double bankExpense = bankResult.length >= 1 ? bankResult[0]['sum'] : 0.0;
-    double bankIncome = bankResult.length == 2 ? bankResult[1]['sum'] : 0.0;
+    double bankExpense;
+    double bankIncome;
+
+    if (bankResult.length == 0) {
+      // No result from DB
+      bankExpense = 0.0;
+      bankIncome = 0.0;
+    } else if (bankResult.length == 1) {
+      // Only 1 result from DB
+      Map<String, dynamic> result = bankResult[0];
+      bankExpense = result[operationDao.src] == Actor.bank.index ? result['sum'] : 0.0;
+      bankIncome = result[operationDao.dst] == Actor.bank.index ? result['sum'] : 0.0;
+    } else {
+      // At least 2 results from DB
+      Map<String, dynamic> result1 = bankResult[0];
+      Map<String, dynamic> result2 = bankResult[1];
+      bankExpense = result1[operationDao.src] == Actor.bank.index ? result1['sum'] : result2['sum'];
+      bankIncome = result1[operationDao.dst] == Actor.bank.index ? result1['sum'] : result2['sum'];
+    }
+
     double bank = bankIncome - bankExpense;
 
-    // Fetches the bank amount
+    // Fetches the cash amount
     final List<Map<String, dynamic>> cashResult = await db.rawQuery("""
-      SELECT ${operationDao.src}, SUM(${operationDao.amount}) AS sum
-      FROM ${operationDao.tableName}
-      WHERE (${operationDao.src} = ${Actor.cash.index}) OR
-            (${operationDao.dst} = ${Actor.cash.index})
-      GROUP BY ${operationDao.src}
+      SELECT ${operationDao.src}, ${operationDao.dst}, SUM(tmp) as sum
+      FROM (
+        SELECT ${operationDao.src}, ${operationDao.dst}, SUM(${operationDao.amount}) as tmp
+        FROM ${operationDao.tableName}
+        WHERE ${operationDao.src} = ${Actor.cash.index}
+           OR ${operationDao.dst} = ${Actor.cash.index}
+        GROUP BY ${operationDao.src}
+      )
+      GROUP BY ${operationDao.dst}
     """);
 
-    double cashExpense = cashResult.length >= 1 ? cashResult[0]['sum'] : 0.0;
-    double cashIncome = cashResult.length == 2 ? cashResult[1]['sum'] : 0.0;
+    double cashExpense;
+    double cashIncome;
+
+    if (cashResult.length == 0) {
+      // No result from DB
+      cashExpense = 0.0;
+      cashIncome = 0.0;
+    } else if (cashResult.length == 1) {
+      // Only 1 result from DB
+      Map<String, dynamic> result = cashResult[0];
+      cashExpense = result[operationDao.src] == Actor.cash.index ? result['sum'] : 0.0;
+      cashIncome = result[operationDao.dst] == Actor.cash.index ? result['sum'] : 0.0;
+    } else {
+      // At least 2 results from DB
+      Map<String, dynamic> result1 = cashResult[0];
+      Map<String, dynamic> result2 = cashResult[1];
+      cashExpense = result1[operationDao.src] == Actor.cash.index ? result1['sum'] : result2['sum'];
+      cashIncome = result1[operationDao.dst] == Actor.cash.index ? result1['sum'] : result2['sum'];
+    }
+
     double cash = cashIncome - cashExpense;
 
     List<double> amounts = [bank + cash, bank, cash];
