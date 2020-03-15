@@ -1,25 +1,28 @@
 import 'package:treasurer/core/database/dao/dao.dart';
+import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 
 /// Operation Data-Access Object
 ///
 /// Middleware between a model and a database table
-class OperationsDao extends Dao<Operation> {
+class OperationDao extends Dao<Operation> {
   // Columns names
   final String id = "id";
   final String amount = "amount";
-  final String isCash = "isCash";
+  final String src = "source";
+  final String dst = "destination";
   final String date = "date";
   final String description = "description";
   final String receiptPhotoPath = "receiptPhotoPath";
 
   // Constructor
-  OperationsDao(){
+  OperationDao(){
     // Columns definition
     columnsDefinition = [
         [id, "INTEGER PRIMARY KEY AUTOINCREMENT"],
         [amount, "REAL NOT NULL"],
-        [isCash, "INTEGER NOT NULL"],
+        [src, "INTEGER NOT NULL"],
+        [dst, "INTEGER NOT NULL"],
         [date, "INTEGER NOT NULL"],
         [description, "TEXT NOT NULL"],
         [receiptPhotoPath, "TEXT"]
@@ -36,7 +39,8 @@ class OperationsDao extends Dao<Operation> {
         date: DateTime.fromMillisecondsSinceEpoch(map[date]),
         description: map[description],
         id: map[id],
-        isCash: map[isCash] == 1,
+        src: Actor.values[map[src]],
+        dst: Actor.values[map[dst]],
         receiptPhotoPath: map[receiptPhotoPath]);
   }
 
@@ -46,7 +50,8 @@ class OperationsDao extends Dao<Operation> {
       amount: operation.amount,
       date: operation.date.millisecondsSinceEpoch,
       description: operation.description,
-      isCash: operation.isCash ? 1 : 0,
+      src: operation.src.index,
+      dst: operation.dst.index,
       receiptPhotoPath: operation.receiptPhotoPath
     };
   }

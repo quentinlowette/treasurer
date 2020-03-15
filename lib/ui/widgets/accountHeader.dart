@@ -6,7 +6,7 @@ import 'package:treasurer/ui/widgets/charts/charts.dart';
 class AccountHeader extends StatelessWidget {
   final AccountViewModel model;
 
-  AccountHeader({@required this.model});
+  const AccountHeader({Key key, @required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

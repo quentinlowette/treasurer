@@ -2,58 +2,69 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/textRecognition.service.dart';
 
-/// ViewModel of the AddOperation View
-class AddOperationViewModel extends ChangeNotifier {
+/// ViewModel of the OperationEditor View
+class OperationEditorViewModel extends ChangeNotifier {
   /// Loading status
   bool _isLoading = false;
 
   /// Image File associated to the operation
   File _imageFile;
 
+  /// Detected amount's string
   String _detectedAmountString;
 
+  /// Detected date
   DateTime _detectedDate;
 
-  AddOperationViewModel({@required Operation initialOperation}) {
+  OperationEditorViewModel({@required Operation initialOperation}) {
+    _initialOperation = initialOperation;
     if (initialOperation != null && initialOperation.receiptPhotoPath != null) {
       _imageFile = File(initialOperation.receiptPhotoPath);
     }
   }
 
+  /// Getter for the detected amount's string
   String get detectedAmountString => _detectedAmountString;
 
+  /// Getter for the detected date
   DateTime get detectedDate => _detectedDate;
 
+  /// Getter for the loading status
   bool get isLoading => _isLoading;
 
+  /// Getter for the image's fiel
   File get imageFile => _imageFile;
 
   /// Instance of the text recognition service
-  TextRecognitionService _textRecognitionService = locator<TextRecognitionService>();
+  TextRecognitionService _textRecognitionService =
+      locator<TextRecognitionService>();
 
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
 
-  Operation _operation;
+  /// Initial operation
+  Operation _initialOperation;
 
-  void exit() {
-    if (_imageFile != null) {
+  /// Exits the view and deletes, if needed, the taken picture
+  void exit([Operation operation]) {
+    // If there isn't an initial operation and if a picture has been taken
+    if (_initialOperation == null && _imageFile != null) {
       _imageFile.delete();
     }
-
-    _navigationService.goBack<Operation>(_operation);
+    _navigationService.goBack<Operation>(operation);
   }
 
   /// Displays the image picker with the camera
   Future<void> getImage() async {
     File pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
 
-    // If picked image is null
+    // If picker was closed
     if (pickedImage == null) {
       return;
     }
@@ -63,7 +74,10 @@ class AddOperationViewModel extends ChangeNotifier {
       _imageFile.delete();
     }
 
+    // Saves the picture
     _imageFile = pickedImage;
+
+    // Notifies changes
     notifyListeners();
   }
 
@@ -73,23 +87,26 @@ class AddOperationViewModel extends ChangeNotifier {
 
     await _textRecognitionService.detect(_imageFile);
 
-    _detectedAmountString = _textRecognitionService.total.toString().replaceAll('.', ',');
+    _detectedAmountString =
+        _textRecognitionService.total.toString().replaceAll('.', ',');
     _detectedDate = _textRecognitionService.date;
     _isLoading = false;
     notifyListeners();
   }
 
-  /// Creates a new operation
-  void commitOperation(String amountText, DateTime date, String descriptionText, bool isCash, bool isPositive) {
-    _operation = Operation(
-        amount: isPositive
-            ? double.parse(amountText.replaceAll(',', '.'))
-            : -1 * double.parse(amountText.replaceAll(',', '.')),
+  /// Creates a new operation and exit the view
+  void commitOperation(String amountText, DateTime date, String descriptionText, Actor srcActor, Actor dstActor) {
+    // Create a new Operation
+    Operation newOperation = Operation(
+        amount: double.parse(amountText.replaceAll(',', '.')),
         date: date,
         description: descriptionText,
-        isCash: isCash,
+        id: _initialOperation == null ? null : _initialOperation.id,
+        src: srcActor,
+        dst: dstActor,
         receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
-    // _accountViewModel.addOperation(operation);
-    exit();
+
+    // Exits the view
+    exit(newOperation);
   }
 }

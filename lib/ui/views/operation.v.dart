@@ -10,7 +10,7 @@ import 'package:treasurer/core/viewmodels/operation.vm.dart';
 class OperationView extends StatelessWidget {
   final Operation operation;
 
-  OperationView({@required this.operation});
+  const OperationView({Key key, @required this.operation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +29,20 @@ class OperationView extends StatelessWidget {
                       onPressed: () => model.exit(),
                     ),
                     IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () => model.deleteOperation(),
+                    ),
+                    IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () => model.editOperation(),
                     ),
                   ],
                 ),
-                Text(operation.description),
-                Text("${operation.amount} €"),
-                Text(DateFormat('dd/MM/yyyy').format(operation.date)),
-                Text("${operation.isCash}"),
-                Text("${operation.receiptPhotoPath}"),
+                Text(model.operation.description),
+                Text("${model.operation.amount} €"),
+                Text(DateFormat('dd/MM/yyyy').format(model.operation.date)),
+                Text("From ${operation.src} To ${operation.dst}"),
+                Text("${model.operation.receiptPhotoPath}"),
               ],
             ),
           ),

@@ -1,42 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
-import 'package:treasurer/core/viewmodels/addOperation.vm.dart';
+import 'package:treasurer/core/viewmodels/operationEditor.vm.dart';
+import 'package:treasurer/ui/widgets/actorPicker.dart';
 import 'package:treasurer/ui/widgets/imageMiniature.dart';
 
-class AddOperationView extends StatefulWidget {
+/// View of the Operation's Editor
+class OperationEditorView extends StatefulWidget {
   final Operation initialOperation;
 
-  AddOperationView({@required this.initialOperation});
+  const OperationEditorView({Key key, @required this.initialOperation})
+      : super(key: key);
 
   @override
-  _AddOperationViewState createState() => _AddOperationViewState();
+  _OperationEditorViewState createState() => _OperationEditorViewState();
 }
 
-class _AddOperationViewState extends State<AddOperationView> {
+class _OperationEditorViewState extends State<OperationEditorView> {
+  /// Global key of the form
+  ///
+  /// Needed for the Form widget
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  /// Auto validate status
   bool _autoValidate = false;
-  bool _isCash = false;
-  bool _isPositive = false;
+
+  /// Auto filled status
+  bool _autoFilled = false;
+
+  /// Controller of the description input
   TextEditingController _descriptionController = TextEditingController();
+
+  /// Controller of the amount input
   TextEditingController _amountController = TextEditingController();
+
+  /// Selected DateTime
   DateTime _date;
+
+  /// Selected source Actor
+  Actor _srcActor;
+
+  /// Selected destination Actor
+  Actor _dstActor;
 
   @override
   void initState() {
     super.initState();
 
+    // Initializes the fields if there is an initial operation
     if (widget.initialOperation != null) {
       _descriptionController.text = widget.initialOperation.description;
       _amountController.text = widget.initialOperation.amount.abs().toString();
       _date = widget.initialOperation.date;
-      _isCash = widget.initialOperation.isCash;
-      _isPositive = widget.initialOperation.amount >= 0;
     }
   }
 
-  /// Displays the date picker and sets the date variable
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  /// Displays the date picker and sets the [_date] variable
   Future<void> _selectDate() async {
     final DateTime pickedDate = await showDatePicker(
       context: context,
@@ -54,9 +82,9 @@ class _AddOperationViewState extends State<AddOperationView> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<AddOperationViewModel>.withConsumer(
+    return ViewModelProvider<OperationEditorViewModel>.withConsumer(
         viewModel:
-            AddOperationViewModel(initialOperation: widget.initialOperation),
+            OperationEditorViewModel(initialOperation: widget.initialOperation),
         builder: (context, model, child) {
           return Scaffold(
             body: SingleChildScrollView(
@@ -82,6 +110,7 @@ class _AddOperationViewState extends State<AddOperationView> {
                                   _amountController.text =
                                       model.detectedAmountString;
                                   _date = model.detectedDate;
+                                  _autoFilled = true;
                                 });
                               }),
                         ],
@@ -115,39 +144,23 @@ class _AddOperationViewState extends State<AddOperationView> {
                               },
                             ),
                             SizedBox(height: 20.0),
-                            Row(
-                              children: <Widget>[
-                                IconButton(
-                                  icon: _isPositive
-                                      ? Icon(Icons.add)
-                                      : Icon(Icons.remove),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isPositive ^= true;
-                                    });
-                                  },
-                                ),
-                                Expanded(
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Montant',
-                                      suffixIcon: Icon(Icons.euro_symbol),
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    controller: _amountController,
-                                    validator: (value) {
-                                      Pattern amountPattern =
-                                          r'^[1-9][0-9]*([\.,][0-9]+)?$';
-                                      RegExp amountRegex =
-                                          RegExp(amountPattern);
-                                      if (!amountRegex.hasMatch(value)) {
-                                        return 'Please enter a valid amount';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ],
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Montant',
+                                suffixIcon: Icon(Icons.euro_symbol),
+                                icon: _autoFilled ? Icon(Icons.warning) : null,
+                              ),
+                              keyboardType: TextInputType.number,
+                              controller: _amountController,
+                              validator: (value) {
+                                Pattern amountPattern =
+                                    r'^[1-9][0-9]*([\.,][0-9]+)?$';
+                                RegExp amountRegex = RegExp(amountPattern);
+                                if (!amountRegex.hasMatch(value)) {
+                                  return 'Please enter a valid amount';
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(height: 20.0),
                             RaisedButton(
@@ -162,27 +175,40 @@ class _AddOperationViewState extends State<AddOperationView> {
                                       DateFormat('dd/MM/yyyy').format(_date)),
                             ),
                             SizedBox(height: 20.0),
-                            CheckboxListTile(
-                              value: this._isCash,
-                              onChanged: (checked) {
+                            ActorPicker(
+                              title: Text("Source"),
+                              currentActor: _srcActor,
+                              differentFrom: _dstActor,
+                              onTap: (actor) {
                                 setState(() {
-                                  this._isCash = checked;
+                                  _srcActor = actor;
                                 });
                               },
-                              title: Text("Cash ?"),
-                              activeColor: Theme.of(context).accentColor,
+                            ),
+                            SizedBox(height: 20.0),
+                            ActorPicker(
+                              title: Text("Destination"),
+                              currentActor: _dstActor,
+                              differentFrom: _srcActor,
+                              onTap: (actor) {
+                                setState(() {
+                                  _dstActor = actor;
+                                });
+                              },
                             ),
                             SizedBox(height: 20.0),
                             RaisedButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate() &&
-                                    _date != null) {
+                                    _date != null &&
+                                    _srcActor != null &&
+                                    _dstActor != null) {
                                   model.commitOperation(
                                       _amountController.text,
                                       _date,
                                       _descriptionController.text,
-                                      _isCash,
-                                      _isPositive);
+                                      _srcActor,
+                                      _dstActor);
                                 } else {
                                   setState(() {
                                     _autoValidate = true;

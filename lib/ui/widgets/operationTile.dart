@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:treasurer/core/models/operation.m.dart';
-import 'package:treasurer/core/viewmodels/account.vm.dart';
 
 class OperationTile extends StatelessWidget {
+  // Curent operation
   final Operation operation;
-  final AccountViewModel model;
 
-  OperationTile({@required this.operation, @required this.model});
+  // OnTap function
+  final void Function() onTap;
+
+  const OperationTile({Key key, @required this.operation, @required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => ListTile(
@@ -19,6 +21,6 @@ class OperationTile extends StatelessWidget {
         style: Theme.of(context).accentTextTheme.bodyText2),
     trailing: Text("${operation.amount}",
         style: Theme.of(context).accentTextTheme.subtitle2),
-    onTap: () => model.navigateToOperation(operation),
+    onTap: onTap,
   );
 }
