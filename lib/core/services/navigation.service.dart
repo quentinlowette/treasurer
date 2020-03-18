@@ -15,7 +15,7 @@ class NavigationService {
   /// Pops the current view
   ///
   /// If non-null, `result` will be used as the result of the route being popped.
-  bool goBack<T extends Object>([T result]) {
+  void goBack<T extends Object>([T result]) {
     return navigatorKey.currentState.pop<T>(result);
   }
 }
