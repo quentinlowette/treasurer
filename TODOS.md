@@ -11,7 +11,7 @@
 ### Functionalities ⚙
 
 - [x] Add indicators to validate the auto filled fields ✏️
-- [ ] ~~Impossible to change the receipt photo without rescanning it 📷~~
+- [x] ~~Impossible to change the receipt photo without rescanning it 📷~~
 - [x] Impossible to do money transfer between cash and bank 💲
 - [ ] Categories 👈 👉
 - [ ] Account startup 🤳
