@@ -54,6 +54,8 @@ class _OperationEditorViewState extends State<OperationEditorView> {
       _descriptionController.text = widget.initialOperation.description;
       _amountController.text = widget.initialOperation.amount.abs().toString();
       _date = widget.initialOperation.date;
+      _srcActor = widget.initialOperation.src;
+      _dstActor = widget.initialOperation.dst;
     }
   }
 
