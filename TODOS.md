@@ -4,6 +4,7 @@
 
 - [x] ~~Update, keep object for the update to be effective into the cached list in account view model~~
 - [x] ~~The SQLite queries for the bank and cash amount don't work. The group by is incorrect~~
+- [ ] Migrate from provider_architecture to Stacked
 
 ## Extensions ✚
 

@@ -140,8 +140,7 @@ class AccountViewModel extends ChangeNotifier {
   }
 
   /// Updates an operation
-  Future<void> updateOperation(
-      Operation oldOperation, Operation newOperation) async {
+  Future<void> updateOperation(Operation oldOperation, Operation newOperation) async {
     // Removes the operation from the storage
     bool success = await _storageService.updateOperation(newOperation);
 

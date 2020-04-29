@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/viewmodels/operation.vm.dart';
 
@@ -14,8 +14,8 @@ class OperationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<OperationViewModel>.withConsumer(
-      viewModel: OperationViewModel(operation: operation),
+    return ViewModelBuilder<OperationViewModel>.reactive(
+      viewModelBuilder: () => OperationViewModel(operation: operation),
       builder: (context, model, _) => Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(

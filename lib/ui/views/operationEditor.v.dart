@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/viewmodels/operationEditor.vm.dart';
@@ -82,9 +82,8 @@ class _OperationEditorViewState extends State<OperationEditorView> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<OperationEditorViewModel>.withConsumer(
-        viewModel:
-            OperationEditorViewModel(initialOperation: widget.initialOperation),
+    return ViewModelBuilder<OperationEditorViewModel>.reactive(
+        viewModelBuilder: () => OperationEditorViewModel(initialOperation: widget.initialOperation),
         builder: (context, model, child) {
           return Scaffold(
             body: SingleChildScrollView(
