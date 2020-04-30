@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
@@ -17,7 +18,12 @@ class AccountView extends StatelessWidget {
           onModelReady: (model) => model.loadData(),
           builder: (context, model, child) {
             return Scaffold(
-              body: !model.isLoaded
+                body: AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle.light.copyWith(
+                statusBarColor: Colors.transparent,
+                systemNavigationBarColor: Colors.transparent,
+              ),
+              child: !model.isLoaded
                   ? Center(
                       child: CircularProgressIndicator(
                       backgroundColor: Colors.white,
@@ -64,20 +70,24 @@ class AccountView extends StatelessWidget {
                               SizedBox(
                                 height: 48.0,
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: model.operations.length,
-                                itemBuilder: (context, index) => OperationTile(
-                                  operation: model.operations[index],
-                                  onTap: () => model.navigateToOperation(
-                                      model.operations[index]),
-                                )
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: model.operations.length,
+                                    itemBuilder: (context, index) =>
+                                        OperationTile(
+                                          operation: model.operations[index],
+                                          onTap: () =>
+                                              model.navigateToOperation(
+                                                  model.operations[index]),
+                                        )),
                               )
                             ],
                           ),
                         ),
                       ]),
                     ),
-            );
+            ));
           });
 }

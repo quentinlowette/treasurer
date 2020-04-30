@@ -20,7 +20,6 @@ class OperationTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(8.0)
     ),
     color: DefaultThemeColors.white,
-    margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     child: ListTile(
       title: Text(
         operation.description,
