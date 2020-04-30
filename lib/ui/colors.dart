@@ -11,7 +11,7 @@ class DefaultThemeColors {
   static const Color darkerWhite = Color(0xfff6f8fa);
 
   // Primary
-  static const Color blue = Color(0xff5036d5);
+  static const Color blue = Color(0xff4563db);
 
   static const Color blue1 = Color(0xff3594dd);
   static const Color blue2 = Color(0xff4563db);
