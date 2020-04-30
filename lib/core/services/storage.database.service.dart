@@ -1,13 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:treasurer/core/database/dao/operation.dao.dart';
-import 'package:treasurer/core/database/databaseProvider.dart';
+import 'package:treasurer/core/database/database_provider.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 
 /// Implementation of the storage service using an sqllite database
 class DatabaseStorageService extends StorageService {
-  ///
+  // Link to the operations' table
   OperationDao operationDao = OperationDao();
 
   @override

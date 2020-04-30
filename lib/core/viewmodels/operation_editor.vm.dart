@@ -6,7 +6,7 @@ import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
-import 'package:treasurer/core/services/textRecognition.service.dart';
+import 'package:treasurer/core/services/text_recognition.service.dart';
 
 /// ViewModel of the OperationEditor View
 class OperationEditorViewModel extends ChangeNotifier {

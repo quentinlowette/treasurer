@@ -3,9 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
-import 'package:treasurer/core/viewmodels/operationEditor.vm.dart';
-import 'package:treasurer/ui/widgets/actorPicker.dart';
-import 'package:treasurer/ui/widgets/imageMiniature.dart';
+import 'package:treasurer/core/viewmodels/operation_editor.vm.dart';
+import 'package:treasurer/ui/widgets/actor_picker.dart';
+import 'package:treasurer/ui/widgets/image_miniature.dart';
 
 /// View of the Operation's Editor
 class OperationEditorView extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/ui/views/account.v.dart';
-import 'package:treasurer/ui/views/operationEditor.v.dart';
+import 'package:treasurer/ui/views/operation_editor.v.dart';
 import 'package:treasurer/ui/views/operation.v.dart';
 
 /// Navigation helper that generates the routes of the application

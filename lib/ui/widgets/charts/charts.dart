@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/ui/colors.dart';
 
-export 'pieChart.dart';
+export 'pie_chart.dart';
 
 abstract class ChartPainter extends CustomPainter {
   final List<Color> colors = [

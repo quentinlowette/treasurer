@@ -5,7 +5,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/storage.service.dart';
-import 'package:treasurer/core/services/textRecognition.service.dart';
+import 'package:treasurer/core/services/text_recognition.service.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 
 /// Global services provider

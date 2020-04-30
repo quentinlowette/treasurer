@@ -3,8 +3,8 @@ import 'package:stacked/stacked.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/ui/colors.dart';
-import 'package:treasurer/ui/widgets/accountHeader.dart';
-import 'package:treasurer/ui/widgets/operationTile.dart';
+import 'package:treasurer/ui/widgets/account_header.dart';
+import 'package:treasurer/ui/widgets/operation_tile.dart';
 
 /// View of an account
 class AccountView extends StatelessWidget {

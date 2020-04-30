@@ -2,19 +2,8 @@ import 'dart:io';
 
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 
-/// Text Recognition Service
-abstract class TextRecognitionService {
-  DateTime _date;
-  double _total;
+import 'package:treasurer/core/services/text_recognition.service.dart';
 
-  DateTime get date => _date;
-  double get total => _total;
-
-  /// Tries to detects in the given [imageFile] the total and the date.
-  ///
-  /// It fills the [_total] and [_date] fields of the service.
-  Future<void> detect(File imageFile);
-}
 
 /// Implementation of the Text Recognition Service using Firebase ML Vision
 class FMLVTextRecognitionService extends TextRecognitionService {
@@ -91,10 +80,10 @@ class FMLVTextRecognitionService extends TextRecognitionService {
     final VisionText visionText = await textRecognizer.processImage(visionImage);
 
     // EXtract the date
-    _date = _extractDate(visionText);
+    date = _extractDate(visionText);
 
     // EXtract the total
-    _total = _extractTotal(visionText);
+    total = _extractTotal(visionText);
 
     /// Close the recognizer
     textRecognizer.close();
