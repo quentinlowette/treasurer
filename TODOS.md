@@ -13,12 +13,12 @@
 - [x] Add indicators to validate the auto filled fields ✏️
 - [x] ~~Impossible to change the receipt photo without rescanning it 📷~~
 - [x] Impossible to do money transfer between cash and bank 💲
-- [ ] Categories 👈 👉
 - [ ] Account startup 🤳
+- [ ] Theme refactor 🎨
 
 ### Bonus ✨
 
 - [ ] Onboarding screens 👋
-- [ ] Theme refactor 🎨
+- [ ] Categories 👈 👉
 - [ ] Flare 😁
 - [ ] (Tests)
