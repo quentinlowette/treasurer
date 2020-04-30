@@ -2,38 +2,29 @@ import 'dart:ui';
 
 class DefaultThemeColors {
   // Black
-  static const Color blackLLL = Color(0xff626262);
-  static const Color blackLL = Color(0xff4b4b4b);
-  static const Color blackL = Color(0xff353535);
-  static const Color black = Color(0xff1e1e1e);
+  static const Color black = Color(0xff262626);
 
   // White
   static const Color white = Color(0xffffffff);
-  static const Color whiteD = Color(0xffe9e9e9);
-  static const Color whiteDD = Color(0xffd2d2d2);
-  static const Color whiteDDD = Color(0xffbcbcbc);
+  static const Color white24 = Color(0x3dffffff);
+  static const Color white54 = Color(0x8affffff);
+  static const Color darkerWhite = Color(0xfff6f8fa);
 
   // Primary
-  static const Color blueLLLL = Color(0xff908ee5);
-  static const Color blueLLL = Color(0xff7e7be0);
-  static const Color blueLL = Color(0xff6b69dc);
-  static const Color blueL = Color(0xff5956d7);
-  static const Color blue = Color(0xff4643d3);
-  static const Color blueD = Color(0xff3f3cbe);
-  static const Color blueDD = Color(0xff3836a9);
-  static const Color blueDDD = Color(0xff312f94);
-  static const Color blueDDDD = Color(0xff2a287f);
+  static const Color blue = Color(0xff5036d5);
+
+  static const Color blue1 = Color(0xff3594dd);
+  static const Color blue2 = Color(0xff4563db);
+  static const Color blue3 = Color(0xff5036d5);
+  static const Color blue4 = Color(0xff5b16d0);
 
   // Secondary
-  static const Color orangeLLLL = Color(0xfff8ac66);
-  static const Color orangeLLL = Color(0xfff79e4d);
-  static const Color orangeLL = Color(0xfff69133);
-  static const Color orangeL = Color(0xfff5831a);
-  static const Color orange = Color(0xfff47500);
-  static const Color orangeD = Color(0xffdc6900);
-  static const Color orangeDD = Color(0xffc35e00);
-  static const Color orangeDDD = Color(0xffab5200);
-  static const Color orangeDDDD = Color(0xff924600);
+  static const Color orange = Color(0xffe89144);
+
+  static const Color orange1 = Color(0xfff2c166);
+  static const Color orange2 = Color(0xffe89144);
+  static const Color orange3 = Color(0xffe2712e);
+  static const Color orange4 = Color(0xffd9430d);
 
   // Denotative colors (system)
   static const Color error = Color(0xffc30014);
