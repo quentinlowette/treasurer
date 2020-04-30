@@ -116,6 +116,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light.copyWith(
               statusBarColor: Colors.transparent,
+              systemNavigationBarColor: Colors.transparent,
             ),
             child: Form(
               key: _formKey,
@@ -211,6 +212,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                                   model.exit(bankAmount, cashAmount);
                                 },
                                 title: "Commencer",
+                                backgroundColor: DefaultThemeColors.white,
+                                textColor: DefaultThemeColors.black,
                               )
                             ],
                           ),
