@@ -78,7 +78,7 @@ class CustomTheme {
       subtitle1: base.subtitle1.copyWith(
         color: DefaultThemeColors.white,
         fontFamily: 'Open Sans',
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w600,
       ),
       subtitle2: base.subtitle2.copyWith(
         color: DefaultThemeColors.white,
