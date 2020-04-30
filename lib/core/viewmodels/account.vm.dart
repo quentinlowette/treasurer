@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/router.dart';
@@ -46,7 +46,6 @@ class AccountViewModel extends ChangeNotifier {
 
   /// Updates the amounts
   void _updateAmounts(Operation operation, {removed = false}) {
-
     double amount = removed ? -1 * operation.amount : operation.amount;
 
     if (operation.dst == Actor.cash) {
@@ -97,6 +96,32 @@ class AccountViewModel extends ChangeNotifier {
     _bank = amounts[1];
     _cash = amounts[2];
 
+    if (_operations.isEmpty) {
+      List<double> amounts =
+          await _navigationService.navigateTo(Router.OnboardingViewRoute);
+
+      Operation _initBankAmount = Operation(
+        amount: amounts[0],
+        date: DateTime.now(),
+        description: "Montant initial sur le compte",
+        src: Actor.extern,
+        dst: Actor.bank,
+        receiptPhotoPath: null,
+      );
+
+      Operation _initCashAmount = Operation(
+        amount: amounts[1],
+        date: DateTime.now(),
+        description: "Montant initial dans la caisse",
+        src: Actor.extern,
+        dst: Actor.cash,
+        receiptPhotoPath: null,
+      );
+
+      await addOperation(_initBankAmount);
+      await addOperation(_initCashAmount);
+    }
+    
     _isLoaded = true;
 
     // Notifies the changes
@@ -140,7 +165,8 @@ class AccountViewModel extends ChangeNotifier {
   }
 
   /// Updates an operation
-  Future<void> updateOperation(Operation oldOperation, Operation newOperation) async {
+  Future<void> updateOperation(
+      Operation oldOperation, Operation newOperation) async {
     // Removes the operation from the storage
     bool success = await _storageService.updateOperation(newOperation);
 

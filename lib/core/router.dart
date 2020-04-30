@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/ui/views/account.v.dart';
+import 'package:treasurer/ui/views/onboarding.v.dart';
 import 'package:treasurer/ui/views/operation_editor.v.dart';
 import 'package:treasurer/ui/views/operation.v.dart';
 
@@ -25,6 +26,11 @@ class Router {
   /// Navigation has one optional parameter of type `Operation`
   static const String OperationViewRoute = '/operation';
 
+  /// Route of the Onboarding View
+  ///
+  /// Navigation returns a `List<double>`
+  static const String OnboardingViewRoute = '/onboarding';
+
   /// Generates the routes from given route settings
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Switch on the route name
@@ -45,6 +51,8 @@ class Router {
             builder: (_) => OperationView(
                   operation: operation,
                 ));
+      case OnboardingViewRoute:
+        return MaterialPageRoute(builder: (_) => OnboardingView());
       default:
         // Default page return if the route name is unknown
         return MaterialPageRoute(
