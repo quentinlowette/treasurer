@@ -121,7 +121,7 @@ class AccountViewModel extends ChangeNotifier {
       await addOperation(_initBankAmount);
       await addOperation(_initCashAmount);
     }
-    
+
     _isLoaded = true;
 
     // Notifies the changes
@@ -137,6 +137,7 @@ class AccountViewModel extends ChangeNotifier {
     if (operation.id != null) {
       // Adds the operation to the loaded list
       _operations.add(operation);
+      _operations.sort((a, b) => -(a.date.compareTo(b.date)));
 
       // Changes the amounts
       _updateAmounts(operation);

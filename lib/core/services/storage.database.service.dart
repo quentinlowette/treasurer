@@ -41,7 +41,7 @@ class DatabaseStorageService extends StorageService {
 
     // Fetches the content of the operations table
     final List<Map<String, dynamic>> result =
-        await db.query(operationDao.tableName);
+        await db.query(operationDao.tableName, orderBy: operationDao.date + " DESC");
 
     // Generates a list of operations from a list of map
     return List.generate(
