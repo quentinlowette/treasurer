@@ -4,6 +4,7 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/ui/colors.dart';
 import 'package:treasurer/ui/widgets/account_header.dart';
+import 'package:treasurer/ui/widgets/header_clipper.dart';
 import 'package:treasurer/ui/widgets/operation_tile.dart';
 
 /// View of an account
@@ -23,9 +24,27 @@ class AccountView extends StatelessWidget {
                     ))
                   : SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: SafeArea(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Stack(children: <Widget>[
+                        ClipPath(
+                          clipper: HeaderClipper(),
+                          child: Container(
+                            height: 400.0,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                stops: [0.1, 0.4, 0.7, 0.9],
+                                colors: [
+                                  DefaultThemeColors.blue1,
+                                  DefaultThemeColors.blue2,
+                                  DefaultThemeColors.blue3,
+                                  DefaultThemeColors.blue4,
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SafeArea(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -34,7 +53,7 @@ class AccountView extends StatelessWidget {
                                 children: <Widget>[
                                   IconButton(
                                     icon: Icon(Icons.add),
-                                    color: Theme.of(context).accentColor,
+                                    color: DefaultThemeColors.white,
                                     onPressed: () => model.newOperation(),
                                   ),
                                 ],
@@ -42,62 +61,22 @@ class AccountView extends StatelessWidget {
                               AccountHeader(
                                 model: model,
                               ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 0.0),
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).accentColor,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(40),
-                                        topRight: Radius.circular(40))),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Center(
-                                      child: Container(
-                                        height: 5.0,
-                                        width: 70.0,
-                                        decoration: BoxDecoration(
-                                            color: DefaultThemeColors.blueDD,
-                                            borderRadius:
-                                                BorderRadius.circular(5.0)),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 30.0,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      child: Text(
-                                        "Operations",
-                                        style: Theme.of(context)
-                                            .accentTextTheme
-                                            .headline6,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    ListView.builder(
-                                        physics: ClampingScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: model.operations.length,
-                                        itemBuilder: (context, index) =>
-                                            OperationTile(
-                                              operation:
-                                                  model.operations[index],
-                                              onTap: () =>
-                                                  model.navigateToOperation(
-                                                      model.operations[index]),
-                                            ))
-                                  ],
-                                ),
+                              SizedBox(
+                                height: 48.0,
                               ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: model.operations.length,
+                                itemBuilder: (context, index) => OperationTile(
+                                  operation: model.operations[index],
+                                  onTap: () => model.navigateToOperation(
+                                      model.operations[index]),
+                                )
+                              )
                             ],
                           ),
                         ),
-                      ),
+                      ]),
                     ),
             );
           });
