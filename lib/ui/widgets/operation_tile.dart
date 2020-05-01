@@ -15,6 +15,7 @@ class OperationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
+    margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     elevation: 4.0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0)

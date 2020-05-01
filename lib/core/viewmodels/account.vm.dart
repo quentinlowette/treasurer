@@ -176,6 +176,7 @@ class AccountViewModel extends ChangeNotifier {
       // Updates the operation from the loaded list
       _operations.remove(oldOperation);
       _operations.add(newOperation);
+      _operations.sort((a, b) => -(a.date.compareTo(b.date)));
 
       // Changes the amounts
       _updateAmounts(oldOperation, removed: true);

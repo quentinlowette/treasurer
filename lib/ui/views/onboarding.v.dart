@@ -116,7 +116,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light.copyWith(
               statusBarColor: Colors.transparent,
-              systemNavigationBarColor: Colors.transparent,
+              // systemNavigationBarColor: Colors.transparent,
             ),
             child: Form(
               key: _formKey,

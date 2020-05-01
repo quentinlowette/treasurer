@@ -18,19 +18,18 @@ class AccountView extends StatelessWidget {
           onModelReady: (model) => model.loadData(),
           builder: (context, model, child) {
             return Scaffold(
-                body: AnnotatedRegion<SystemUiOverlayStyle>(
-              value: SystemUiOverlayStyle.light.copyWith(
-                statusBarColor: Colors.transparent,
-                systemNavigationBarColor: Colors.transparent,
-              ),
-              child: !model.isLoaded
+              backgroundColor: DefaultThemeColors.white.withAlpha(240),
+              body: AnnotatedRegion<SystemUiOverlayStyle>(
+                value: SystemUiOverlayStyle.light.copyWith(
+                  statusBarColor: Colors.transparent,
+                ),
+                child: !model.isLoaded
                   ? Center(
                       child: CircularProgressIndicator(
                       backgroundColor: Colors.white,
                     ))
-                  : SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Stack(children: <Widget>[
+                  : Stack(
+                      children: <Widget>[
                         ClipPath(
                           clipper: HeaderClipper(),
                           child: Container(
@@ -51,43 +50,38 @@ class AccountView extends StatelessWidget {
                           ),
                         ),
                         SafeArea(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: Icon(Icons.add),
-                                    color: DefaultThemeColors.white,
-                                    onPressed: () => model.newOperation(),
-                                  ),
-                                ],
-                              ),
-                              AccountHeader(
-                                model: model,
-                              ),
-                              SizedBox(
-                                height: 48.0,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: model.operations.length,
-                                    itemBuilder: (context, index) =>
-                                        OperationTile(
-                                          operation: model.operations[index],
-                                          onTap: () =>
-                                              model.navigateToOperation(
-                                                  model.operations[index]),
-                                        )),
-                              )
-                            ],
-                          ),
+                          child: ListView.builder(
+                            // shrinkWrap: true,
+                            itemCount: model.operations.length + 3,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: Icon(Icons.add),
+                                      color: DefaultThemeColors.white,
+                                      onPressed: () => model.newOperation(),
+                                    ),
+                                  ],
+                                );
+                              } else if (index == 1) {
+                                return AccountHeader(model: model);
+                              } else if (index == 2) {
+                                return SizedBox(height: 48.0);
+                              } else {
+                                index -= 3;
+                                return OperationTile(
+                                  operation: model.operations[index],
+                                  onTap: () =>
+                                      model.navigateToOperation(
+                                          model.operations[index]),
+                                );
+                              }
+                            }
+                          )
                         ),
-                      ]),
-                    ),
+                  ]),
             ));
           });
 }
