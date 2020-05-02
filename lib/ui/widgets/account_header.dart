@@ -52,7 +52,7 @@ class AccountHeader extends StatelessWidget {
                 ],
               )
             ],
-          )
+          ),
         ],
       ),
     );

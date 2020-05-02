@@ -9,7 +9,36 @@ import 'package:treasurer/ui/widgets/header_clipper.dart';
 import 'package:treasurer/ui/widgets/operation_tile.dart';
 
 /// View of an account
-class AccountView extends StatelessWidget {
+class AccountView extends StatefulWidget {
+  AccountView({Key key}) : super(key: key);
+
+  @override
+  _AccountViewState createState() => _AccountViewState();
+}
+
+class _AccountViewState extends State<AccountView> {
+  ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  double get offset => _scrollController.hasClients
+    ? _scrollController.offset
+    : 0.0;
+
+  double valueOrZero(double value) {
+    return value >= 0 ? value : 0.0;
+  }
+
   @override
   Widget build(BuildContext context) =>
       ViewModelBuilder<AccountViewModel>.reactive(
@@ -31,9 +60,11 @@ class AccountView extends StatelessWidget {
                   : Stack(
                       children: <Widget>[
                         ClipPath(
-                          clipper: HeaderClipper(),
+                          clipper: HeaderClipper(
+                            opening: valueOrZero(80.0 - offset/2),
+                          ),
                           child: Container(
-                            height: 400.0,
+                            height: 400.0 + offset,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
@@ -50,36 +81,40 @@ class AccountView extends StatelessWidget {
                           ),
                         ),
                         SafeArea(
-                          child: ListView.builder(
-                            // shrinkWrap: true,
-                            itemCount: model.operations.length + 3,
-                            itemBuilder: (context, index) {
-                              if (index == 0) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(Icons.add),
-                                      color: DefaultThemeColors.white,
-                                      onPressed: () => model.newOperation(),
-                                    ),
-                                  ],
-                                );
-                              } else if (index == 1) {
-                                return AccountHeader(model: model);
-                              } else if (index == 2) {
-                                return SizedBox(height: 48.0);
-                              } else {
-                                index -= 3;
-                                return OperationTile(
-                                  operation: model.operations[index],
-                                  onTap: () =>
-                                      model.navigateToOperation(
-                                          model.operations[index]),
-                                );
-                              }
-                            }
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    color: DefaultThemeColors.white,
+                                    onPressed: () => model.newOperation(),
+                                  ),
+                                ],
+                              ),
+                              Opacity(
+                                opacity: valueOrZero(1 - offset/100),
+                                child: AccountHeader(model: model)
+                              )
+                            ],
                           )
+                        ),
+                        ListView.builder(
+                          controller: _scrollController,
+                          itemCount: model.operations.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == 0) {
+                              return SizedBox(height: 270.0,);
+                            }
+                            index -= 1;
+                            return OperationTile(
+                              operation: model.operations[index],
+                              onTap: () =>
+                                  model.navigateToOperation(
+                                      model.operations[index]),
+                            );
+                          }
                         ),
                   ]),
             ));
