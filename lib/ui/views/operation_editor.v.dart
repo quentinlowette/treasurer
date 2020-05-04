@@ -6,6 +6,7 @@ import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 import 'package:treasurer/core/viewmodels/operation_editor.vm.dart';
 import 'package:treasurer/ui/colors.dart';
+import 'package:treasurer/ui/theme.dart';
 import 'package:treasurer/ui/widgets/buttons.dart';
 import 'package:treasurer/ui/widgets/operation_editor_field.dart';
 
@@ -103,17 +104,7 @@ class OperationEditorView extends StatelessWidget {
               ),
               flexibleSpace: Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.1, 0.4, 0.7, 0.9],
-                    colors: [
-                      DefaultThemeColors.blue1,
-                      DefaultThemeColors.blue2,
-                      DefaultThemeColors.blue3,
-                      DefaultThemeColors.blue4,
-                    ],
-                  ),
+                  gradient: CustomTheme.gradient,
                 ),
               ),
             ),
