@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 import 'package:treasurer/ui/colors.dart';
+import 'package:treasurer/ui/theme.dart';
 import 'package:treasurer/ui/widgets/account_header.dart';
 import 'package:treasurer/ui/widgets/header_clipper.dart';
 import 'package:treasurer/ui/widgets/operation_tile.dart';
@@ -66,55 +67,44 @@ class _AccountViewState extends State<AccountView> {
                           child: Container(
                             height: 400.0 + offset,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                stops: [0.1, 0.4, 0.7, 0.9],
-                                colors: [
-                                  DefaultThemeColors.blue1,
-                                  DefaultThemeColors.blue2,
-                                  DefaultThemeColors.blue3,
-                                  DefaultThemeColors.blue4,
-                                ],
-                              ),
+                              gradient: CustomTheme.gradient,
                             ),
                           ),
                         ),
                         SafeArea(
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: Icon(Icons.add),
-                                    color: DefaultThemeColors.white,
-                                    onPressed: () => model.newOperation(),
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: model.operations.length + 2,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: Icon(Icons.add),
+                                      color: DefaultThemeColors.white,
+                                      onPressed: () => model.newOperation(),
+                                    ),
+                                  ],
+                                );
+                              } else if (index == 1) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 48.0),
+                                  child: Opacity(
+                                    opacity: valueOrZero(1 - offset/100),
+                                    child: AccountHeader(model: model)
                                   ),
-                                ],
-                              ),
-                              Opacity(
-                                opacity: valueOrZero(1 - offset/100),
-                                child: AccountHeader(model: model)
-                              )
-                            ],
-                          )
-                        ),
-                        ListView.builder(
-                          controller: _scrollController,
-                          itemCount: model.operations.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return SizedBox(height: 270.0,);
+                                );
+                              }
+                              index -= 2;
+                              return OperationTile(
+                                operation: model.operations[index],
+                                onTap: () =>
+                                    model.navigateToOperation(
+                                        model.operations[index]),
+                              );
                             }
-                            index -= 1;
-                            return OperationTile(
-                              operation: model.operations[index],
-                              onTap: () =>
-                                  model.navigateToOperation(
-                                      model.operations[index]),
-                            );
-                          }
+                          ),
                         ),
                   ]),
             ));
