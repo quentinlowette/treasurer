@@ -41,7 +41,7 @@ class OperationView extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.only(
-                top: 72.0,
+                top: 80.0,
                 bottom: 16.0,
                 left: 16.0,
                 right: 16.0,
@@ -49,11 +49,9 @@ class OperationView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Container(
-                    child: Text(
-                      model.operation.description,
-                      style: Theme.of(context).accentTextTheme.headline5,
-                    ),
+                  Text(
+                    model.operation.description,
+                    style: Theme.of(context).accentTextTheme.headline5,
                   ),
                   SizedBox(height: 16.0),
                   Text(

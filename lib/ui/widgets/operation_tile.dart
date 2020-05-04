@@ -24,15 +24,12 @@ class OperationTile extends StatelessWidget {
     child: ListTile(
       title: Text(
         operation.description,
-        // style: Theme.of(context).textTheme.subtitle1,
       ),
       subtitle: Text(
         DateFormat("dd/MM/yyyy").format(operation.date),
-        // style: Theme.of(context).textTheme.bodyText2,
       ),
       trailing: Text(
         "${operation.amount}",
-        // style: Theme.of(context).textTheme.subtitle2,
       ),
       onTap: onTap,
     ),
