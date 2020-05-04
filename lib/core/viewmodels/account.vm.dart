@@ -160,6 +160,32 @@ class AccountViewModel extends ChangeNotifier {
       // Changes the amounts
       _updateAmounts(operation, removed: true);
 
+      if (_operations.isEmpty) {
+        List<double> amounts =
+            await _navigationService.navigateTo(Router.OnboardingViewRoute);
+
+        Operation _initBankAmount = Operation(
+          amount: amounts[0],
+          date: DateTime.now(),
+          description: "Montant initial sur le compte",
+          src: Actor.extern,
+          dst: Actor.bank,
+          receiptPhotoPath: null,
+        );
+
+        Operation _initCashAmount = Operation(
+          amount: amounts[1],
+          date: DateTime.now(),
+          description: "Montant initial dans la caisse",
+          src: Actor.extern,
+          dst: Actor.cash,
+          receiptPhotoPath: null,
+        );
+
+        await addOperation(_initBankAmount);
+        await addOperation(_initCashAmount);
+      }
+
       // Notifies the changes
       notifyListeners();
     }
