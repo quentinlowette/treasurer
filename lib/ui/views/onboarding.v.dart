@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 import 'package:treasurer/core/viewmodels/onboarding.vm.dart';
 import 'package:treasurer/ui/colors.dart';
+import 'package:treasurer/ui/theme.dart';
 import 'package:treasurer/ui/widgets/buttons.dart';
+import 'package:treasurer/ui/widgets/page_indicator.dart';
 
 class OnboardingView extends StatefulWidget {
   @override
@@ -34,70 +36,7 @@ class _OnboardingViewState extends State<OnboardingView> {
   /// Controller of the cash amount input
   TextEditingController _cashAmountController = TextEditingController();
 
-  Widget _buildPageIndicator(bool isActive) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 8.0,
-      width: isActive ? 32.0 : 8.0,
-      decoration: BoxDecoration(
-        color: isActive ? DefaultThemeColors.white : DefaultThemeColors.white54,
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-    );
-  }
-
-  Widget _buildPageIndicatorList() {
-    List<Widget> indicators = [];
-    for (int i = 0; i < _pageCount; i++) {
-      indicators.add(_buildPageIndicator(i == _currentPage));
-    }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: indicators,
-    );
-  }
-
-  Widget _buildAmountForm({String title, TextEditingController controller}) {
-    return ListView(
-      children: <Widget>[
-        SizedBox(
-          height: 250.0,
-        ),
-        Text(title, style: Theme.of(context).accentTextTheme.bodyText1),
-        SizedBox(height: 16.0),
-        TextFormField(
-          decoration: InputDecoration(
-            hintText: "0.0",
-            fillColor: DefaultThemeColors.white,
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              borderSide: BorderSide(
-                style: BorderStyle.none,
-                width: 0.0,
-              )
-            ),
-          ),
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1,
-          keyboardType: TextInputType.number,
-          controller: controller,
-          validator: (value) {
-            Pattern amountPattern = r'^[1-9][0-9]*([\.,][0-9]+)?$';
-            RegExp amountRegex = RegExp(amountPattern);
-            if (!amountRegex.hasMatch(value)) {
-              return 'Please enter a valid amount';
-            }
-            return null;
-          },
-        ),
-        SizedBox(
-          height: 16.0,
-        ),
-      ],
-    );
-  }
+  RegExp _amountRegex = RegExp(r'^[1-9][0-9]*([\.,][0-9]+)?$');
 
   @override
   void dispose() {
@@ -116,7 +55,6 @@ class _OnboardingViewState extends State<OnboardingView> {
           body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light.copyWith(
               statusBarColor: Colors.transparent,
-              // systemNavigationBarColor: Colors.transparent,
             ),
             child: Form(
               key: _formKey,
@@ -125,17 +63,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0.1, 0.4, 0.7, 0.9],
-                        colors: [
-                          DefaultThemeColors.blue1,
-                          DefaultThemeColors.blue2,
-                          DefaultThemeColors.blue3,
-                          DefaultThemeColors.blue4,
-                        ],
-                      ),
+                      gradient: CustomTheme.gradient,
                     ),
                   ),
                   SafeArea(
@@ -151,13 +79,20 @@ class _OnboardingViewState extends State<OnboardingView> {
                           padding: EdgeInsets.all(40.0),
                           child: ListView(
                             children: <Widget>[
-                              SizedBox(
-                                height: 250.0,
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 16.0,
+                                  bottom: 48.0,
+                                ),
+                                child: Image.asset(
+                                    "assets/images/welcoming.png",
+                                    width: 200.0,
+                                    height: 200.0),
                               ),
                               Text(
                                 "Bienvenue",
                                 style:
-                                    Theme.of(context).accentTextTheme.headline4,
+                                    Theme.of(context).accentTextTheme.headline3,
                               ),
                               SizedBox(
                                 height: 20.0,
@@ -165,41 +100,128 @@ class _OnboardingViewState extends State<OnboardingView> {
                               Text(
                                 "Suivez ces quelques étapes pour paramétrer votre livre de compte",
                                 style:
-                                    Theme.of(context).accentTextTheme.bodyText1,
+                                    Theme.of(context).accentTextTheme.subtitle1,
                               ),
                             ],
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.all(40.0),
-                          child: _buildAmountForm(
-                            title:
+                          child: ListView(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 16.0,
+                                  bottom: 48.0,
+                                ),
+                                child: Image.asset("assets/images/card.png",
+                                    width: 200.0, height: 200.0),
+                              ),
+                              Text(
                                 "Veuillez indiquer le montant initial de votre compte :",
-                            controller: _bankAmountController,
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(40.0),
-                          child: _buildAmountForm(
-                            title:
-                                "Veuillez indiquer le montant initial de votre caisse :",
-                            controller: _cashAmountController,
+                                style:
+                                    Theme.of(context).accentTextTheme.subtitle1,
+                              ),
+                              SizedBox(height: 32.0),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "0.0",
+                                  fillColor: DefaultThemeColors.white,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide(
+                                      style: BorderStyle.none,
+                                      width: 0.0,
+                                    ),
+                                  ),
+                                ),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyText1,
+                                keyboardType: TextInputType.number,
+                                controller: _bankAmountController,
+                                validator: (value) {
+                                  if (!_amountRegex.hasMatch(value)) {
+                                    return 'Veuillez entrer un montant correct';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                            ],
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.all(40.0),
                           child: ListView(
                             children: <Widget>[
-                              SizedBox(
-                                height: 250.0,
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 16.0,
+                                  bottom: 48.0,
+                                ),
+                                child: Image.asset("assets/images/wallet.png",
+                                    width: 200.0, height: 200.0),
                               ),
                               Text(
-                                "Paramétrage terminé",
+                                "Veuillez indiquer le montant initial de votre caisse :",
                                 style:
-                                    Theme.of(context).accentTextTheme.headline4,
+                                    Theme.of(context).accentTextTheme.subtitle1,
                               ),
+                              SizedBox(height: 32.0),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "0.0",
+                                  fillColor: DefaultThemeColors.white,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide(
+                                      style: BorderStyle.none,
+                                      width: 0.0,
+                                    ),
+                                  ),
+                                ),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyText1,
+                                keyboardType: TextInputType.number,
+                                controller: _cashAmountController,
+                                validator: (value) {
+                                  if (!_amountRegex.hasMatch(value)) {
+                                    return 'Veuillez entrer un montant correct';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(40.0),
+                          child: ListView(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 16.0,
+                                  bottom: 48.0,
+                                ),
+                                child: Image.asset(
+                                    "assets/images/completed.png",
+                                    width: 200.0,
+                                    height: 200.0),
+                              ),
+                              // Text(
+                              //   "Réglages terminés",
+                              //   style:
+                              //       Theme.of(context).accentTextTheme.headline3,
+                              // ),
                               SizedBox(
-                                height: 20.0,
+                                height: 120.0,
                               ),
                               CustomRaisedButton(
                                 onPressed: () {
@@ -225,7 +247,10 @@ class _OnboardingViewState extends State<OnboardingView> {
                     bottom: 24.0,
                     left: 0.0,
                     right: 0.0,
-                    child: _buildPageIndicatorList(),
+                    child: PageIndicators(
+                      pageCount: _pageCount,
+                      currentPageIndex: _currentPage,
+                    ),
                   ),
                 ],
               ),
