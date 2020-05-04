@@ -121,4 +121,16 @@ class CustomTheme {
       iconTheme: _buildDefaultIconTheme(),
     );
   }
+
+  static Gradient get gradient => LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [0.1, 0.4, 0.7, 0.9],
+    colors: [
+      DefaultThemeColors.blue1,
+      DefaultThemeColors.blue2,
+      DefaultThemeColors.blue3,
+      DefaultThemeColors.blue4,
+    ],
+  );
 }
