@@ -28,5 +28,6 @@ class DefaultThemeColors {
 
   // Denotative colors (system)
   static const Color error = Color(0xffc30014);
+  static const Color error2 = Color(0xffedb3b9);
   static const Color success = Color(0xff268f13);
 }
