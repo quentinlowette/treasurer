@@ -59,8 +59,8 @@ class DatabaseStorageService extends StorageService {
       FROM (
         SELECT ${operationDao.src}, ${operationDao.dst}, SUM(${operationDao.amount}) as tmp
         FROM ${operationDao.tableName}
-        WHERE ${operationDao.src} = ${Actor.bank.index}
-           OR ${operationDao.dst} = ${Actor.bank.index}
+        WHERE ${operationDao.src} = ${ActorType.bank.index}
+           OR ${operationDao.dst} = ${ActorType.bank.index}
         GROUP BY ${operationDao.src}
       )
       GROUP BY ${operationDao.dst}
@@ -76,14 +76,14 @@ class DatabaseStorageService extends StorageService {
     } else if (bankResult.length == 1) {
       // Only 1 result from DB
       Map<String, dynamic> result = bankResult[0];
-      bankExpense = result[operationDao.src] == Actor.bank.index ? result['sum'] : 0.0;
-      bankIncome = result[operationDao.dst] == Actor.bank.index ? result['sum'] : 0.0;
+      bankExpense = result[operationDao.src] == ActorType.bank.index ? result['sum'] : 0.0;
+      bankIncome = result[operationDao.dst] == ActorType.bank.index ? result['sum'] : 0.0;
     } else {
       // At least 2 results from DB
       Map<String, dynamic> result1 = bankResult[0];
       Map<String, dynamic> result2 = bankResult[1];
-      bankExpense = result1[operationDao.src] == Actor.bank.index ? result1['sum'] : result2['sum'];
-      bankIncome = result1[operationDao.dst] == Actor.bank.index ? result1['sum'] : result2['sum'];
+      bankExpense = result1[operationDao.src] == ActorType.bank.index ? result1['sum'] : result2['sum'];
+      bankIncome = result1[operationDao.dst] == ActorType.bank.index ? result1['sum'] : result2['sum'];
     }
 
     double bank = bankIncome - bankExpense;
@@ -94,8 +94,8 @@ class DatabaseStorageService extends StorageService {
       FROM (
         SELECT ${operationDao.src}, ${operationDao.dst}, SUM(${operationDao.amount}) as tmp
         FROM ${operationDao.tableName}
-        WHERE ${operationDao.src} = ${Actor.cash.index}
-           OR ${operationDao.dst} = ${Actor.cash.index}
+        WHERE ${operationDao.src} = ${ActorType.cash.index}
+           OR ${operationDao.dst} = ${ActorType.cash.index}
         GROUP BY ${operationDao.src}
       )
       GROUP BY ${operationDao.dst}
@@ -111,14 +111,14 @@ class DatabaseStorageService extends StorageService {
     } else if (cashResult.length == 1) {
       // Only 1 result from DB
       Map<String, dynamic> result = cashResult[0];
-      cashExpense = result[operationDao.src] == Actor.cash.index ? result['sum'] : 0.0;
-      cashIncome = result[operationDao.dst] == Actor.cash.index ? result['sum'] : 0.0;
+      cashExpense = result[operationDao.src] == ActorType.cash.index ? result['sum'] : 0.0;
+      cashIncome = result[operationDao.dst] == ActorType.cash.index ? result['sum'] : 0.0;
     } else {
       // At least 2 results from DB
       Map<String, dynamic> result1 = cashResult[0];
       Map<String, dynamic> result2 = cashResult[1];
-      cashExpense = result1[operationDao.src] == Actor.cash.index ? result1['sum'] : result2['sum'];
-      cashIncome = result1[operationDao.dst] == Actor.cash.index ? result1['sum'] : result2['sum'];
+      cashExpense = result1[operationDao.src] == ActorType.cash.index ? result1['sum'] : result2['sum'];
+      cashIncome = result1[operationDao.dst] == ActorType.cash.index ? result1['sum'] : result2['sum'];
     }
 
     double cash = cashIncome - cashExpense;

@@ -39,8 +39,8 @@ class OperationDao extends Dao<Operation> {
         date: DateTime.fromMillisecondsSinceEpoch(map[date]),
         description: map[description],
         id: map[id],
-        src: Actor.values[map[src]],
-        dst: Actor.values[map[dst]],
+        src: Actor(ActorType.values[map[src]]),
+        dst: Actor(ActorType.values[map[dst]]),
         receiptPhotoPath: map[receiptPhotoPath]);
   }
 
@@ -50,8 +50,8 @@ class OperationDao extends Dao<Operation> {
       amount: operation.amount,
       date: operation.date.millisecondsSinceEpoch,
       description: operation.description,
-      src: operation.src.index,
-      dst: operation.dst.index,
+      src: operation.src.toIndex(),
+      dst: operation.dst.toIndex(),
       receiptPhotoPath: operation.receiptPhotoPath
     };
   }

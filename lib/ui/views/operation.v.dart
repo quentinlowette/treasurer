@@ -68,31 +68,17 @@ class OperationView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "De",
-                            style: Theme.of(context).accentTextTheme.subtitle1,
-                          ),
-                          Text(
-                            "${operation.src}",
-                            style: Theme.of(context).accentTextTheme.headline6,
-                          ),
-                        ],
+                      Text(
+                        "${operation.src}",
+                        style: Theme.of(context).accentTextTheme.headline6,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            "À",
-                            style: Theme.of(context).accentTextTheme.subtitle1,
-                          ),
-                          Text(
-                            "${operation.dst}",
-                            style: Theme.of(context).accentTextTheme.headline6,
-                          ),
-                        ],
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: DefaultThemeColors.white,
+                      ),
+                      Text(
+                        "${operation.dst}",
+                        style: Theme.of(context).accentTextTheme.headline6,
                       ),
                     ],
                   ),
@@ -108,7 +94,9 @@ class OperationView extends StatelessWidget {
                     title: "Modifier",
                     onPressed: () => model.editOperation(),
                   ),
-                  SizedBox(height: 16.0,),
+                  SizedBox(
+                    height: 16.0,
+                  ),
                   CustomRaisedButton(
                     backgroundColor: DefaultThemeColors.white,
                     textColor: DefaultThemeColors.error,

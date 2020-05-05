@@ -48,16 +48,16 @@ class AccountViewModel extends ChangeNotifier {
   void _updateAmounts(Operation operation, {removed = false}) {
     double amount = removed ? -1 * operation.amount : operation.amount;
 
-    if (operation.dst == Actor.cash) {
+    if (operation.dst.hasType(ActorType.cash)) {
       _cash += amount;
     }
-    if (operation.src == Actor.cash) {
+    if (operation.src.hasType(ActorType.cash)) {
       _cash -= amount;
     }
-    if (operation.dst == Actor.bank) {
+    if (operation.dst.hasType(ActorType.bank)) {
       _bank += amount;
     }
-    if (operation.src == Actor.bank) {
+    if (operation.src.hasType(ActorType.bank)) {
       _bank -= amount;
     }
 
@@ -85,6 +85,32 @@ class AccountViewModel extends ChangeNotifier {
         arguments: operation);
   }
 
+  Future<void> _initAccount() async {
+    List<double> amounts =
+        await _navigationService.navigateTo(Router.OnboardingViewRoute);
+
+    Operation _initBankAmount = Operation(
+      amount: amounts[0],
+      date: DateTime.now(),
+      description: "Montant initial sur le compte",
+      src: Actor(ActorType.extern),
+      dst: Actor(ActorType.bank),
+      receiptPhotoPath: null,
+    );
+
+    Operation _initCashAmount = Operation(
+      amount: amounts[1],
+      date: DateTime.now(),
+      description: "Montant initial dans la caisse",
+      src: Actor(ActorType.extern),
+      dst: Actor(ActorType.cash),
+      receiptPhotoPath: null,
+    );
+
+    await addOperation(_initBankAmount);
+    await addOperation(_initCashAmount);
+  }
+
   /// Loads the stored operations
   Future<void> loadData() async {
     // Fetches the operations from the storage service
@@ -97,29 +123,7 @@ class AccountViewModel extends ChangeNotifier {
     _cash = amounts[2];
 
     if (_operations.isEmpty) {
-      List<double> amounts =
-          await _navigationService.navigateTo(Router.OnboardingViewRoute);
-
-      Operation _initBankAmount = Operation(
-        amount: amounts[0],
-        date: DateTime.now(),
-        description: "Montant initial sur le compte",
-        src: Actor.extern,
-        dst: Actor.bank,
-        receiptPhotoPath: null,
-      );
-
-      Operation _initCashAmount = Operation(
-        amount: amounts[1],
-        date: DateTime.now(),
-        description: "Montant initial dans la caisse",
-        src: Actor.extern,
-        dst: Actor.cash,
-        receiptPhotoPath: null,
-      );
-
-      await addOperation(_initBankAmount);
-      await addOperation(_initCashAmount);
+      await _initAccount();
     }
 
     _isLoaded = true;
@@ -161,29 +165,7 @@ class AccountViewModel extends ChangeNotifier {
       _updateAmounts(operation, removed: true);
 
       if (_operations.isEmpty) {
-        List<double> amounts =
-            await _navigationService.navigateTo(Router.OnboardingViewRoute);
-
-        Operation _initBankAmount = Operation(
-          amount: amounts[0],
-          date: DateTime.now(),
-          description: "Montant initial sur le compte",
-          src: Actor.extern,
-          dst: Actor.bank,
-          receiptPhotoPath: null,
-        );
-
-        Operation _initCashAmount = Operation(
-          amount: amounts[1],
-          date: DateTime.now(),
-          description: "Montant initial dans la caisse",
-          src: Actor.extern,
-          dst: Actor.cash,
-          receiptPhotoPath: null,
-        );
-
-        await addOperation(_initBankAmount);
-        await addOperation(_initCashAmount);
+        await _initAccount();
       }
 
       // Notifies the changes

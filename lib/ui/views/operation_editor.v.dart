@@ -19,18 +19,6 @@ class OperationEditorView extends StatelessWidget {
     @required this.initialOperation
   }) : super(key: key);
 
-  String _actorToString(Actor actor) {
-    switch (actor) {
-      case Actor.bank:
-        return "Compte";
-      case Actor.cash:
-        return "Caisse";
-      case Actor.extern:
-        return "Externe";
-    }
-    return null;
-  }
-
   /// Displays the date picker and sets the [_date] variable
   Future<void> _selectDate(BuildContext context, OperationEditorViewModel model) async {
     final DateTime pickedDate = await showDatePicker(
@@ -60,12 +48,13 @@ class OperationEditorView extends StatelessWidget {
               )
             ),
             child: Wrap(
-              children: Actor.values.map((actor) {
+              children: ActorType.values.map((actorType) {
                 Color color;
+                Actor actor = Actor(actorType);
 
-                if (actor == currentActor) {
+                if (currentActor != null && currentActor.hasType(actorType)) {
                   color = DefaultThemeColors.blue;
-                } else if (actor == differentFrom) {
+                } else if (differentFrom != null && differentFrom.hasType(actorType)) {
                   color = DefaultThemeColors.black.withAlpha(120);
                 } else {
                   color = DefaultThemeColors.black;
@@ -73,10 +62,10 @@ class OperationEditorView extends StatelessWidget {
 
                 return ListTile(
                   title: Text(
-                    _actorToString(actor),
+                    actor.toString(),
                     style: TextStyle(color: color),
                   ),
-                  enabled: actor != differentFrom,
+                  enabled: differentFrom == null || !differentFrom.hasType(actorType),
                   onTap: () {
                     onTap(actor);
                     Navigator.pop(context);
@@ -179,7 +168,7 @@ class OperationEditorView extends StatelessWidget {
                           height: 48.0,
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            model.srcActor != null ? _actorToString(model.srcActor) : "Source",
+                            model.srcActor != null ? model.srcActor.toString() : "Source",
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),
@@ -200,7 +189,7 @@ class OperationEditorView extends StatelessWidget {
                           height: 48.0,
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            model.dstActor != null ? _actorToString(model.dstActor) : "Destination",
+                            model.dstActor != null ? model.dstActor.toString() : "Destination",
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),
