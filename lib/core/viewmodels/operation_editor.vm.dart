@@ -125,11 +125,11 @@ class OperationEditorViewModel extends ChangeNotifier {
   /// Exits the view and deletes, if needed, the taken picture
   void exit([Operation operation]) {
     // If there isn't an initial operation and if a picture has been taken
-    if (_initialOperation == null && _imageFile != null) {
-      _imageFile.delete();
-    }
-    // _descriptionController.dispose();
-    // _amountController.dispose();
+    // if (_initialOperation == null) {
+    //   _imageFile.delete();
+    // }
+    _descriptionController.dispose();
+    _amountController.dispose();
     _navigationService.goBack<Operation>(operation);
   }
 
@@ -153,8 +153,6 @@ class OperationEditorViewModel extends ChangeNotifier {
 
     if (_imageFile != null) {
       await scanImage();
-      print("scan");
-      print(_detectedAmountString);
       _amountController.text = _detectedAmountString;
       _date = _detectedDate;
       _autoFilled = true;
