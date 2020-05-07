@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -6,6 +8,7 @@ import 'package:treasurer/core/viewmodels/operation.vm.dart';
 import 'package:treasurer/ui/colors.dart';
 import 'package:treasurer/ui/theme.dart';
 import 'package:treasurer/ui/widgets/buttons.dart';
+import 'package:treasurer/ui/widgets/image_button.dart';
 
 /// View of an operation
 ///
@@ -36,6 +39,9 @@ class OperationView extends StatelessWidget {
                     color: DefaultThemeColors.white,
                     onPressed: () => model.exit(),
                   ),
+                  ImageButton(
+                    imagePath: model.operation.receiptPhotoPath,
+                  )
                 ],
               ),
             ),
@@ -82,11 +88,11 @@ class OperationView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 32.0),
-                  Text(
-                    model.operation.receiptPhotoPath ?? "Pas de photo",
-                    style: Theme.of(context).accentTextTheme.headline6,
-                  ),
+                  // SizedBox(height: 32.0),
+                  // Text(
+                  //   model.operation.receiptPhotoPath ?? "Pas de photo",
+                  //   style: Theme.of(context).accentTextTheme.headline6,
+                  // ),
                   Spacer(),
                   CustomRaisedButton(
                     backgroundColor: DefaultThemeColors.white,
