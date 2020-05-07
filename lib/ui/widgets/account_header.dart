@@ -18,7 +18,7 @@ class AccountHeader extends StatelessWidget {
             style: Theme.of(context).accentTextTheme.headline5,
           ),
           Text(
-            "${model.total} €",
+            "${model.total.toStringAsFixed(2)} €",
             style: Theme.of(context).accentTextTheme.headline3,
           ),
           SizedBox(height: 16.0,),
@@ -33,7 +33,7 @@ class AccountHeader extends StatelessWidget {
                     style: Theme.of(context).accentTextTheme.headline6,
                   ),
                   Text(
-                    "${model.bank} €",
+                    "${model.bank.toStringAsFixed(2)} €",
                     style: Theme.of(context).accentTextTheme.headline5,
                   ),
                 ],
@@ -46,7 +46,7 @@ class AccountHeader extends StatelessWidget {
                     style: Theme.of(context).accentTextTheme.headline6,
                   ),
                   Text(
-                    "${model.cash} €",
+                    "${model.cash.toStringAsFixed(2)} €",
                     style: Theme.of(context).accentTextTheme.headline5,
                   ),
                 ],
