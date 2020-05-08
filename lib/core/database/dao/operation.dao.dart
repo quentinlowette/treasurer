@@ -2,9 +2,7 @@ import 'package:treasurer/core/database/dao/dao.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 
-/// Operation Data-Access Object
-///
-/// Middleware between a model and a database table
+/// The operation Data-Access Object
 class OperationDao extends Dao<Operation> {
   // Columns names
   final String id = "id";
@@ -16,17 +14,17 @@ class OperationDao extends Dao<Operation> {
   final String receiptPhotoPath = "receiptPhotoPath";
 
   // Constructor
-  OperationDao(){
+  OperationDao() {
     // Columns definition
     columnsDefinition = [
-        [id, "INTEGER PRIMARY KEY AUTOINCREMENT"],
-        [amount, "REAL NOT NULL"],
-        [src, "INTEGER NOT NULL"],
-        [dst, "INTEGER NOT NULL"],
-        [date, "INTEGER NOT NULL"],
-        [description, "TEXT NOT NULL"],
-        [receiptPhotoPath, "TEXT"]
-      ];
+      [id, "INTEGER PRIMARY KEY AUTOINCREMENT"],
+      [amount, "REAL NOT NULL"],
+      [src, "INTEGER NOT NULL"],
+      [dst, "INTEGER NOT NULL"],
+      [date, "INTEGER NOT NULL"],
+      [description, "TEXT NOT NULL"],
+      [receiptPhotoPath, "TEXT"]
+    ];
 
     // Table name
     tableName = "operations";
@@ -35,13 +33,14 @@ class OperationDao extends Dao<Operation> {
   @override
   Operation fromMap(Map<String, dynamic> map) {
     return Operation(
-        amount: map[amount],
-        date: DateTime.fromMillisecondsSinceEpoch(map[date]),
-        description: map[description],
-        id: map[id],
-        src: Actor(ActorType.values[map[src]]),
-        dst: Actor(ActorType.values[map[dst]]),
-        receiptPhotoPath: map[receiptPhotoPath]);
+      amount: map[amount],
+      date: DateTime.fromMillisecondsSinceEpoch(map[date]),
+      description: map[description],
+      id: map[id],
+      src: Actor(ActorType.values[map[src]]),
+      dst: Actor(ActorType.values[map[dst]]),
+      receiptPhotoPath: map[receiptPhotoPath],
+    );
   }
 
   @override
