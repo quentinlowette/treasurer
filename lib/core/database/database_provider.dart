@@ -18,7 +18,7 @@ class DatabaseProvider {
   static final int _version = 1;
 
   /// The definition of the database's tables.
-  static final List<Dao> tables = [OperationDao()];
+  static final List<Dao> _tables = [OperationDao()];
 
   /// An instance of this class.
   static final DatabaseProvider instance =
@@ -51,7 +51,7 @@ class DatabaseProvider {
   /// Creates the tables of the database.
   Future<void> _onCreate(Database db, int version) async {
     Batch batch = db.batch();
-    for (Dao dao in tables) {
+    for (Dao dao in _tables) {
       batch.execute("DROP TABLE IF EXISTS ${dao.tableName}");
       batch.execute(dao.creationQuery);
     }
