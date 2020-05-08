@@ -48,16 +48,16 @@ class AccountViewModel extends ChangeNotifier {
   void _updateAmounts(Operation operation, {removed = false}) {
     double amount = removed ? -1 * operation.amount : operation.amount;
 
-    if (operation.dst.hasType(ActorType.cash)) {
+    if (operation.destination.hasType(ActorType.cash)) {
       _cash += amount;
     }
-    if (operation.src.hasType(ActorType.cash)) {
+    if (operation.source.hasType(ActorType.cash)) {
       _cash -= amount;
     }
-    if (operation.dst.hasType(ActorType.bank)) {
+    if (operation.destination.hasType(ActorType.bank)) {
       _bank += amount;
     }
-    if (operation.src.hasType(ActorType.bank)) {
+    if (operation.source.hasType(ActorType.bank)) {
       _bank -= amount;
     }
 
@@ -89,23 +89,9 @@ class AccountViewModel extends ChangeNotifier {
     List<double> amounts =
         await _navigationService.navigateTo(Router.OnboardingViewRoute);
 
-    Operation _initBankAmount = Operation(
-      amount: amounts[0],
-      date: DateTime.now(),
-      description: "Montant initial sur le compte",
-      src: Actor(ActorType.extern),
-      dst: Actor(ActorType.bank),
-      receiptPhotoPath: null,
-    );
+    Operation _initBankAmount = Operation(amounts[0], DateTime.now(), "Montant initial sur le compte", Actor(ActorType.extern), Actor(ActorType.bank), null);
 
-    Operation _initCashAmount = Operation(
-      amount: amounts[1],
-      date: DateTime.now(),
-      description: "Montant initial dans la caisse",
-      src: Actor(ActorType.extern),
-      dst: Actor(ActorType.cash),
-      receiptPhotoPath: null,
-    );
+    Operation _initCashAmount = Operation(amounts[1], DateTime.now(), "Montant initial dans la caisse", Actor(ActorType.extern), Actor(ActorType.cash), null);
 
     await addOperation(_initBankAmount);
     await addOperation(_initCashAmount);

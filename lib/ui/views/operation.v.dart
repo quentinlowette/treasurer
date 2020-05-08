@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -75,7 +73,7 @@ class OperationView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "${operation.src}",
+                        "${operation.source}",
                         style: Theme.of(context).accentTextTheme.headline6,
                       ),
                       Icon(
@@ -83,7 +81,7 @@ class OperationView extends StatelessWidget {
                         color: DefaultThemeColors.white,
                       ),
                       Text(
-                        "${operation.dst}",
+                        "${operation.destination}",
                         style: Theme.of(context).accentTextTheme.headline6,
                       ),
                     ],

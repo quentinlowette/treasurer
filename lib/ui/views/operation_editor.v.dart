@@ -14,13 +14,12 @@ import 'package:treasurer/ui/widgets/operation_editor_field.dart';
 class OperationEditorView extends StatelessWidget {
   final Operation initialOperation;
 
-  const OperationEditorView({
-    Key key,
-    @required this.initialOperation
-  }) : super(key: key);
+  const OperationEditorView({Key key, @required this.initialOperation})
+      : super(key: key);
 
   /// Displays the date picker and sets the [_date] variable
-  Future<void> _selectDate(BuildContext context, OperationEditorViewModel model) async {
+  Future<void> _selectDate(
+      BuildContext context, OperationEditorViewModel model) async {
     final DateTime pickedDate = await showDatePicker(
       context: context,
       initialDate: model.date ?? DateTime.now(),
@@ -33,64 +32,64 @@ class OperationEditorView extends StatelessWidget {
     }
   }
 
-  void _selectActor(BuildContext context, Actor currentActor, Actor differentFrom, void Function(Actor actor) onTap) {
+  void _selectActor(BuildContext context, Actor currentActor,
+      Actor differentFrom, void Function(Actor actor) onTap) {
     showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          color: Color(0xFF737373),
-          child: Container(
-            decoration: BoxDecoration(
-              color: DefaultThemeColors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8.0),
-                topRight: Radius.circular(8.0),
-              )
-            ),
-            child: Wrap(
-              children: ActorType.values.map((actorType) {
-                Color color;
-                Actor actor = Actor(actorType);
+        context: context,
+        builder: (context) {
+          return Container(
+            color: Color(0xFF737373),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: DefaultThemeColors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    topRight: Radius.circular(8.0),
+                  )),
+              child: Wrap(
+                children: ActorType.values.map((actorType) {
+                  Color color;
+                  Actor actor = Actor(actorType);
 
-                if (currentActor != null && currentActor.hasType(actorType)) {
-                  color = DefaultThemeColors.blue;
-                } else if (differentFrom != null && differentFrom.hasType(actorType)) {
-                  color = DefaultThemeColors.black.withAlpha(120);
-                } else {
-                  color = DefaultThemeColors.black;
-                }
+                  if (currentActor != null && currentActor.hasType(actorType)) {
+                    color = DefaultThemeColors.blue;
+                  } else if (differentFrom != null &&
+                      differentFrom.hasType(actorType)) {
+                    color = DefaultThemeColors.black.withAlpha(120);
+                  } else {
+                    color = DefaultThemeColors.black;
+                  }
 
-                return ListTile(
-                  title: Text(
-                    actor.toString(),
-                    style: TextStyle(color: color),
-                  ),
-                  enabled: differentFrom == null || !differentFrom.hasType(actorType),
-                  onTap: () {
-                    onTap(actor);
-                    Navigator.pop(context);
-                  },
-                );
-              }).toList(),
+                  return ListTile(
+                    title: Text(
+                      actor.toString(),
+                      style: TextStyle(color: color),
+                    ),
+                    enabled: differentFrom == null ||
+                        !differentFrom.hasType(actorType),
+                    onTap: () {
+                      onTap(actor);
+                      Navigator.pop(context);
+                    },
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<OperationEditorViewModel>.reactive(
-        viewModelBuilder: () => OperationEditorViewModel(initialOperation: initialOperation),
+        viewModelBuilder: () =>
+            OperationEditorViewModel(initialOperation: initialOperation),
         builder: (context, model, child) {
           return Scaffold(
             appBar: AppBar(
-              title: Text(
-                initialOperation == null
+              title: Text(initialOperation == null
                   ? "Nouvelle opération"
-                  : "Modifier l'opération"
-              ),
+                  : "Modifier l'opération"),
               flexibleSpace: Container(
                 decoration: BoxDecoration(
                   gradient: CustomTheme.gradient,
@@ -102,7 +101,9 @@ class OperationEditorView extends StatelessWidget {
               child: ListView(
                 children: <Widget>[
                   model.isLoading ? LinearProgressIndicator() : Container(),
-                  SizedBox(height: 16.0,),
+                  SizedBox(
+                    height: 16.0,
+                  ),
                   OperationEditorField(
                     title: "Montant",
                     isValid: model.isAmountValid,
@@ -114,8 +115,9 @@ class OperationEditorView extends StatelessWidget {
                         border: InputBorder.none,
                       ),
                       style: TextStyle(
-                        color: model.isAutoFilled ? DefaultThemeColors.orange : DefaultThemeColors.black
-                      ),
+                          color: model.isAutoFilled
+                              ? DefaultThemeColors.orange
+                              : DefaultThemeColors.black),
                       keyboardType: TextInputType.number,
                       controller: model.amountController,
                     ),
@@ -142,10 +144,13 @@ class OperationEditorView extends StatelessWidget {
                       height: 48.0,
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        model.date != null ? DateFormat('dd/MM/yyyy').format(model.date) : "Veuillez choisir une date",
+                        model.date != null
+                            ? DateFormat('dd/MM/yyyy').format(model.date)
+                            : "Veuillez choisir une date",
                         style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: model.isAutoFilled ? DefaultThemeColors.orange : DefaultThemeColors.black
-                        ),
+                            color: model.isAutoFilled
+                                ? DefaultThemeColors.orange
+                                : DefaultThemeColors.black),
                       ),
                     ),
                   ),
@@ -154,49 +159,49 @@ class OperationEditorView extends StatelessWidget {
                     children: <Widget>[
                       OperationEditorField(
                         title: "Source",
-                        isValid: model.isSrcValid,
+                        isValid: model.issourceValid,
                         alignment: CrossAxisAlignment.start,
                         onTap: () => _selectActor(
-                          context,
-                          model.srcActor,
-                          model.dstActor,
-                          (actor) {
-                            model.setSource(actor);
-                          }
-                        ),
+                            context, model.sourceActor, model.destinationActor,
+                            (actor) {
+                          model.setSource(actor);
+                        }),
                         subtitle: Container(
                           height: 48.0,
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            model.srcActor != null ? model.srcActor.toString() : "Source",
+                            model.sourceActor != null
+                                ? model.sourceActor.toString()
+                                : "Source",
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),
                       ),
                       OperationEditorField(
                         title: "Destination",
-                        isValid: model.isDstValid,
+                        isValid: model.isdestinationValid,
                         alignment: CrossAxisAlignment.end,
                         onTap: () => _selectActor(
-                          context,
-                          model.dstActor,
-                          model.srcActor,
-                          (actor) {
-                            model.setDestination(actor);
-                          }
-                        ),
+                            context, model.destinationActor, model.sourceActor,
+                            (actor) {
+                          model.setDestination(actor);
+                        }),
                         subtitle: Container(
                           height: 48.0,
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            model.dstActor != null ? model.dstActor.toString() : "Destination",
+                            model.destinationActor != null
+                                ? model.destinationActor.toString()
+                                : "Destination",
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 82.0,),
+                  SizedBox(
+                    height: 82.0,
+                  ),
                   CustomOutlineButton(
                     onPressed: () {
                       model.getAndScanImage();
@@ -205,7 +210,9 @@ class OperationEditorView extends StatelessWidget {
                     outlineColor: DefaultThemeColors.blue,
                     textColor: DefaultThemeColors.blue,
                   ),
-                  SizedBox(height: 16.0,),
+                  SizedBox(
+                    height: 16.0,
+                  ),
                   CustomRaisedButton(
                     onPressed: () {
                       if (model.validateFields()) {
@@ -218,7 +225,9 @@ class OperationEditorView extends StatelessWidget {
                     backgroundColor: DefaultThemeColors.blue,
                     textColor: DefaultThemeColors.white,
                   ),
-                  SizedBox(height: 16.0,),
+                  SizedBox(
+                    height: 16.0,
+                  ),
                 ],
               ),
             ),

@@ -49,8 +49,8 @@ class DatabaseProvider {
   }
 
   /// Creates the tables of the database.
-  Future<void> _onCreate(Database db, int version) async {
-    Batch batch = db.batch();
+  Future<void> _onCreate(Database database, int version) async {
+    Batch batch = database.batch();
     for (Dao dao in _tables) {
       batch.execute("DROP TABLE IF EXISTS ${dao.tableName}");
       batch.execute(dao.creationQuery);

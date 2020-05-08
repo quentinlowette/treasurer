@@ -1,35 +1,29 @@
-import 'package:flutter/foundation.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 
-/// Model of an Operation
+/// A model of an operation.
 class Operation {
-  /// Amount exchange in the operation
+  /// The amount exchange in this operation.
   final double amount;
 
-  /// Date of the operation
+  /// The date of this operation
   final DateTime date;
 
-  /// Description of the operation
+  /// The description of this operation
   final String description;
 
-  /// Id of the operation in the database
+  /// The id of this operation in the database
   int id;
 
   /// Source Actors of the operation
-  final Actor src;
+  final Actor source;
 
   /// Destination Actors of the operation
-  final Actor dst;
+  final Actor destination;
 
   /// Path of the receipt photo associated to the operation
   final String receiptPhotoPath;
 
-  Operation(
-      {@required this.amount,
-      @required this.date,
-      @required this.description,
-      @required this.src,
-      @required this.dst,
-      @required this.receiptPhotoPath,
-      this.id});
+  Operation(this.amount, this.date, this.description, this.source,
+      this.destination, this.receiptPhotoPath,
+      [this.id]);
 }

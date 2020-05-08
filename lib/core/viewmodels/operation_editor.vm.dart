@@ -36,10 +36,10 @@ class OperationEditorViewModel extends ChangeNotifier {
   DateTime _date;
 
   /// Selected source Actor
-  Actor _srcActor;
+  Actor _sourceActor;
 
   /// Selected destination Actor
-  Actor _dstActor;
+  Actor _destinationActor;
 
   /// Validation's Flags
   bool _descriptionValid = true;
@@ -48,9 +48,9 @@ class OperationEditorViewModel extends ChangeNotifier {
 
   bool _dateValid = true;
 
-  bool _srcValid = true;
+  bool _sourceValid = true;
 
-  bool _dstValid = true;
+  bool _destinationValid = true;
 
   OperationEditorViewModel({@required Operation initialOperation}) {
     _initialOperation = initialOperation;
@@ -59,8 +59,8 @@ class OperationEditorViewModel extends ChangeNotifier {
       _descriptionController.text = initialOperation.description;
       _amountController.text = initialOperation.amount.abs().toString();
       _date = initialOperation.date;
-      _srcActor = initialOperation.src;
-      _dstActor = initialOperation.dst;
+      _sourceActor = initialOperation.source;
+      _destinationActor = initialOperation.destination;
 
       if (initialOperation.receiptPhotoPath != null) {
         _imageFile = File(initialOperation.receiptPhotoPath);
@@ -81,10 +81,10 @@ class OperationEditorViewModel extends ChangeNotifier {
   DateTime get date => _date;
 
   /// Getter for the selected source Actor
-  Actor get srcActor => _srcActor;
+  Actor get sourceActor => _sourceActor;
 
   /// Getter for the selected destination Actor
-  Actor get dstActor => _dstActor;
+  Actor get destinationActor => _destinationActor;
 
   // Getter for the validation's flags
   bool get isDescriptionValid => _descriptionValid;
@@ -93,9 +93,9 @@ class OperationEditorViewModel extends ChangeNotifier {
 
   bool get isDateValid => _dateValid;
 
-  bool get isSrcValid => _srcValid;
+  bool get issourceValid => _sourceValid;
 
-  bool get isDstValid => _dstValid;
+  bool get isdestinationValid => _destinationValid;
 
   /// Getter for the detected amount's string
   String get detectedAmountString => _detectedAmountString;
@@ -110,7 +110,8 @@ class OperationEditorViewModel extends ChangeNotifier {
   File get imageFile => _imageFile;
 
   /// Instance of the text recognition service
-  TextRecognitionService _textRecognitionService = locator<TextRecognitionService>();
+  TextRecognitionService _textRecognitionService =
+      locator<TextRecognitionService>();
 
   /// Instance of the navigation service
   NavigationService _navigationService = locator<NavigationService>();
@@ -139,12 +140,12 @@ class OperationEditorViewModel extends ChangeNotifier {
   }
 
   void setSource(Actor actor) {
-    _srcActor = actor;
+    _sourceActor = actor;
     notifyListeners();
   }
 
   void setDestination(Actor actor) {
-    _dstActor = actor;
+    _destinationActor = actor;
     notifyListeners();
   }
 
@@ -160,6 +161,7 @@ class OperationEditorViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   /// Displays the image picker with the camera
   Future<void> getImage() async {
     File pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -188,7 +190,8 @@ class OperationEditorViewModel extends ChangeNotifier {
 
     await _textRecognitionService.detect(_imageFile);
 
-    _detectedAmountString = _textRecognitionService.total.toString().replaceAll('.', ',');
+    _detectedAmountString =
+        _textRecognitionService.total.toString().replaceAll('.', ',');
     _detectedDate = _textRecognitionService.date;
     _isLoading = false;
 
@@ -200,30 +203,32 @@ class OperationEditorViewModel extends ChangeNotifier {
     RegExp amountRegex = RegExp(amountPattern);
 
     _descriptionValid = _descriptionController.text != "";
-    _amountValid = _amountController.text != "" && amountRegex.hasMatch(_amountController.text);
+    _amountValid = _amountController.text != "" &&
+        amountRegex.hasMatch(_amountController.text);
     _dateValid = _date != null;
-    _srcValid = _srcActor != null;
-    _dstValid = _dstActor != null;
+    _sourceValid = _sourceActor != null;
+    _destinationValid = _destinationActor != null;
 
     // notifyListeners();
 
     return _descriptionValid &&
-           _amountValid &&
-           _dateValid &&
-           _srcValid &&
-           _dstValid;
+        _amountValid &&
+        _dateValid &&
+        _sourceValid &&
+        _destinationValid;
   }
+
   /// Creates a new operation and exit the view
   void commitOperation() {
     // Create a new Operation
     Operation newOperation = Operation(
-        amount: double.parse(_amountController.text.replaceAll(',', '.')),
-        date: _date,
-        description: _descriptionController.text,
-        id: _initialOperation == null ? null : _initialOperation.id,
-        src: _srcActor,
-        dst: _dstActor,
-        receiptPhotoPath: _imageFile == null ? null : _imageFile.path);
+        double.parse(_amountController.text.replaceAll(',', '.')),
+        _date,
+        _descriptionController.text,
+        _sourceActor,
+        _destinationActor,
+        _imageFile == null ? null : _imageFile.path,
+        _initialOperation == null ? null : _initialOperation.id);
 
     // Exits the view
     exit(newOperation);

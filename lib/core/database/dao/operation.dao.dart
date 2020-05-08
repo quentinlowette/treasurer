@@ -7,8 +7,8 @@ class OperationDao extends Dao<Operation> {
   // Columns names
   final String id = "id";
   final String amount = "amount";
-  final String src = "source";
-  final String dst = "destination";
+  final String source = "source";
+  final String destination = "destination";
   final String date = "date";
   final String description = "description";
   final String receiptPhotoPath = "receiptPhotoPath";
@@ -19,8 +19,8 @@ class OperationDao extends Dao<Operation> {
     columnsDefinition = [
       [id, "INTEGER PRIMARY KEY AUTOINCREMENT"],
       [amount, "REAL NOT NULL"],
-      [src, "INTEGER NOT NULL"],
-      [dst, "INTEGER NOT NULL"],
+      [source, "INTEGER NOT NULL"],
+      [destination, "INTEGER NOT NULL"],
       [date, "INTEGER NOT NULL"],
       [description, "TEXT NOT NULL"],
       [receiptPhotoPath, "TEXT"]
@@ -33,13 +33,13 @@ class OperationDao extends Dao<Operation> {
   @override
   Operation fromMap(Map<String, dynamic> map) {
     return Operation(
-      amount: map[amount],
-      date: DateTime.fromMillisecondsSinceEpoch(map[date]),
-      description: map[description],
-      id: map[id],
-      src: Actor(ActorType.values[map[src]]),
-      dst: Actor(ActorType.values[map[dst]]),
-      receiptPhotoPath: map[receiptPhotoPath],
+      map[amount],
+      DateTime.fromMillisecondsSinceEpoch(map[date]),
+      map[description],
+      Actor(ActorType.values[map[source]]),
+      Actor(ActorType.values[map[destination]]),
+      map[receiptPhotoPath],
+      map[id],
     );
   }
 
@@ -49,8 +49,8 @@ class OperationDao extends Dao<Operation> {
       amount: operation.amount,
       date: operation.date.millisecondsSinceEpoch,
       description: operation.description,
-      src: operation.src.toInteger(),
-      dst: operation.dst.toInteger(),
+      source: operation.source.toInteger(),
+      destination: operation.destination.toInteger(),
       receiptPhotoPath: operation.receiptPhotoPath
     };
   }
