@@ -6,27 +6,28 @@ import 'package:sqflite/sqflite.dart';
 import 'package:treasurer/core/database/dao/dao.dart';
 import 'package:treasurer/core/database/dao/operation.dao.dart';
 
-/// Helper class for the database management
+/// An helper class for the database management.
 ///
-/// It is a Singleton that holds a reference to the database.
+/// DatabaseProvider is a singleton that holds a reference to the database.
+/// It is responsible to create the table on the database creation.
 class DatabaseProvider {
-  /// Database name
-  static final String _databaseName = "treasurer.db";
+  /// The name of the database.
+  static final String _name = "treasurer.db";
 
-  /// Database version number
-  static final int _databaseVersion = 1;
+  /// The version number of the database.
+  static final int _version = 1;
 
-  /// Tables definition
+  /// The definition of the database's tables.
   static final List<Dao> tables = [OperationDao()];
 
-  /// Instance of this class
+  /// An instance of this class.
   static final DatabaseProvider instance =
       DatabaseProvider._privateConstructor();
 
-  /// Database instance
+  /// The database instance.
   static Database _database;
 
-  /// Getter for the database instance
+  /// Returns the single database instance.
   Future<Database> get database async {
     if (_database != null) {
       return _database;
@@ -35,26 +36,24 @@ class DatabaseProvider {
     return _database;
   }
 
-  /// Private constructor
   DatabaseProvider._privateConstructor();
 
-  /// Opens the database
+  /// Initializes the database and creates it if necessary.
   Future<Database> _initInstance() async {
-    // Construct path (/data/user/0/com.example.treasurer/app_flutter/)
+    // Constructs path
     Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, _databaseName);
+    String path = join(documentDirectory.path, _name);
 
     // Opens the database (No need to close because only one DB)
-    return await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(path, version: _version, onCreate: _onCreate);
   }
 
-  /// Creates the tables of the database
+  /// Creates the tables of the database.
   Future<void> _onCreate(Database db, int version) async {
     Batch batch = db.batch();
     for (Dao dao in tables) {
       batch.execute("DROP TABLE IF EXISTS ${dao.tableName}");
-      batch.execute(dao.createTableQuery);
+      batch.execute(dao.creationQuery);
     }
     await batch.commit();
   }
