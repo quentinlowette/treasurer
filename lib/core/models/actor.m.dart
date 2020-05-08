@@ -1,23 +1,27 @@
-/// Actors involved in an Operation
+/// The different kind of actors that can be involved in an operation.
 enum ActorType {
-  /// Represents the cash register
+  /// The cash box.
   cash,
-  /// Represents the bank account
+  /// The bank account.
   bank,
-  /// Represents an external person
+  /// An external person.
   extern
 }
 
+/// An actor involved in an operation.
 class Actor {
+  /// The actor's type
   final ActorType _actorType;
 
   Actor(this._actorType);
 
+  /// Returns `true` if this actor is of type [type].
   bool hasType(ActorType type) {
     return this._actorType == type;
   }
 
-  int toIndex() {
+  /// Returns a integer representation of this actor.
+  int toInteger() {
     return this._actorType.index;
   }
 

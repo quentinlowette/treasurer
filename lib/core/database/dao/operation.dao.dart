@@ -49,8 +49,8 @@ class OperationDao extends Dao<Operation> {
       amount: operation.amount,
       date: operation.date.millisecondsSinceEpoch,
       description: operation.description,
-      src: operation.src.toIndex(),
-      dst: operation.dst.toIndex(),
+      src: operation.src.toInteger(),
+      dst: operation.dst.toInteger(),
       receiptPhotoPath: operation.receiptPhotoPath
     };
   }
