@@ -188,11 +188,11 @@ class OperationEditorViewModel extends ChangeNotifier {
 
     notifyListeners();
 
-    await _textRecognitionService.detect(_imageFile);
+    TextRecognitionServiceResponse response =
+        await _textRecognitionService.detect(_imageFile);
 
-    _detectedAmountString =
-        _textRecognitionService.total.toString().replaceAll('.', ',');
-    _detectedDate = _textRecognitionService.date;
+    _detectedAmountString = response.total.toString().replaceAll('.', ',');
+    _detectedDate = response.date;
     _isLoading = false;
 
     notifyListeners();
