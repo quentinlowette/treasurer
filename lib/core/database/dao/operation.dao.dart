@@ -2,7 +2,7 @@ import 'package:treasurer/core/database/dao/dao.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
 
-/// The operation Data-Access Object
+/// The operation Data-Access Object.
 class OperationDao extends Dao<Operation> {
   // Columns names
   final String id = "id";
