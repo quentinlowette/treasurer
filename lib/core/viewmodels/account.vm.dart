@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:treasurer/core/models/actor.m.dart';
 import 'package:treasurer/core/models/operation.m.dart';
@@ -173,6 +175,12 @@ class AccountViewModel extends ChangeNotifier {
 
     // If the database's operation succeeds.
     if (success) {
+      // Deletes the image file
+      if (operation.receiptPhotoPath != null) {
+        File file = File(operation.receiptPhotoPath);
+        file.delete();
+      }
+
       // Removes the operation from the loaded list.
       _operations.remove(operation);
 

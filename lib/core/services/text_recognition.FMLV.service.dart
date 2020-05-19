@@ -83,6 +83,10 @@ class FMLVTextRecognitionService extends TextRecognitionService {
       }
     }
 
+    if (floatingNumbers.isEmpty) {
+      return 0.0;
+    }
+
     return floatingNumbers
         .reduce((current, next) => current >= next ? current : next);
   }

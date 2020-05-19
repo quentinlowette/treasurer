@@ -85,150 +85,156 @@ class OperationEditorView extends StatelessWidget {
         viewModelBuilder: () =>
             OperationEditorViewModel(initialOperation: initialOperation),
         builder: (context, model, child) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(initialOperation == null
-                  ? "Nouvelle opération"
-                  : "Modifier l'opération"),
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                  gradient: CustomTheme.gradient,
+          return WillPopScope(
+            onWillPop: () async {
+              model.deleteImage();
+              return true;
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(initialOperation == null
+                    ? "Nouvelle opération"
+                    : "Modifier l'opération"),
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: CustomTheme.gradient,
+                  ),
                 ),
               ),
-            ),
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: ListView(
-                children: <Widget>[
-                  model.isLoading ? LinearProgressIndicator() : Container(),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  OperationEditorField(
-                    title: "Montant",
-                    isValid: model.isAmountValid,
-                    alignment: CrossAxisAlignment.start,
-                    onTap: null,
-                    subtitle: TextField(
-                      decoration: InputDecoration(
-                        hintText: '0.0',
-                        border: InputBorder.none,
-                      ),
-                      style: TextStyle(
-                          color: model.isAutoFilled
-                              ? DefaultThemeColors.orange
-                              : DefaultThemeColors.black),
-                      keyboardType: TextInputType.number,
-                      controller: model.amountController,
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: ListView(
+                  children: <Widget>[
+                    model.isLoading ? LinearProgressIndicator() : Container(),
+                    SizedBox(
+                      height: 16.0,
                     ),
-                  ),
-                  OperationEditorField(
-                    title: "Description",
-                    isValid: model.isDescriptionValid,
-                    alignment: CrossAxisAlignment.start,
-                    onTap: null,
-                    subtitle: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Nouvelle opération',
-                        border: InputBorder.none,
-                      ),
-                      controller: model.descriptionController,
-                    ),
-                  ),
-                  OperationEditorField(
-                    title: "Date",
-                    isValid: model.isDateValid,
-                    alignment: CrossAxisAlignment.start,
-                    onTap: () => _selectDate(context, model),
-                    subtitle: Container(
-                      height: 48.0,
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        model.date != null
-                            ? DateFormat('dd/MM/yyyy').format(model.date)
-                            : "Veuillez choisir une date",
-                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                    OperationEditorField(
+                      title: "Montant",
+                      isValid: model.isAmountValid,
+                      alignment: CrossAxisAlignment.start,
+                      onTap: null,
+                      subtitle: TextField(
+                        decoration: InputDecoration(
+                          hintText: '0.0',
+                          border: InputBorder.none,
+                        ),
+                        style: TextStyle(
                             color: model.isAutoFilled
                                 ? DefaultThemeColors.orange
                                 : DefaultThemeColors.black),
+                        keyboardType: TextInputType.number,
+                        controller: model.amountController,
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      OperationEditorField(
-                        title: "Source",
-                        isValid: model.issourceValid,
-                        alignment: CrossAxisAlignment.start,
-                        onTap: () => _selectActor(
-                            context, model.sourceActor, model.destinationActor,
-                            (actor) {
-                          model.setSource(actor);
-                        }),
-                        subtitle: Container(
-                          height: 48.0,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            model.sourceActor != null
-                                ? model.sourceActor.toString()
-                                : "Source",
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
+                    OperationEditorField(
+                      title: "Description",
+                      isValid: model.isDescriptionValid,
+                      alignment: CrossAxisAlignment.start,
+                      onTap: null,
+                      subtitle: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Nouvelle opération',
+                          border: InputBorder.none,
+                        ),
+                        controller: model.descriptionController,
+                      ),
+                    ),
+                    OperationEditorField(
+                      title: "Date",
+                      isValid: model.isDateValid,
+                      alignment: CrossAxisAlignment.start,
+                      onTap: () => _selectDate(context, model),
+                      subtitle: Container(
+                        height: 48.0,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          model.date != null
+                              ? DateFormat('dd/MM/yyyy').format(model.date)
+                              : "Veuillez choisir une date",
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: model.isAutoFilled
+                                  ? DefaultThemeColors.orange
+                                  : DefaultThemeColors.black),
                         ),
                       ),
-                      OperationEditorField(
-                        title: "Destination",
-                        isValid: model.isdestinationValid,
-                        alignment: CrossAxisAlignment.end,
-                        onTap: () => _selectActor(
-                            context, model.destinationActor, model.sourceActor,
-                            (actor) {
-                          model.setDestination(actor);
-                        }),
-                        subtitle: Container(
-                          height: 48.0,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            model.destinationActor != null
-                                ? model.destinationActor.toString()
-                                : "Destination",
-                            style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        OperationEditorField(
+                          title: "Source",
+                          isValid: model.issourceValid,
+                          alignment: CrossAxisAlignment.start,
+                          onTap: () => _selectActor(context, model.sourceActor,
+                              model.destinationActor, (actor) {
+                            model.setSource(actor);
+                          }),
+                          subtitle: Container(
+                            height: 48.0,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              model.sourceActor != null
+                                  ? model.sourceActor.toString()
+                                  : "Source",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 82.0,
-                  ),
-                  CustomOutlineButton(
-                    onPressed: () {
-                      model.getAndScanImage();
-                    },
-                    title: "Scanner une photo",
-                    outlineColor: DefaultThemeColors.blue,
-                    textColor: DefaultThemeColors.blue,
-                  ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  CustomRaisedButton(
-                    onPressed: () {
-                      if (model.validateFields()) {
-                        model.commitOperation();
-                      } else {
-                        model.rebuild();
-                      }
-                    },
-                    title: "Ajouter",
-                    backgroundColor: DefaultThemeColors.blue,
-                    textColor: DefaultThemeColors.white,
-                  ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                ],
+                        OperationEditorField(
+                          title: "Destination",
+                          isValid: model.isdestinationValid,
+                          alignment: CrossAxisAlignment.end,
+                          onTap: () => _selectActor(
+                              context,
+                              model.destinationActor,
+                              model.sourceActor, (actor) {
+                            model.setDestination(actor);
+                          }),
+                          subtitle: Container(
+                            height: 48.0,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              model.destinationActor != null
+                                  ? model.destinationActor.toString()
+                                  : "Destination",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 82.0,
+                    ),
+                    CustomOutlineButton(
+                      onPressed: () {
+                        model.getAndScanImage();
+                      },
+                      title: "Scanner une photo",
+                      outlineColor: DefaultThemeColors.blue,
+                      textColor: DefaultThemeColors.blue,
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    CustomRaisedButton(
+                      onPressed: () {
+                        if (model.validateFields()) {
+                          model.commitOperation();
+                        } else {
+                          model.rebuild();
+                        }
+                      },
+                      title: "Ajouter",
+                      backgroundColor: DefaultThemeColors.blue,
+                      textColor: DefaultThemeColors.white,
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

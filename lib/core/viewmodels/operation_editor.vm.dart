@@ -9,52 +9,57 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/text_recognition.service.dart';
 
-/// ViewModel of the OperationEditor View
+/// View Model of the OperationEditor View.
 class OperationEditorViewModel extends ChangeNotifier {
-  /// Loading status
+  /// The loading status.
   bool _isLoading = false;
 
-  /// Image File associated to the operation
+  /// The image file associated to the operation.
   File _imageFile;
 
-  /// Detected amount's string
+  /// The detected amount's string.
   String _detectedAmountString;
 
-  /// Detected date
+  /// The detected date.
   DateTime _detectedDate;
 
-  /// Auto filled status
+  /// The auto filled status.
   bool _autoFilled = false;
 
-  /// Controller of the description input
+  /// The controller of the description input.
   TextEditingController _descriptionController = TextEditingController();
 
-  /// Controller of the amount input
+  /// The controller of the amount input.
   TextEditingController _amountController = TextEditingController();
 
-  /// Selected DateTime
+  /// The selected [DateTime].
   DateTime _date;
 
-  /// Selected source Actor
+  /// The selected source [Actor]
   Actor _sourceActor;
 
-  /// Selected destination Actor
+  /// The selected destination [Actor]
   Actor _destinationActor;
 
-  /// Validation's Flags
+  /// The validation's flag for the description.
   bool _descriptionValid = true;
 
+  /// The validation's flag for the amount.
   bool _amountValid = true;
 
+  /// The validation's flag for the date.
   bool _dateValid = true;
 
+  /// The validation's flag for the source.
   bool _sourceValid = true;
 
+  /// The validation's flag for the destination.
   bool _destinationValid = true;
 
   OperationEditorViewModel({@required Operation initialOperation}) {
     _initialOperation = initialOperation;
-    // Initializes the fields if there is an initial operation
+
+    // Initializes the fields if there is an initial operation.
     if (initialOperation != null) {
       _descriptionController.text = initialOperation.description;
       _amountController.text = initialOperation.amount.abs().toString();
@@ -62,96 +67,111 @@ class OperationEditorViewModel extends ChangeNotifier {
       _sourceActor = initialOperation.source;
       _destinationActor = initialOperation.destination;
 
+      // If there is an associated image file.
       if (initialOperation.receiptPhotoPath != null) {
         _imageFile = File(initialOperation.receiptPhotoPath);
       }
     }
   }
 
-  /// Getter for the auto filled status
+  /// The getter for the auto filled status.
   bool get isAutoFilled => _autoFilled;
 
-  /// Getter for the controller of the description input
+  /// The getter for the controller of the description input.
   TextEditingController get descriptionController => _descriptionController;
 
-  /// Getter for the controller of the amount input
+  /// The getter for the controller of the amount input.
   TextEditingController get amountController => _amountController;
 
-  /// Getter for the selected DateTime
+  /// The getter for the selected [DateTime].
   DateTime get date => _date;
 
-  /// Getter for the selected source Actor
+  /// The getter for the selected source [Actor].
   Actor get sourceActor => _sourceActor;
 
-  /// Getter for the selected destination Actor
+  /// The getter for the selected destination [Actor].
   Actor get destinationActor => _destinationActor;
 
-  // Getter for the validation's flags
+  /// The getter for the description validation's flag.
   bool get isDescriptionValid => _descriptionValid;
 
+  /// The getter for the amount validation's flag.
   bool get isAmountValid => _amountValid;
 
+  /// The getter for the date validation's flag.
   bool get isDateValid => _dateValid;
 
+  /// The getter for the source validation's flag.
   bool get issourceValid => _sourceValid;
 
+  /// The getter for the destination validation's flag.
   bool get isdestinationValid => _destinationValid;
 
-  /// Getter for the detected amount's string
+  /// The getter for the detected amount's string.
   String get detectedAmountString => _detectedAmountString;
 
-  /// Getter for the detected date
+  /// The getter for the detected date.
   DateTime get detectedDate => _detectedDate;
 
-  /// Getter for the loading status
+  /// The getter for the loading status.
   bool get isLoading => _isLoading;
 
-  /// Getter for the image's fiel
+  /// The getter for the image's fiel.
   File get imageFile => _imageFile;
 
-  /// Instance of the text recognition service
+  /// An instance of the [TextRecognitionService].
   TextRecognitionService _textRecognitionService =
       locator<TextRecognitionService>();
 
-  /// Instance of the navigation service
+  /// An instance of the [NavigationService].
   NavigationService _navigationService = locator<NavigationService>();
 
-  /// Initial operation
+  /// The initial operation.
   Operation _initialOperation;
 
+  /// Refreshes the view.
   void rebuild() {
     notifyListeners();
   }
 
-  /// Exits the view and deletes, if needed, the taken picture
+  /// Deletes the receipt picture.
+  void deleteImage() {
+    // If a picture has been taken.
+    if (_imageFile != null) {
+      _imageFile.delete();
+    }
+  }
+
+  /// Exits the view.
   void exit([Operation operation]) {
-    // If there isn't an initial operation and if a picture has been taken
-    // if (_initialOperation == null) {
-    //   _imageFile.delete();
-    // }
-    _descriptionController.dispose();
-    _amountController.dispose();
     _navigationService.goBack<Operation>(operation);
   }
 
+  /// Sets the date.
   void setDate(DateTime date) {
     _date = date;
     notifyListeners();
   }
 
+  /// Sets the source actor.
   void setSource(Actor actor) {
     _sourceActor = actor;
     notifyListeners();
   }
 
+  /// Sets the destination actor.
   void setDestination(Actor actor) {
     _destinationActor = actor;
     notifyListeners();
   }
 
+  /// Fetches an image and scans it.
+  ///
+  /// Fills the date and total fields according to the detected information.
   Future<void> getAndScanImage() async {
     await getImage();
 
+    // If an image was taken
     if (_imageFile != null) {
       await scanImage();
       _amountController.text = _detectedAmountString;
@@ -162,7 +182,7 @@ class OperationEditorViewModel extends ChangeNotifier {
     }
   }
 
-  /// Displays the image picker with the camera
+  /// Displays the image picker with the camera.
   Future<void> getImage() async {
     File pickedImage = await ImagePicker.pickImage(source: ImageSource.camera);
 
@@ -183,6 +203,8 @@ class OperationEditorViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Scans the receipt image and sets the variables with the detected
+  /// information.
   Future<void> scanImage() async {
     _isLoading = true;
 
@@ -198,6 +220,9 @@ class OperationEditorViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Validates the different fields of the form.
+  ///
+  /// Returns `true` if all fields are valid.
   bool validateFields() {
     Pattern amountPattern = r'^[1-9][0-9]*([\.,][0-9]+)?$';
     RegExp amountRegex = RegExp(amountPattern);
@@ -209,8 +234,6 @@ class OperationEditorViewModel extends ChangeNotifier {
     _sourceValid = _sourceActor != null;
     _destinationValid = _destinationActor != null;
 
-    // notifyListeners();
-
     return _descriptionValid &&
         _amountValid &&
         _dateValid &&
@@ -218,9 +241,9 @@ class OperationEditorViewModel extends ChangeNotifier {
         _destinationValid;
   }
 
-  /// Creates a new operation and exit the view
+  /// Creates a new [Operation] and exit the view.
   void commitOperation() {
-    // Create a new Operation
+    // Creates a new Operation
     Operation newOperation = Operation(
         double.parse(_amountController.text.replaceAll(',', '.')),
         _date,
