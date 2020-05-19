@@ -241,7 +241,7 @@ class OperationEditorViewModel extends ChangeNotifier {
         _destinationValid;
   }
 
-  /// Creates a new [Operation] and exit the view.
+  /// Creates a new [Operation] and exits the view.
   void commitOperation() {
     // Creates a new Operation
     Operation newOperation = Operation(

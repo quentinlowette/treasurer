@@ -5,44 +5,44 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 
-/// View Model of the operation view
+/// View Model of the Operation view.
 class OperationViewModel extends ChangeNotifier {
-  /// Operation
+  /// The underlying [Operation].
   Operation operation;
 
-  /// Instance of the navigation service
+  /// An instance of the [NavigationService].
   NavigationService _navigationService = locator<NavigationService>();
 
-  /// Account ViewModel
+  /// The global [AccountViewModel].
   AccountViewModel _accountViewModel = locator<AccountViewModel>();
 
   OperationViewModel({@required this.operation});
 
-  /// Exits the operation view
+  /// Exits the operation view.
   void exit() {
     _navigationService.goBack();
   }
 
-  /// Opens the OperationEditor view and updates the operation
+  /// Opens the OperationEditor view and updates the operation.
   Future<void> editOperation() async {
-    // Opens edit view and wait for the new Operation
+    // Opens the editor view and wait for the new Operation.
     Operation newOperation = await _navigationService
         .navigateTo(Router.OperationEditorViewRoute, arguments: operation);
 
-    // Update the operation
+    // If an operation is returned.
     if (newOperation != null) {
-      // Caals the account viewmodel to update the operation
+      // Calls the account view model to update the operation.
       await _accountViewModel.updateOperation(operation, newOperation);
 
-      // Updates current operation
+      // Updates the underlying operation.
       operation = newOperation;
 
-      // Notifies changes
+      // Notifies changes.
       notifyListeners();
     }
   }
 
-  /// Deletes this operation
+  /// Deletes this operation.
   Future<void> deleteOperation() async {
     await _accountViewModel.removeOperation(operation);
 
