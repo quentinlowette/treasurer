@@ -4,7 +4,7 @@ export 'text_recognition.FMLV.service.dart';
 
 /// An abstract text recognition service.
 abstract class TextRecognitionService {
-  /// Tries to detects in the given [imageFile] the total and the date.
+  /// Tries to detects in the given `imageFile` the total and the date.
   Future<TextRecognitionServiceResponse> detect(File imageFile);
 }
 

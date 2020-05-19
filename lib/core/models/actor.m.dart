@@ -15,7 +15,7 @@ class Actor {
 
   Actor(this._actorType);
 
-  /// Returns `true` if this actor is of type [type].
+  /// Returns `true` if this actor is of type `type`.
   bool hasType(ActorType type) {
     return this._actorType == type;
   }

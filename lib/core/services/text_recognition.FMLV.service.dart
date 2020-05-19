@@ -55,7 +55,9 @@ class FMLVTextRecognitionService extends TextRecognitionService {
   /// Extracts a total from a [VisionText].
   ///
   /// Searches inside the [VisionText] for a sequence of character that matches
-  /// a money amount's regular expression.
+  /// a money amount's regular expression. If there is a match that also
+  /// contains the symbol "EUR" it returns it, otherwise it returns the biggest
+  /// detected floating number.
   double _extractTotal(VisionText visionText) {
     // The regular expression of a money amount.
     String floatPattern = r"[-+]?\d+(\.|,)\d+";

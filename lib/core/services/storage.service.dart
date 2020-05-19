@@ -9,7 +9,7 @@ abstract class StorageService {
   /// Returns the id of the inserted operation.
   Future<int> addOperation(Operation operation);
 
-  /// Deletes the given [operation] from the storage.
+  /// Deletes the given [Operation] from the storage.
   ///
   /// Returns `true` if the deletion succeeds.
   Future<bool> deleteOperation(Operation operation);
@@ -23,7 +23,7 @@ abstract class StorageService {
   /// adds them to obtain the total.
   Future<List<double>> getAmounts();
 
-  /// Updates the given [operation] in the storage.
+  /// Updates the given [Operation] in the storage.
   ///
   /// Returns `true` if the update succeeds.
   Future<bool> updateOperation(Operation operation);

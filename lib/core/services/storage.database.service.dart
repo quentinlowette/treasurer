@@ -102,9 +102,13 @@ class DatabaseStorageService extends StorageService {
 
     // Fetches the cash amount.
     final List<Map<String, dynamic>> cashResult = await database.rawQuery("""
-      SELECT ${operationDao.source}, ${operationDao.destination}, SUM(tmp) as sum
+      SELECT ${operationDao.source},
+             ${operationDao.destination},
+             SUM(tmp) as sum
       FROM (
-        SELECT ${operationDao.source}, ${operationDao.destination}, SUM(${operationDao.amount}) as tmp
+        SELECT ${operationDao.source},
+               ${operationDao.destination},
+               SUM(${operationDao.amount}) as tmp
         FROM ${operationDao.tableName}
         WHERE ${operationDao.source} = ${ActorType.cash.index}
            OR ${operationDao.destination} = ${ActorType.cash.index}

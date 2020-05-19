@@ -16,7 +16,8 @@ GetIt locator = GetIt.instance;
 setupServiceLocator() {
   // Services
   locator.registerLazySingleton<NavigationService>(() => NavigationService());
-  locator.registerLazySingleton<TextRecognitionService>(() => FMLVTextRecognitionService());
+  locator.registerLazySingleton<TextRecognitionService>(
+      () => FMLVTextRecognitionService());
   locator.registerLazySingleton<StorageService>(() => DatabaseStorageService());
 
   // ViewModels
