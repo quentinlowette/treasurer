@@ -76,7 +76,7 @@ class FMLVTextRecognitionService extends TextRecognitionService {
           return double.parse(match.replaceAll(',', '.'));
         }
 
-        // If there is a match
+        // If there is a match.
         if (match != null) {
           floatingNumbers.add(double.parse(match.replaceAll(',', '.')));
         }
@@ -89,25 +89,25 @@ class FMLVTextRecognitionService extends TextRecognitionService {
 
   @override
   Future<TextRecognitionServiceResponse> detect(File imageFile) async {
-    // Vision Image
+    // Creates a visionImage.
     final FirebaseVisionImage visionImage =
         FirebaseVisionImage.fromFile(imageFile);
 
-    // Detector
+    // Fetches the textRecognizer.
     final TextRecognizer textRecognizer =
         FirebaseVision.instance.textRecognizer();
 
-    // Recognition
+    // Processes the image.
     final VisionText visionText =
         await textRecognizer.processImage(visionImage);
 
-    // EXtract the date
+    // EXtracts the date.
     DateTime date = _extractDate(visionText);
 
-    // EXtract the total
+    // EXtracts the total.
     double total = _extractTotal(visionText);
 
-    /// Close the recognizer
+    /// Closes the recognizer.
     textRecognizer.close();
 
     return TextRecognitionServiceResponse(date, total);

@@ -52,7 +52,7 @@ class _AccountViewState extends State<AccountView> {
                   value: SystemUiOverlayStyle.light.copyWith(
                     statusBarColor: Colors.transparent,
                   ),
-                  child: !model.isLoaded
+                  child: model.isLoading
                       ? Center(
                           child: CircularProgressIndicator(
                             backgroundColor: DefaultThemeColors.white,

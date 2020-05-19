@@ -6,45 +6,45 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 
-/// View Model of the Account View
+/// View Model of the Account View.
 class AccountViewModel extends ChangeNotifier {
-  /// Loading status
-  bool _isLoaded = false;
+  /// The loading status.
+  bool _isLoading = true;
 
-  /// List of the operations done in this account
+  /// The list of [Operation] done on this account.
   List<Operation> _operations;
 
-  /// Total amount of the account
+  /// The total amount.
   double _total;
 
-  /// Amount of cash of the account
+  /// The amount of cash.
   double _cash;
 
-  /// Amount of bank of the account
+  /// The amount of money in the bank.
   double _bank;
 
-  /// Instance of the navigation service
+  /// An instance of the [NavigationService].
   NavigationService _navigationService = locator<NavigationService>();
 
-  /// Instance of the storage service
+  /// An instance of the [StorageService].
   StorageService _storageService = locator<StorageService>();
 
-  /// Getter for the loading status
-  bool get isLoaded => _isLoaded;
+  /// The getter for the loading status.
+  bool get isLoading => _isLoading;
 
-  /// Getter for the list of operations
+  /// The getter for the list of [Operation].
   List<Operation> get operations => _operations;
 
-  /// Getter for the total amount
+  /// The getter for the total amount.
   double get total => _total;
 
-  /// Getter for the cash amount
+  /// The getter for the cash amount.
   double get cash => _cash;
 
-  /// Getter for the bank amount
+  /// The getter for the bank amount.
   double get bank => _bank;
 
-  /// Updates the amounts
+  /// Updates the amounts.
   void _updateAmounts(Operation operation, {removed = false}) {
     double amount = removed ? -1 * operation.amount : operation.amount;
 
@@ -63,12 +63,13 @@ class AccountViewModel extends ChangeNotifier {
 
     _total = _bank + _cash;
 
-    _cash = double.parse(_cash.toStringAsFixed(2));
-    _bank = double.parse(_bank.toStringAsFixed(2));
-    _total = double.parse(_total.toStringAsFixed(2));
+    // TODO Sort this out
+    // _cash = double.parse(_cash.toStringAsFixed(2));
+    // _bank = double.parse(_bank.toStringAsFixed(2));
+    // _total = double.parse(_total.toStringAsFixed(2));
   }
 
-  /// Navigates to the operation's editor and then adds the new operation
+  /// Navigates to the operation's editor and then adds the returned operation.
   Future<void> newOperation() async {
     Operation newOperation =
         await _navigationService.navigateTo(Router.OperationEditorViewRoute);
@@ -79,104 +80,139 @@ class AccountViewModel extends ChangeNotifier {
     }
   }
 
-  /// Navigates to the Operation view
+  /// Navigates to the Operation view.
   void navigateToOperation(Operation operation) {
     _navigationService.navigateTo(Router.OperationViewRoute,
         arguments: operation);
   }
 
+  /// Navigates to the onboarding screens and
+  /// sets up the account with the returned amounts.
   Future<void> _initAccount() async {
     List<double> amounts =
         await _navigationService.navigateTo(Router.OnboardingViewRoute);
 
-    Operation _initBankAmount = Operation(amounts[0], DateTime.now(), "Montant initial sur le compte", Actor(ActorType.extern), Actor(ActorType.bank), null);
+    // Creates the initial bank amount.
+    Operation _initBankAmount = Operation(
+        amounts[0],
+        DateTime.now(),
+        "Montant initial sur le compte",
+        Actor(ActorType.extern),
+        Actor(ActorType.bank),
+        null);
 
-    Operation _initCashAmount = Operation(amounts[1], DateTime.now(), "Montant initial dans la caisse", Actor(ActorType.extern), Actor(ActorType.cash), null);
+    // Creates the initial cash amount.
+    Operation _initCashAmount = Operation(
+        amounts[1],
+        DateTime.now(),
+        "Montant initial dans la caisse",
+        Actor(ActorType.extern),
+        Actor(ActorType.cash),
+        null);
 
+    // Adds the two created operations.
     await addOperation(_initBankAmount);
     await addOperation(_initCashAmount);
   }
 
-  /// Loads the stored operations
+  /// Loads the stored operations.
   Future<void> loadData() async {
-    // Fetches the operations from the storage service
+    // Fetches the operations from the storage service.
     _operations = await _storageService.getOperations();
 
+    // TODO Does this operation need to be performed on the DB or on the list of oerations fetched before ?
+    // Fetches the amounts based on the stored operations.
     List<double> amounts = await _storageService.getAmounts();
 
     _total = amounts[0];
     _bank = amounts[1];
     _cash = amounts[2];
 
+    // If there is no operation stored.
     if (_operations.isEmpty) {
       await _initAccount();
     }
 
-    _isLoaded = true;
+    _isLoading = false;
 
-    // Notifies the changes
+    // Notifies the changes.
     notifyListeners();
   }
 
-  /// Adds an operation
+  /// Adds an [Operation].
+  ///
+  /// The given operation is added to the storage and to the list. The amounts
+  /// are updated and the list is sorted.
   Future<void> addOperation(Operation operation) async {
-    // Adds the operation to the storage
+    // Adds the operation to the storage.
     operation.id = await _storageService.addOperation(operation);
 
-    // If the database's operation succeeds
+    // If the database's operation succeeds.
     if (operation.id != null) {
-      // Adds the operation to the loaded list
+      // Adds the operation to the loaded list.
       _operations.add(operation);
+
+      // Sorts the list.
       _operations.sort((a, b) => -(a.date.compareTo(b.date)));
 
-      // Changes the amounts
+      // Updates the amounts.
       _updateAmounts(operation);
 
-      // Notifies the changes
+      // Notifies the changes.
       notifyListeners();
     }
   }
 
-  /// Removes an operation
+  /// Removes an [Operation].
+  ///
+  /// The given operation is removed from the storage and the loaded list. The
+  /// amounts are updated.
   Future<void> removeOperation(Operation operation) async {
-    // Removes the operation from the storage
+    // Removes the operation from the storage.
     bool success = await _storageService.deleteOperation(operation);
 
-    // If the database's operation succeeds
+    // If the database's operation succeeds.
     if (success) {
-      // Removes the operation from the loaded list
+      // Removes the operation from the loaded list.
       _operations.remove(operation);
 
-      // Changes the amounts
+      // Updates the amounts.
       _updateAmounts(operation, removed: true);
 
+      // If, after removing the operation, the account doesn't have
+      // any operation left, navigates to the onboarding screens.
       if (_operations.isEmpty) {
         await _initAccount();
       }
 
-      // Notifies the changes
+      // Notifies the changes.
       notifyListeners();
     }
   }
 
-  /// Updates an operation
+  /// Updates an [Operation].
+  ///
+  /// The given operation is updated in the storage and in the loaded list.
+  /// The amounts are updated and the list is sorted.
   Future<void> updateOperation(
       Operation oldOperation, Operation newOperation) async {
-    // Removes the operation from the storage
+    // Updates the operation in the storage.
     bool success = await _storageService.updateOperation(newOperation);
 
-    // If the database's operation succeeds
+    // If the database's operation succeeds.
     if (success) {
-      // Updates the operation from the loaded list
+      // Updates the operation in the loaded list.
       _operations.remove(oldOperation);
       _operations.add(newOperation);
+
+      // Sorts the list.
       _operations.sort((a, b) => -(a.date.compareTo(b.date)));
 
-      // Changes the amounts
+      // Updates the amounts.
       _updateAmounts(oldOperation, removed: true);
       _updateAmounts(newOperation, removed: false);
 
-      // Notifies the changes
+      // Notifies the changes.
       notifyListeners();
     }
   }

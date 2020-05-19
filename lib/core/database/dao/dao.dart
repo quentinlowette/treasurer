@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 ///
 /// Dao are used to interact with a table in the database.
 abstract class Dao<T> {
-  /// The description of the columns in the database that store the object
+  /// The description of the columns in the database that store the object.
   ///
   /// The description is stored as a list of column representation.
   /// These representations are encoded as a list of the column name and

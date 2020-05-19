@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Allows to extract the navigation from the views and
 /// put it inside the viewModels.
 class NavigationService {
-  // Navigator key
+  // The navigator key.
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   /// Navigates to the `routeName`.
