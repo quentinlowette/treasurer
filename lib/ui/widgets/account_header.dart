@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 
+/// The header of the account view].
+///
+/// Displays the total amount as well as the bank and cash ones.
 class AccountHeader extends StatelessWidget {
+  /// The view model of the described account.
   final AccountViewModel model;
 
   const AccountHeader({Key key, @required this.model}) : super(key: key);

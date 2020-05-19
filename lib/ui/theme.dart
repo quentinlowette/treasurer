@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/ui/colors.dart';
 
+/// The theme of the application.
 class CustomTheme {
+  /// The default theme.
   static final ThemeData defaultTheme = _buildDefaultTheme();
 
+  /// Returns a custom [TextTheme] for the default text.
   static TextTheme _buildDefaultTextTheme() {
     TextTheme base = ThemeData.light().textTheme;
 
@@ -51,6 +54,7 @@ class CustomTheme {
     );
   }
 
+  /// Returns a custom [TextTheme] for the accentuated text.
   static TextTheme _buildAccentTextTheme() {
     TextTheme base = ThemeData.light().accentTextTheme;
 
@@ -98,6 +102,7 @@ class CustomTheme {
     );
   }
 
+  /// Returns a custom [IconThemeData].
   static IconThemeData _buildDefaultIconTheme() {
     IconThemeData base = ThemeData.light().iconTheme;
 
@@ -106,6 +111,7 @@ class CustomTheme {
     );
   }
 
+  /// Returns a custom [ThemeData].
   static ThemeData _buildDefaultTheme() {
     ThemeData base = ThemeData.light();
 
@@ -122,6 +128,7 @@ class CustomTheme {
     );
   }
 
+  /// Returns the application's gradient.
   static Gradient get gradient => LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

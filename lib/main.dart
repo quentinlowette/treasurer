@@ -6,7 +6,7 @@ import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/ui/theme.dart';
 
 void main() {
-  // setting up the services provider
+  // Sets up the services provider
   setupServiceLocator();
   runApp(MyApp());
 }
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Treasurer',
       theme: CustomTheme.defaultTheme,
       initialRoute: Router.InitialRoute,
       onGenerateRoute: Router.generateRoute,
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
-        const Locale('fr')
+        const Locale('fr', 'BE')
       ],
       debugShowCheckedModeBanner: false,
     );

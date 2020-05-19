@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/ui/colors.dart';
 
+/// A indicator for one page of the onboarding view.
 class PageIndicator extends StatelessWidget {
-
+  /// The activity status.
   final bool isActive;
 
   const PageIndicator({Key key, this.isActive}) : super(key: key);
@@ -22,11 +23,15 @@ class PageIndicator extends StatelessWidget {
   }
 }
 
+/// An indicator of the current page inside the onboarding view.
+///
+/// It is a list of [PageIndicator] with one of them being active.
 class PageIndicators extends StatelessWidget {
-
-  final int pageCount;
-
+  /// The index of the current active page.
   final int currentPageIndex;
+
+  /// The number of [PageIndicator].
+  final int pageCount;
 
   const PageIndicators({Key key, this.pageCount, this.currentPageIndex}) : super(key: key);
 

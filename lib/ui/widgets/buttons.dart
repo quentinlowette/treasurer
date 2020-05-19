@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
+/// A custom raised button.
+///
+/// Wraps the standard [RaisedButton] with specific paramters.
 class CustomRaisedButton extends StatelessWidget {
-  final void Function() onPressed;
-
-  final String title;
-
+  /// The background color.
   final Color backgroundColor;
 
+  /// The function to call when the buutton is pressed.
+  final void Function() onPressed;
+
+  /// The color of this button's text.
   final Color textColor;
+
+  /// The text of this button.
+  final String title;
 
   CustomRaisedButton({
     this.onPressed,
@@ -30,14 +37,21 @@ class CustomRaisedButton extends StatelessWidget {
   }
 }
 
+/// A custom outline button.
+///
+/// Wraps the standard [OutlineButton] with specific paramters.
 class CustomOutlineButton extends StatelessWidget {
+  /// The function to call when the buutton is pressed.
   final void Function() onPressed;
 
-  final String title;
-
+  /// The color of the border.
   final Color outlineColor;
 
+  /// The color of this button's text.
   final Color textColor;
+
+  /// The text of this button.
+  final String title;
 
   CustomOutlineButton({
     this.onPressed,

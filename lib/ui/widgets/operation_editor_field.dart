@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:treasurer/ui/colors.dart';
 
+/// A titled and touchable field for the operation's editor.
 class OperationEditorField extends StatelessWidget {
-  final String title;
-  final Widget subtitle;
-  final bool isValid;
+  /// The alignment to use.
   final CrossAxisAlignment alignment;
+
+  /// The validation's flag.
+  final bool isValid;
+
+  /// The function to call when the field is tapped.
   final void Function() onTap;
+
+  /// The subtitle of this field.
+  final Widget subtitle;
+
+  /// The title of this field.
+  final String title;
 
   const OperationEditorField({
     Key key,

@@ -3,7 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:treasurer/ui/colors.dart';
 
+/// A button to display the receipt image of an operation.
+///
+/// When pressed, it displays the picture in a dialog.
 class ImageButton extends StatelessWidget {
+  /// The path to the pictire.
   final String imagePath;
 
   ImageButton({@required this.imagePath});
