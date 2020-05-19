@@ -5,7 +5,7 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/viewmodels/account.vm.dart';
 
-/// View Model of the Operation view.
+/// The View Model of the Operation view.
 class OperationViewModel extends ChangeNotifier {
   /// The underlying [Operation].
   Operation operation;

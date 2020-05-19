@@ -29,7 +29,7 @@ class OperationTile extends StatelessWidget {
         DateFormat("dd/MM/yyyy").format(operation.date),
       ),
       trailing: Text(
-        "${operation.amount}",
+        "${operation.amount.toStringAsFixed(2)}",
       ),
       onTap: onTap,
     ),

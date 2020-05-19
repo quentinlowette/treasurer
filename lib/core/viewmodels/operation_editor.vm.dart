@@ -9,7 +9,7 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/text_recognition.service.dart';
 
-/// View Model of the OperationEditor View.
+/// The View Model of the OperationEditor View.
 class OperationEditorViewModel extends ChangeNotifier {
   /// The loading status.
   bool _isLoading = false;

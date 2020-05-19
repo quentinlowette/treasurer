@@ -7,32 +7,89 @@ import 'package:treasurer/ui/theme.dart';
 import 'package:treasurer/ui/widgets/buttons.dart';
 import 'package:treasurer/ui/widgets/page_indicator.dart';
 
+/// The View of the onboarding screens.
+///
+/// Welcomes the user and sets up the account by asking
+/// the initial amount in the bank and in the cash.
 class OnboardingView extends StatefulWidget {
   @override
   _OnboardingViewState createState() => _OnboardingViewState();
 }
 
+/// The state of the [OnboardingView].
 class _OnboardingViewState extends State<OnboardingView> {
-  /// Number of pages in the onboarding
+  /// The number of pages in the onboarding.
   final int _pageCount = 4;
 
-  /// Current page index
+  /// The current page index.
   int _currentPage = 0;
 
-  /// Controller of the page view
+  /// The controller of the page view.
   PageController _pageController = PageController(initialPage: 0);
 
-  /// Controller of the bank amount input
+  /// The controller of the bank amount input.
   TextEditingController _bankAmountController = TextEditingController();
 
-  bool _bankFieldValid = true;
-
-  bool _cashFieldValid = true;
-
-  /// Controller of the cash amount input
+  /// The controller of the cash amount input.
   TextEditingController _cashAmountController = TextEditingController();
 
+  /// The validation status of the bank field.
+  bool _bankFieldValid = true;
+
+  /// The validation status of the cash field.
+  bool _cashFieldValid = true;
+
+  /// A regular expression of a money amount.
   RegExp _amountRegex = RegExp(r'^([1-9][0-9]*|0)([\.,][0-9]+)?$');
+
+  /// Validates the bank and cash fields
+  /// and exits the view if they are both correct.
+  void validate(OnboardingViemModel model) {
+    // If the cash firld is empty or is invalid.
+    if (_cashAmountController.text.isEmpty ||
+        !_amountRegex.hasMatch(_cashAmountController.text)) {
+      setState(() {
+        // Sets the validation flag.
+        _cashFieldValid = false;
+
+        // Animates to the page with the cash field.
+        _currentPage = 2;
+        _pageController.animateToPage(_currentPage,
+            duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+      });
+    } else {
+      setState(() {
+        _cashFieldValid = true;
+      });
+    }
+
+    // If the bank firld is empty or is invalid.
+    if (_bankAmountController.text.isEmpty ||
+        !_amountRegex.hasMatch(_bankAmountController.text)) {
+      setState(() {
+        // Sets the validation flag.
+        _bankFieldValid = false;
+
+        // Animates to the page with the bank field.
+        _currentPage = 1;
+        _pageController.animateToPage(_currentPage,
+            duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+      });
+    } else {
+      setState(() {
+        _bankFieldValid = true;
+      });
+    }
+
+    // If both fields are valid.
+    if (_bankFieldValid && _cashFieldValid) {
+      double bankAmount =
+          double.parse(_bankAmountController.text.replaceAll(',', '.'));
+      double cashAmount =
+          double.parse(_cashAmountController.text.replaceAll(',', '.'));
+      model.exit(bankAmount, cashAmount);
+    }
+  }
 
   @override
   void dispose() {
@@ -46,7 +103,7 @@ class _OnboardingViewState extends State<OnboardingView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<OnboardingViemModel>.reactive(
       viewModelBuilder: () => OnboardingViemModel(),
-      builder: (context, model, child) {
+      builder: (context, model, _) {
         return Scaffold(
           body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light.copyWith(
@@ -95,7 +152,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            SizedBox(height: 16.0,),
+                            SizedBox(
+                              height: 16.0,
+                            ),
                             Text(
                               "Veuillez indiquer le montant initial de votre compte :",
                               style:
@@ -106,9 +165,13 @@ class _OnboardingViewState extends State<OnboardingView> {
                               decoration: InputDecoration(
                                 hintText: "0.0",
                                 hintStyle: TextStyle(
-                                  color: _bankFieldValid ? DefaultThemeColors.black.withAlpha(125) : DefaultThemeColors.error,
+                                  color: _bankFieldValid
+                                      ? DefaultThemeColors.black.withAlpha(125)
+                                      : DefaultThemeColors.error,
                                 ),
-                                fillColor: _bankFieldValid ? DefaultThemeColors.white : DefaultThemeColors.error2,
+                                fillColor: _bankFieldValid
+                                    ? DefaultThemeColors.white
+                                    : DefaultThemeColors.error2,
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0),
@@ -131,7 +194,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            SizedBox(height: 16.0,),
+                            SizedBox(
+                              height: 16.0,
+                            ),
                             Text(
                               "Veuillez indiquer le montant initial de votre caisse :",
                               style:
@@ -142,9 +207,13 @@ class _OnboardingViewState extends State<OnboardingView> {
                               decoration: InputDecoration(
                                 hintText: "0.0",
                                 hintStyle: TextStyle(
-                                  color: _cashFieldValid ? DefaultThemeColors.black.withAlpha(125) : DefaultThemeColors.error,
+                                  color: _cashFieldValid
+                                      ? DefaultThemeColors.black.withAlpha(125)
+                                      : DefaultThemeColors.error,
                                 ),
-                                fillColor: _cashFieldValid ? DefaultThemeColors.white : DefaultThemeColors.error2,
+                                fillColor: _cashFieldValid
+                                    ? DefaultThemeColors.white
+                                    : DefaultThemeColors.error2,
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0),
@@ -175,52 +244,14 @@ class _OnboardingViewState extends State<OnboardingView> {
                             ),
                             Spacer(),
                             CustomRaisedButton(
-                              onPressed: () {
-                                if (_cashAmountController.text.isEmpty || !_amountRegex.hasMatch(_cashAmountController.text)) {
-                                  setState(() {
-                                    _cashFieldValid = false;
-                                    _currentPage = 2;
-                                    _pageController.animateToPage(
-                                      _currentPage,
-                                      duration: Duration(milliseconds: 500),
-                                      curve: Curves.decelerate);
-                                  });
-                                } else {
-                                  setState(() {
-                                    _cashFieldValid = true;
-                                  });
-                                }
-
-                                if (_bankAmountController.text.isEmpty || !_amountRegex.hasMatch(_bankAmountController.text)) {
-                                  setState(() {
-                                    _bankFieldValid = false;
-                                    _currentPage = 1;
-                                    _pageController.animateToPage(
-                                      _currentPage,
-                                      duration: Duration(milliseconds: 500),
-                                      curve: Curves.decelerate);
-                                  });
-                                } else {
-                                  setState(() {
-                                    _bankFieldValid = true;
-                                  });
-                                }
-
-                                if (_bankFieldValid && _cashFieldValid) {
-                                  double bankAmount = double.parse(
-                                    _bankAmountController.text
-                                        .replaceAll(',', '.'));
-                                  double cashAmount = double.parse(
-                                      _cashAmountController.text
-                                          .replaceAll(',', '.'));
-                                  model.exit(bankAmount, cashAmount);
-                                }
-                              },
+                              onPressed: () => this.validate(model),
                               title: "Commencer",
                               backgroundColor: DefaultThemeColors.white,
                               textColor: DefaultThemeColors.blue,
                             ),
-                            SizedBox(height: 24.0,),
+                            SizedBox(
+                              height: 24.0,
+                            ),
                           ],
                         ),
                       ),

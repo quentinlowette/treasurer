@@ -8,10 +8,11 @@ import 'package:treasurer/ui/theme.dart';
 import 'package:treasurer/ui/widgets/buttons.dart';
 import 'package:treasurer/ui/widgets/image_button.dart';
 
-/// View of an operation
+/// View of an operation.
 ///
-/// Displays the operation's details
+/// Displays the operation's details.
 class OperationView extends StatelessWidget {
+  /// The operation to detail.
   final Operation operation;
 
   const OperationView({Key key, @required this.operation}) : super(key: key);
@@ -59,7 +60,7 @@ class OperationView extends StatelessWidget {
                   ),
                   SizedBox(height: 16.0),
                   Text(
-                    "${model.operation.amount} €",
+                    "${model.operation.amount.toStringAsFixed(2)} €",
                     style: Theme.of(context).accentTextTheme.headline3,
                     textAlign: TextAlign.center,
                   ),
@@ -86,11 +87,6 @@ class OperationView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // SizedBox(height: 32.0),
-                  // Text(
-                  //   model.operation.receiptPhotoPath ?? "Pas de photo",
-                  //   style: Theme.of(context).accentTextTheme.headline6,
-                  // ),
                   Spacer(),
                   CustomRaisedButton(
                     backgroundColor: DefaultThemeColors.white,

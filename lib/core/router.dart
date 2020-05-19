@@ -5,7 +5,7 @@ import 'package:treasurer/ui/views/onboarding.v.dart';
 import 'package:treasurer/ui/views/operation_editor.v.dart';
 import 'package:treasurer/ui/views/operation.v.dart';
 
-/// Navigation helper that generates the routes of the application.
+/// A navigation helper that generates the routes of the application.
 class Router {
   /// The initial route.
   static const String InitialRoute = '/';

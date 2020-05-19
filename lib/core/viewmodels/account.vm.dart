@@ -8,7 +8,7 @@ import 'package:treasurer/core/services/locator.dart';
 import 'package:treasurer/core/services/navigation.service.dart';
 import 'package:treasurer/core/services/storage.service.dart';
 
-/// View Model of the Account View.
+/// The View Model of the Account View.
 class AccountViewModel extends ChangeNotifier {
   /// The loading status.
   bool _isLoading = true;
@@ -64,11 +64,6 @@ class AccountViewModel extends ChangeNotifier {
     }
 
     _total = _bank + _cash;
-
-    // TODO Sort this out
-    // _cash = double.parse(_cash.toStringAsFixed(2));
-    // _bank = double.parse(_bank.toStringAsFixed(2));
-    // _total = double.parse(_total.toStringAsFixed(2));
   }
 
   /// Navigates to the operation's editor and then adds the returned operation.
@@ -122,7 +117,6 @@ class AccountViewModel extends ChangeNotifier {
     // Fetches the operations from the storage service.
     _operations = await _storageService.getOperations();
 
-    // TODO Does this operation need to be performed on the DB or on the list of oerations fetched before ?
     // Fetches the amounts based on the stored operations.
     List<double> amounts = await _storageService.getAmounts();
 
