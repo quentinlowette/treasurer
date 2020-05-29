@@ -136,8 +136,8 @@ class OperationEditorViewModel extends ChangeNotifier {
 
   /// Deletes the receipt picture.
   void deleteImage() {
-    // If a picture has been taken.
-    if (_imageFile != null) {
+    // If a new picture has been taken.
+    if (_imageFile != null && _initialOperation == null) {
       _imageFile.delete();
     }
   }
