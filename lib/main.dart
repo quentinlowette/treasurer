@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:treasurer/core/router.dart';
 import 'package:treasurer/core/services/locator.dart';
